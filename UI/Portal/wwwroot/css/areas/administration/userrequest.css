@@ -1,0 +1,131 @@
+﻿.k-listview {
+    border-color: transparent;
+    box-shadow: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+    .k-listview:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+        border-color: transparent;
+    }
+
+    .k-listview > div:nth-child(even) .request {
+        background: #eaeaea;
+    }
+
+.request {
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+    .request hr {
+        margin: 5px;
+        color: #cecece;
+        border-color: #CECECE;
+    }
+
+    .request a {
+        margin: 2px 0 2px;
+    }
+
+.current-data {
+    border-top: 1px solid #cecece;
+    margin-top: 4px;
+}
+
+.subtitle {
+    font-weight: 600;
+    font-style: italic;
+}
+
+.client {
+    font-weight: 800;
+}
+
+.request .btn-aprove, .request .btn-aprove * {
+    color: #237220;
+}
+
+    .request .btn-aprove.disabled {
+        color: #333;
+    }
+
+    .request .btn-aprove:hover {
+        background-color: #237220;
+    }
+
+        .request .btn-aprove:hover * {
+            color: #FFF;
+        }
+
+.request .btn-reject, .request .btn-reject * {
+    color: #2a57a9;
+}
+
+    .request .btn-reject:hover {
+        background-color: #2a57a9;
+    }
+
+        .request .btn-reject:hover * {
+            color: #FFF;
+        }
+
+.request .btn-delete, .request .btn-delete * {
+    color: #cc2121;
+}
+
+    .request .btn-delete:hover {
+        background-color: #cc2121;
+    }
+
+        .request .btn-delete:hover * {
+            color: #FFF;
+        }
+
+.k-state-selected .btn-aprove, .k-state-selected .btn-delete, .k-state-selected .btn-reject {
+    border-color: #FFF;
+    background-color: #FFF;
+}
+
+.color-ok {
+    color: #237220;
+}
+
+.color-wrong {
+    color: #cc2121;
+}
+
+.indicators span {
+    margin-left: 12px;
+}
+
+    .indicators span.glyphicon {
+        margin-left: 2px;
+    }
+
+.template-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+    .template-wrapper p {
+        font-size: 1em;
+        line-height: 1.2;
+        padding: 20px;
+        text-align: left;
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+.k-listview-content .request-item {
+    margin-right: 0;
+}
+
+    .k-listview-content .request-item:nth-child(even), .k-listview-content:nth-child(even) {
+        background-color: #edecec;
+    }

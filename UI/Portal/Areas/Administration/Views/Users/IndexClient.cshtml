@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="row">
+    <div class="col-7">
+        <h3 id="title-page">@ViewBag.Title</h3>
+    </div>
+    <div class="col-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <input type="hidden" id="CardCode" value="@ViewData["CardCode"]" />
+                <label for="filProfiles" class="col-2 col-sm-1">Perfil</label>
+                <div class="col-10 col-sm-5 col-md-3 col-lg-2">
+                    <select id="filProfiles" style="width: 100%;"></select>
+                </div>
+                <label for="filName" class="col-2 col-sm-1">Nombre</label>
+                <div class="col-10 col-sm-5 col-md-3 col-lg-3">
+                    <input type="text" id="filName" class="form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Detail" visible="false" title="Usuario" modal="true" draggable="true" width="950" on-refresh="onRefresh" on-close="onCloseWindow">
+    <content><div style='text-align: center;'>Cargando ...</div></content>
+</kendo-window>
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "Users")",
+			urlEdit = "@Url.Action("Edit", "Users")",
+			urlDelete = "@Url.Action("Delete", "Users")",
+			urlProfiles = "@Url.Action("GetProfiles", "Users")",
+			urlSendEmail = "@Url.Action("SendUserData", "Users")",
+			urlClientName = "@Url.Action("GetClientName", "Users")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/usersclient.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/usersclient.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,107 @@
+﻿@model Portal.Areas.Marketing.Models.PopupNotification
+@{
+    string data = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+}
+<form>
+    <input type="hidden" id="item-data" value="@data" />
+    <input type="hidden" asp-for="Id" />
+    <input id="gallery" type="file" class="d-none">
+    <input type="hidden" id="new-photo" />
+    <div class="row">
+        <div class="col-3">
+            <div class="row">
+                <label asp-for="Name" class="col-12 text-nowrap">Nombre</label>
+                <div class="col-12">
+                    <input type="text" asp-for="Name" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <label asp-for="Description" class="col-12 text-nowrap">Descripci&oacute;n</label>
+                <div class="col mb-2">
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col">
+                    <label asp-for="InitialDate" class="text-nowrap">Desde</label>
+                    <input type="date" asp-for="InitialDate" style="width: 110px" />
+                </div>
+
+                <div class="col">
+                    <label asp-for="FinalDate" class="text-nowrap">Hasta</label>
+                    <input type="date" asp-for="FinalDate" style="width: 110px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col custom-control custom-switch ml-5 mt-2">
+                    <input type="checkbox" class="custom-control-input selected" asp-for="Enabled" />
+                    <input name="Enabled" type="hidden" value="false" />
+                    <label class="custom-control-label" asp-for="Enabled"> Habilitado</label>
+                </div>
+                <div class="col custom-control custom-switch ml-5 mr-5 mt-2">
+                    <input type="checkbox" class="custom-control-input selected" asp-for="Popup" />
+                    <input name="Popup" type="hidden" value="false" />
+                    <label class="custom-control-label" asp-for="Popup"> Emergente</label>
+                </div>
+
+                <div class="col">
+                    <label asp-for="Frequency" class="text-nowrap">Frec. (Hrs)</label>
+                    <input type="number" min="0" max="23" asp-for="Frequency" class="form-control frequency" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="Lines" class="col-12 text-nowrap">L&iacute;neas</label>
+                <div class="col">
+                    <input asp-for="Lines" class="w-100" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="Clients" class="col-12 text-nowrap">Clientes</label>
+                <div class="col">
+                    <input asp-for="Clients" class="w-100" />
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h5>Detalle</h5>
+            <div class="custom-tab">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Web</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Aplicaci&oacute;n M&oacute;vil</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active show" id="tab1" role="tabpanel">
+                        <textarea asp-for="Value" class="form-control" style="height: 580px;"></textarea>
+                    </div>
+                    <div class="tab-pane" id="tab2" role="tabpanel">
+                        <input asp-for="MobileValue" type="hidden" />
+                        @{ string strImage = string.IsNullOrEmpty(Model.MobileValue) ? "~/images/no-image.jpg" : $"~/images/notification/{Model.MobileValue}"; }
+                        <img id="photo" src="@Url.Content(strImage)" style="max-width: 320px; max-height: 544px;" />
+                        <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary" title="Escoger una imagen de la galer&iacute;a" id="photo-gallery">
+                                    <i class="fa fa-image"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger" title="Eliminar imagen actual" id="photo-remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="text-right pt-2">
+                <button type="button" class="save-notification btn btn-primary per-update">Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>

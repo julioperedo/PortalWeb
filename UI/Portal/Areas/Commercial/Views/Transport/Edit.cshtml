@@ -1,0 +1,125 @@
+﻿@model BEntities.Sales.Transport
+<form>
+	<div class="form-horizontal">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="Sent" />
+		<div class="row">
+			<label asp-for="DocNumber" class="col-md-2">No. de Gu&iacute;a :</label>
+			<div class="col-md-4">
+				<input asp-for="DocNumber" class="form-control" />
+			</div>
+			<label asp-for="Date" class="col-md-2">Fecha :</label>
+			<div class="col-md-4">
+				<input type="date" asp-for="Date" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="SourceId" class="col-md-2">Origen :</label>
+			<div class="col-md-4">
+				<input asp-for="SourceId" class="w-100" />
+			</div>
+			<label asp-for="DestinationId" class="col-md-2">Destino :</label>
+			<div class="col-md-4">
+				<input asp-for="DestinationId" class="w-100" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="TransporterId" class="col-md-2">Transporte :</label>
+			<div class="col-md-4">
+				<input asp-for="TransporterId" class="w-100" />
+			</div>
+			<label asp-for="DeliveryTo" class="col-md-2">Entregar a :</label>
+			<div class="col-md-4">
+				<input asp-for="DeliveryTo" class="form-control" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="Observations" class="col-md-2">Observaciones :</label>
+			<div class="col-md-10">
+				<textarea asp-for="Observations" class="form-control"></textarea>
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="TypeId" class="col-md-2">Tipo :</label>
+			<div class="col-md-10">
+				<input type="hidden" asp-for="TypeId" />
+				<input class="k-radio" id="transport-type-1" name="transport-type" type="radio" value="149"><label class="k-radio-label" for="transport-type-1">Mercader&iacute;a</label>
+				<input class="k-radio" id="transport-type-2" name="transport-type" type="radio" value="150"><label class="k-radio-label" for="transport-type-2">Documentos</label>
+				<input class="k-radio" id="transport-type-3" name="transport-type" type="radio" value="151"><label class="k-radio-label" for="transport-type-3">Repuestos</label>
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="Weight" class="col-md-2">Peso(Kg) :</label>
+			<div class="col-md-4">
+				<input type="number" asp-for="Weight" class="form-control" min="0" />
+			</div>
+			<label asp-for="QuantityPieces" class="col-md-2">Cant. Piezas :</label>
+			<div class="col-md-4">
+				<input type="number" asp-for="QuantityPieces" class="form-control" min="0" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="RemainingAmount" class="col-md-2 text-nowrap">Pago Entrega (Bs) :</label>
+			<div class="col-md-4">
+				<input type="number" asp-for="RemainingAmount" class="form-control" min="0" />
+				<span class="k-invalid-msg" data-for="RemainingAmount"></span>
+			</div>
+			<div class="col-md-6">
+				<div class="custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input" asp-for="WithCopies">
+					<input type="hidden" name="WithCopies" value="false" />
+					<label class="custom-control-label" asp-for="WithCopies">Copias La paz</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<label for="DetailValue" class="col-md-2">Ordenes :</label>
+			<div class="col-md-10">
+				<input type="hidden" asp-for="StringValues" />
+				<div class="data-container"><input id="DetailValue" name="DetailValue" class="form-control" /></div>
+				<div class="data-container p-4">
+					<div id="contacts-content">
+                        <table class="table table-borderless table-sm">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">E-Mail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><input type="text" id="name1" class="form-control" /></th>
+                                    <td><input type="email" id="email1" class="form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><input type="text" id="name2" class="form-control" /></th>
+                                    <td><input type="email" id="email2" class="form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><input type="text" id="name3" class="form-control" /></th>
+                                    <td><input type="email" id="email3" class="form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><input type="text" id="name4" class="form-control" /></th>
+                                    <td><input type="email" id="email4" class="form-control" /></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><input type="text" id="name5" class="form-control" /></th>
+                                    <td><input type="email" id="email5" class="form-control" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+					</div>
+					<span class="data-warning">Los nombres sin su respectivo E-Mail no ser&aacute;n registrados.</span>
+					<span class="k-invalid-msg" data-for="StringValues"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right pt-2">
+				<button type="button" class="btn btn-outline-secondary action-cancel">Cancelar</button>
+				<button type="button" class="btn btn-primary action-save">Guardar</button>
+			</div>
+		</div>
+	</div>
+</form>

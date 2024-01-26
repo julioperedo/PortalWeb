@@ -1,0 +1,256 @@
+﻿body {
+}
+
+.quote {
+}
+
+	.quote .filter {
+	}
+
+	.quote .content {
+		overflow: auto;
+		/*background-color: azure;*/
+	}
+
+.quote-filter {
+	/*background-color: #CCC;
+	margin-top: -4px;
+	padding-top: 4px;
+	padding-bottom: 6px;*/
+}
+
+.k-widget.k-listview {
+	border-width: 0;
+}
+
+.filter-footer {
+	background-color: #CCC;
+	font-weight: 700;
+	padding: 3px 3px 2px 8px;
+	min-height: 18px;
+	margin: 0 -11px -10px -11px;
+}
+
+#Products {
+	margin-left: -8px;
+	margin-right: -10px;
+	overflow-x: auto;
+}
+
+.product, .quote-result {
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	display: table;
+	margin: 1px;
+	padding: 4px 3px 2px 0;
+	border-radius: 5px;
+	background-color: #ededed;
+}
+
+.fa.fa-arrow-right {
+	color: #fff;
+}
+
+.product:hover, .quote-result:hover {
+	background-color: #bfddf7;
+}
+
+.product .data, .quote-result .data {
+	display: table-cell;
+	padding: 0 3px 3px;
+	margin-right: 35px;
+	width: 100%;
+}
+
+	.product .data .quote-result .data .quote-code {
+		font-weight: 700;
+		color: #073456;
+	}
+
+	.product .data .quote-result .data .code {
+		font-weight: 700;
+	}
+
+.product a, .quote-result a {
+	display: table-cell;
+	color: #FFF;
+	cursor: pointer;
+}
+
+	.product a span:hover {
+		background-color: #002cff;
+	}
+
+	.product a span, .quote-result a span {
+		font-size: 1.6em;
+		vertical-align: middle;
+		background-color: #2c77ba;
+		border-radius: 5px;
+		padding: 7px;
+	}
+
+.row .quote-product {
+	margin-left: 0;
+}
+
+.quote-detail {
+	padding-right: 20px;
+}
+
+.quote-product {
+	border: 1px solid #CCCCCC;
+	margin-bottom: 15px;
+}
+
+	.quote-product .image {
+		float: left;
+		width: 30%;
+		padding: 2px 0 2px 2px;
+		text-align: center;
+	}
+
+		.quote-product .image img {
+			max-height: 250px;
+			max-width: 100%;
+		}
+
+	.quote-product .desc {
+		float: left;
+		width: 45%;
+		padding-left: 5px;
+	}
+
+		.quote-product .desc .code {
+			font-weight: 700;
+			font-size: 1.4em;
+		}
+
+		.quote-product .desc .name {
+			font-size: 1.3em;
+		}
+
+		.quote-product .desc .k-editor-inline {
+			border-width: 0;
+			box-shadow: none;
+			background: none;
+		}
+
+	.quote-product .prices {
+		float: left;
+		width: 20%;
+		padding-top: 8px;
+		padding-left: 8px;
+	}
+
+		.quote-product .prices .price {
+			margin-top: 8px;
+			background-color: #F9F9F9;
+			border-radius: 5px;
+			padding: 2px 10px 10px 4px;
+			border: 1px solid #EEEEEE;
+		}
+
+		.quote-product .prices .stock {
+			margin-top: 8px;
+			background-color: #f7f7b6;
+			border-radius: 5px;
+			padding: 10px;
+			border: 1px solid #eeee93;
+		}
+
+		.quote-product .prices .volume {
+			margin-top: 8px;
+			background-color: #f7f7b6;
+			border-radius: 5px;
+			padding: 10px;
+			border: 1px solid #eeee93;
+		}
+
+		.quote-product .prices .subsidiary {
+			font-size: 1.4em;
+			color: #CCCCCC;
+		}
+
+		.quote-product .prices .regular {
+			font-size: 1.6em;
+			font-weight: 700;
+			text-align: right;
+		}
+
+		.quote-product .prices .observations {
+			text-align: right;
+		}
+
+.remove-product {
+	background-color: #f63939;
+	color: #FFF;
+	padding: 6px 7px;
+	border-radius: 5px;
+	float: right;
+	cursor: pointer;
+	margin: 2px;
+	height: fit-content;
+}
+
+	.remove-product:hover {
+		background-color: #F00;
+	}
+
+.refresh-product {
+	background-color: #209000;
+	color: #FFF;
+	padding: 6px;
+	border-radius: 5px;
+	float: right;
+	cursor: pointer;
+	margin: 2px;
+	height: fit-content;
+}
+
+	.refresh-product:hover {
+		background-color: #206515;
+	}
+
+.selected-price {
+	width: 16px;
+	height: 16px;
+}
+
+.quote-header {
+	background-color: #d8e6fb;
+	color: #2c77ba;
+	margin-left: 0;
+	margin-right: 0;
+	border-radius: 5px;
+}
+
+	.quote-header .code {
+		font-size: 1.2em;
+		font-weight: 700;
+	}
+
+		.quote-header .code:not(:empty) {
+			/*margin-left: 8px;*/
+		}
+
+	.quote-header .label {
+		margin: 0;
+		color: #2c77ba;
+		font-size: 1em;
+		font-weight: 400;
+	}
+
+	.quote-header .date, .quote-header .card-detail {
+		margin-right: 40px;
+	}
+
+
+.category li {
+	padding-left: 20px;
+}
+
+	.category li.group {
+		padding-left: 5px;
+	}

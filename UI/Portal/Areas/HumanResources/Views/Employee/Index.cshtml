@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Empleados";
+}
+<div class="row">
+    <div class="col-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="filter" class="col-2 col-sm-1 text-nowrap">Filtro</label>
+                <div class="col-10 col-sm-7 col-md-6 col-lg-8">
+                    <input type="text" id="filter" class="form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail">
+    <form>
+        <div class="row">
+            <div class="col-4 text-center">
+                <img id="picture" class="photo" />
+                <input id="photo" name="photo" type="hidden" />
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <input id="id" name="id" type="hidden" />
+                        <label for="name">Nombre</label>
+                        <input id="name" name="name" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="shortName">Iniciales</label>
+                        <input id="shortName" name="shortName" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="position">Cargo</label>
+                        <input id="position" name="position" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="hierarchyLevel">Nivel Jerarqu&iacute;a</label>
+                        <input id="hierarchyLevel" name="hierarchyLevel" type="number" class="form-control" min="1" max="10" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="mail">Correo Electr&oacute;nico</label>
+                        <input id="mail" name="mail" type="email" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="phone">Interno</label>
+                        <input id="phone" name="phone" type="number" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pt-2">
+                        <label for="enabled">Habilitado</label>
+                        <input id="enabled" name="enabled" />
+                    </div>
+                </div>
+                           
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-2">
+                <div id="departments"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="department-detail" class="bg-light p-3 d-none mt-2">
+                    <input type="hidden" id="id-detail" name="id-detail" />
+                    <div class="row">
+                        <div class="col">
+                            <label for="idDepartment">&Aacute;rea de trabajo</label>
+                            <input id="idDepartment" name="idDepartment" class="w-100" />
+                        </div>
+                        <div class="col">
+                            <label for="idManager">Inmediato Superior</label>
+                            <input id="idManager" name="idManager" class="w-100" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-right p-3">
+                            <button class="btn btn-outline-secondary action-cancel-department">Cancelar</button>
+                            <button class="btn btn-outline-primary action-save-department ml-1">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-2">
+                <button class="btn btn-outline-secondary action-cancel">Cancelar</button>
+                <button class="btn btn-primary action-save ml-1">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Styles {
+    <style type="text/css">
+        .photo {
+            max-width: 200px;
+            border: 9px solid #999;
+            border-radius: 6px;
+        }
+    </style>
+}
+@section Scripts {
+    <script type="text/javascript">
+        let urlFilter = "@Url.Action("Filter")",
+            urlEdit = "@Url.Action("Edit")",
+            urlSync = "@Url.Action("Sync")",
+            urlDepartments = "@Url.Action("GetDepartments")",
+            urlNoPhoto = "@Url.Content("~/images/no-photo.jpg")",
+            urlPath = "@Url.Content("~/images/humanresources/")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/human-resources/employee.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/human-resources/employee.min.js" asp-append-version="true"></script>
+    </environment>
+}

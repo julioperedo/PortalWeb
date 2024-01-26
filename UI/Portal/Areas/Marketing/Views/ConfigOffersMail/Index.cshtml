@@ -1,0 +1,95 @@
+﻿@model Portal.Areas.Marketing.Models.OffersMailConfig
+@{
+    ViewData["Title"] = "Configuración de Marcas para los correos";
+    var lstMonday = (from l in Model.Asigned where l.WeekDay == 1 select l).ToList();
+    var lstTuesday = (from l in Model.Asigned where l.WeekDay == 2 select l).ToList();
+    var lstWednesday = (from l in Model.Asigned where l.WeekDay == 3 select l).ToList();
+    var lstThursday = (from l in Model.Asigned where l.WeekDay == 4 select l).ToList();
+    var lstFriday = (from l in Model.Asigned where l.WeekDay == 5 select l).ToList();
+    var lstAvailables = (from l in Model.Lines where !(from a in Model.Asigned select a.IdLine).Contains(l.Id) select l).ToList();
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row d-sm-none">
+    <div class="col-12 col-md-12">
+        <span>Esta p&aacute;gina no est&aacute; dise&ntilde;ada para utilizarse en una pantalla m&oacute;vil, por favor ingrese desde una computadora.</span>
+    </div>
+</div>
+<div class="row d-none d-sm-inline-flex list-wrapper">
+    <div class="col-sm-3 col-md-2 availables">
+        <div class="day-list-wrapper">
+            <span>Marcas Disponibles</span>
+            <ul id="available-days" class="day-list">
+                @foreach (var item in lstAvailables)
+                {
+                    <li class="list-item" data-id="0" data-idline="@item.Id">@item.Name (@item.OffersCount)</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-9 col-md-10 week-days">
+        <div class="day-list-wrapper">
+            <span>Lunes</span>
+            <ul id="day-1" class="day-list">
+                @foreach (var item in lstMonday)
+                {
+                    <li class="list-item" data-id="@item.Id" data-idline="@item.IdLine">@item.Line.Name (@item.OffersCount)</li>
+                }
+            </ul>
+        </div>
+        <div class="day-list-wrapper">
+            <span>Martes</span>
+            <ul id="day-2" class="day-list">
+                @foreach (var item in lstTuesday)
+                {
+                    <li class="list-item" data-id="@item.Id" data-idline="@item.IdLine">@item.Line.Name (@item.OffersCount)</li>
+                }
+            </ul>
+        </div>
+        <div class="day-list-wrapper">
+            <span>Mi&eacute;rcoles</span>
+            <ul id="day-3" class="day-list">
+                @foreach (var item in lstWednesday)
+                {
+                    <li class="list-item" data-id="@item.Id" data-idline="@item.IdLine">@item.Line.Name (@item.OffersCount)</li>
+                }
+            </ul>
+        </div>
+        <div class="day-list-wrapper">
+            <span>Jueves</span>
+            <ul id="day-4" class="day-list">
+                @foreach (var item in lstThursday)
+                {
+                    <li class="list-item" data-id="@item.Id" data-idline="@item.IdLine">@item.Line.Name (@item.OffersCount)</li>
+                }
+            </ul>
+        </div>
+        <div class="day-list-wrapper">
+            <span>Viernes</span>
+            <ul id="day-5" class="day-list">
+                @foreach (var item in lstFriday)
+                {
+                    <li class="list-item" data-id="@item.Id" data-idline="@item.IdLine">@item.Line.Name (@item.OffersCount)</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-12 text-right">
+        <button type="button" id="Save" class="btn btn-primary">Guardar</button>
+    </div>
+</div>
+<link href="~/css/areas/marketing/customerdetail/index.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+        var urlSave = "@Url.Action("Save", "ConfigOffersMail")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/marketing/configoffersmail.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/marketing/configoffersmail.min.js" asp-append-version="true"></script>
+    </environment>
+}

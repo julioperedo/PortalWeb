@@ -1,0 +1,31 @@
+﻿body {
+}
+
+.product {
+    border-radius: 8px;
+    text-align: center;
+    margin: 4px 4px 12px;
+}
+
+    .product:hover {
+        background-color: #ddd;
+    }
+
+    .product img {
+        max-height: 75px;
+        max-width: 75px;
+        margin: 2px auto 2px;
+    }
+
+    .product button {
+        margin-bottom: 6px;
+    }
+
+#col-promos img {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.add-promo {
+    cursor: pointer;
+}

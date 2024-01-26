@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Pivot de Ventas";
+}
+<input type="hidden" id="Client" value="@ViewBag.CardName" />
+<input type="hidden" id="local-user" value="N" />
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="" href="#" id="action-config"><i class="fas fa-cogs"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Since" class="col-3 col-sm-2 col-lg-1">Desde</label>
+                <div Class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <input id="Since" style="width: 110px;" />
+                </div>
+                <label for="Until" class="col-3 col-sm-2 col-lg-1">Hasta</label>
+                <div Class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <input id="Until" style="width: 110px;" />
+                </div>
+                <label for="Subsidiary" class="col-3 col-sm-2 col-lg-1">Sucursal</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Subsidiary" multiple="multiple"></select>
+                </div>
+                <label for="Storehouse" class="col-3 col-sm-2 col-lg-1">Almac&eacute;n</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Storehouse" multiple="multiple"></select>
+                </div>
+                <label for="Category" class="col-3 col-sm-2 col-lg-1 text-nowrap">Categor&iacute;a</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Category" multiple="multiple"></select>
+                </div>
+                <label for="SubCategory" class="col-3 col-sm-2 col-lg-1 text-nowrap">Subcategor&iacute;a</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="SubCategory" multiple="multiple"></select>
+                </div>
+                <label for="Line" class="col-3 col-sm-2 col-lg-1">L&iacute;nea</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Line" multiple="multiple"></select>
+                </div>
+                <label for="ItemCode" class="col-3 col-sm-2 col-lg-1">Producto</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <input id="ItemCode" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-right pt-3">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table id="pivot" style="width:100%;height:100%;"></table>
+<div class="footer-note">Para modificar como se muestran los datos en la tabla pivot hay que presionar en <i class="fas fa-cogs"></i> en el menú superior.</div>
+<link href="~/lib/easyui/easyui.css" rel="stylesheet" />
+<link href="~/css/areas/reports/pivotsales.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "PivotSales")",
+			urlGetSubsidiaries = "@Url.Action("GetSubsidiaries", "PivotSales")",
+			urlWarehouses = "@Url.Action("GetWarehouses", "PivotSales")",
+			urlCategories = "@Url.Action("GetCategories", "PivotSales")",
+			urlSubcategories = "@Url.Action("GetSubcategories2", "PivotSales")",
+			urlLines = "@Url.Action("GetLines", "PivotSales")",
+			_UserConfig = "@ViewData["ConfigPivot"]",
+			urlExport = "@Url.Action("Export", "PivotSales")",
+			urlUpdate = "@Url.Action("UpdateConfig", "PivotSales")";
+    </script>
+    <script src="~/lib/easyui/jquery.easyui.min.js"></script>
+    <script src="~/lib/easyui/jquery.easyui.pivotgrid.js"></script>    
+    <environment include="Development">
+        <script src="~/js/areas/reports/pivotsales.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/reports/pivotsales.min.js" asp-append-version="true"></script>
+    </environment>
+}

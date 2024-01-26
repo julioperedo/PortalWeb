@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Solicitudes de Usuarios";
+}
+<h3 class="title">@ViewData["Title"]</h3>
+<div class="custom-tab">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pending-tab" data-toggle="tab" href="#pending" role="tab">Pendientes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="processed-tab" data-toggle="tab" href="#processed" role="tab">Procesados</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="pending" role="tabpanel">
+            <div class="row">
+                <div class="col">
+                    <div id="pendings"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="processed" role="tabpanel">
+            <div class="row">
+                <div class="col bg-light px-2 py-3 mx-3">
+                    <div class="row">
+                        <label for="request-type" class="col-2 col-md-1 text-nowrap">Tipo</label>
+                        <div class="col-10 col-md">
+                            <select id="request-type" style="width: 100%;">
+                                <option value="22">Aprobadas</option>
+                                <option value="23">Rechazadas</option>
+                                <option value="24">Eliminadas</option>
+                            </select>
+                        </div>
+                        <label for="request-filter" class="col-2 col-md-1 text-nowrap">Filtro</label>
+                        <div class="col-10 col-md">
+                            <input type="text" id="request-filter" class="form-control" />
+                        </div>
+                        <div class="col text-right pt-2">
+                            <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                            <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col pt-2">
+                    <div id="processed-requests"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-kendo-tmpl" id="tPending">
+    <div class="row request-item">
+        <div class="col">
+            <div class="request">
+                <div class="row">
+                    <div class="col-12 col-sm-8 col-lg-7 col-xl-8">
+                        <div class="row">
+                            <div class="col-8 col-md-6 col-xl-9"><span class="subtitle">Datos Solicitud</span></div>
+                            <div class="col-4 col-md-6 col-xl-3 text-right"><b>#=kendo.toString(requestDate, "dd-MM-yyyy HH:mm")#</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="client">( #=cardCode# )</span> #=clientName#<br />
+                                <span class="client">#=fullName#</span> <span class="text-nowrap">( #=eMail# )</span>
+                            </div>
+                        </div>
+                        <div class="row current-data">
+                            <div class="col">
+                                <span class="subtitle">Nombres V&aacute;lidos</span><br />
+                                #=validCardNames#<br />
+                                <span class="subtitle">Correos V&aacute;lidos</span><br />
+                                #=validEMails#
+                            </div>
+                        </div>
+                        <div class="row current-data">
+                            <div class="col">
+                                <span class="subtitle">Ejecutivo de Venta:</span> #=sellerName#
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4 col-lg-3 col-xl-2 indicators">
+                        <hr class="d-sm-none" />
+                        <span>Creaci&oacute;n: #=kendo.toString(createDate, "dd-MM-yyyy")#</span><br class="d-none d-sm-inline" />
+                        <span>Monto: #=kendo.toString(amount, "N2")#</span> <br class="d-none d-sm-inline" />
+                        # if(hasOrders) {# <span class="color-ok">Compras: </span> <i class="fas fa-check color-ok"></i> #} else {# <span class="color-wrong">Compras:</span> #} #<br class="d-none d-sm-inline" />
+                        # if(validEMail) {# <span class="color-ok">Correo V&aacute;lido: </span> <i class="fas fa-check color-ok"></i> #} else {# <span class="color-wrong">Correo V&aacute;lido:</span> #} #<br class="d-none d-sm-inline" />
+                        # if(inBlackList) {# <span class="color-wrong">Lista Negra: </span> <i class="fas fa-ban color-wrong"></i> #} else {# <span class="color-ok">Lista Negra: </span> #} #<br class="d-none d-sm-inline" />
+                        <span>Existe: </span> # if(idUser > 0) {# <i class="fas fa-check"></i> #} #<br class="d-none d-sm-inline" />
+                        <span>Habilitado: </span> # if(enabled) {# <i class="fas fa-check"></i> #} #<br class="d-none d-sm-inline" />
+                        <span>#=cardCode#: </span> # if(sameClient) {# <i class="fas fa-check"></i> #} #<br class="d-none d-sm-inline" />
+                        <span>Otros Usuarios: </span> # if(clientHasUsers) {# <i class="fas fa-check"></i> #} #<br class="d-none d-sm-inline" />
+                        <span>Otros Usuarios Habilitados: </span> # if(clientHasEnabledUsers) {# <i class="fas fa-check"></i> #} #
+                    </div>
+                    <div class="col-12 col-sm col-lg-2 col-xl-2 text-center">
+                        # if(validEMail && hasOrders && !inBlackList) {# <a title='Aprobar y Enviar Correo' class='btn btn-xs btn-aprove action # if(!validEMail || !hasOrders || inBlackList) {# disabled #} #'><i class="fas fa-save"></i> <span>Aprobar</span> </a><br class="d-none d-lg-inline" /> #} #
+                        <a title='Rechazar y Enviar Correo' class='btn btn-xs btn-reject action'><i class="fas fa-ban"></i> <span>Rechazar</span></a><br class="d-none d-lg-inline" />
+                        <a title='Eliminar' class='btn btn-xs btn-delete action'><i class="fas fa-trash"></i> <span>Eliminar</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="tooltip-template" type="text/x-kendo-template">
+    <div class="template-wrapper">
+        <p>#=target.data('title')#</p>
+    </div>
+</script>
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/administration/userrequest.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/administration/userrequest.min.css" asp-append-version="true" rel="stylesheet" />
+    </environment>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "UserRequest")",
+			urlDetail = "@Url.Action("DetailRequest", "UserRequest")",
+			urlApproveUser = "@Url.Action("ApproveUser", "UserRequest")",
+			urlReject = "@Url.Action("RejectRequest", "UserRequest")",
+			urlUndo = "@Url.Action("UndoRequest", "UserRequest")",
+			urlDelete = "@Url.Action("DeleteRequest", "UserRequest")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/userrequest.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/userrequest.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,424 @@
+﻿@{
+    ViewData["Title"] = "Detalle de Clientes";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        @if (ViewBag.SeeMargin == "Y")
+        {
+            <a class="btn btn-secondary" role="button" href="#" id="action-show-all"><i class="fas fa-eye"></i></a>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Client" class="col-3 col-sm-2 col-lg-1 text-nowrap">Cliente</label>
+                <div class="col-9 col-sm-8 col-lg col-xl">
+                    <kendo-dropdownlist name="Client" option-label="Seleccione un Cliente..." datatextfield="name" datavaluefield="code" style="width: 100%;" ignore-case="true" filter="FilterType.Contains" on-change="onClientChanged">
+                        <datasource>
+                            <transport>
+                                <read url="@Url.Action("GetClientsLocal", "CustomerDetail")" />
+                            </transport>
+                        </datasource>
+                        <virtual enabled="true" item-height="26" value-mapper="clientMapper" />
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3 pb-2">
+        <div class="card no-shadow bg-secondary text-white">
+            <div class="card-body">
+                <div class="row">
+                    <span class="col-3 col-sm-2 col-md-1 col-lg-1 text-nowrap">Nombre:</span>
+                    <div class="col-9 col-sm-4 col-md-5 col-lg-5"><span id="name"></span></div>
+                    <span class="col-3 col-sm-2 col-md-2 col-lg-1 text-nowrap">Raz&oacute;n Social:</span>
+                    <div class="col-9 col-sm-4 col-md-4 col-lg-5"><span id="legalName"></span></div>
+                    <span class="col-3 col-sm-2 col-md-1 col-lg-1 text-nowrap">NIT:</span>
+                    <div class="col-9 col-sm-4 col-md-4 col-lg-5"><span id="nit"></span></div>
+                    <span class="col-3 col-sm-2 col-md-1 col-lg-1 text-nowrap">Creado el:</span>
+                    <div class="col-9 col-sm-4 col-md-4 col-lg-5"><span id="createDate"></span></div>
+                    <span class="col-3 col-sm-2 col-md-1 col-lg-1 text-nowrap">Saldo:</span>
+                    <div class="col-9 col-sm-4 col-md-5 col-lg-5"><span id="accountBalance"></span></div>
+                    <span class="col-3 col-sm-2 col-md-2 col-lg-1 text-nowrap">Pedidos:</span>
+                    <div class="col-9 col-sm-4 col-md-4 col-lg-5"><span id="orders"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Portal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab3" role="tab">Personas de Contacto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab4" role="tab">Direcciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab5" role="tab">Anexos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab6" role="tab">Correos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab7" role="tab">Comercial</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active show" id="tab1" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="row">
+                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Tel&eacute;fono 1:</span>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="phone1"></span></div>
+                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Tel&eacute;fono 2:</span>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="phone2"></span></div>
+                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Tel. M&oacute;vil:</span>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="mobile"></span></div>
+                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Fax:</span>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="fax"></span></div>
+                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">E-Mail:</span>
+                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="email"></span></div>
+                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Contacto:</span>
+                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="contactPerson"></span></div>
+                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">ACCPAC:</span>
+                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="accpac"></span></div>
+                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Eje. Ventas:</span>
+                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="seller"></span></div>
+                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Lim. Cr&eacute;dito:</span>
+                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="creditLimit"></span></div>
+                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Cond. Pago:</span>
+                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="terms"></span></div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div id="acredited">
+                                <div class="custom-tab">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active show" data-toggle="tab" href="#tab11" role="tab" aria-selected="true">Central</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#tab12" role="tab">Iquique</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#tab13" role="tab">Miami</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active show" id="tab11" role="tabpanel">
+                                            <div class="row">
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 1:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-acredited1"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 1:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-ciacredited1"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 2:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-acredited2"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 2:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-ciacredited2"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 3:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-acredited3"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 3:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-ciacredited3"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 4:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-acredited4"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 4:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-ciacredited4"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 5:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-acredited5"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 5:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="sa-ciacredited5"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 6:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="sa-acredited6"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 6:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="sa-ciacredited6"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 7:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="sa-acredited7"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 7:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="sa-ciacredited7"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 8:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="sa-acredited8"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 8:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="sa-ciacredited8"></span></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="tab12" role="tabpanel">
+                                            <div class="row">
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 1:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-acredited1"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 1:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-ciacredited1"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 2:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-acredited2"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 2:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-ciacredited2"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 3:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-acredited3"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 3:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-ciacredited3"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 4:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-acredited4"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 4:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-ciacredited4"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 5:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-acredited5"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 5:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="iq-ciacredited5"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 6:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="iq-acredited6"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 6:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="iq-ciacredited6"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 7:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="iq-acredited7"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 7:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="iq-ciacredited7"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 8:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="iq-acredited8"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 8:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="iq-ciacredited8"></span></div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="tab13" role="tabpanel">
+                                            <div class="row">
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 1:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-acredited1"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 1:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-ciacredited1"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 2:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-acredited2"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 2:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-ciacredited2"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 3:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-acredited3"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 3:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-ciacredited3"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 4:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-acredited4"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 4:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-ciacredited4"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">Acred. 5:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-acredited5"></span></div>
+                                                <span class="col-3 col-sm-3 col-md-3 col-lg-2 text-nowrap">CI Acred. 5:</span>
+                                                <div class="col-9 col-sm-9 col-md-9 col-lg-10"><span id="la-ciacredited5"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 6:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="la-acredited6"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 6:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="la-ciacredited6"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 7:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="la-acredited7"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 7:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="la-ciacredited7"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">Acred. 8:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="la-acredited8"></span></div>
+                                                <span class="col-3 col-sm-5 col-md-4 col-lg-2 text-nowrap">CI Acred. 8:</span>
+                                                <div class="col-9 col-sm-7 col-md-8 col-lg-10"><span id="la-ciacredited8"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab2" role="tabpanel">
+                    <div id="portal-users"></div>
+                </div>
+                <div class="tab-pane" id="tab3" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div id="contact-list"></div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <table class="contact-detail table table-condensed2 table-bordered">
+                                <tr>
+                                    <td>ID de contacto</td>
+                                    <td><span id="cnt-name"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre</td>
+                                    <td><span id="cnt-firstName"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Segundo nombre</td>
+                                    <td><span id="cnt-middleName"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Apellido</td>
+                                    <td><span id="cnt-lastName"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Prefijo</td>
+                                    <td><span id="cnt-title"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Cargo</td>
+                                    <td><span id="cnt-position"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Direcci&oacute;n</td>
+                                    <td><span id="cnt-adderess"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Tel&eacute;fono 1</td>
+                                    <td><span id="cnt-phone1"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Tel&eacute;fono 2</td>
+                                    <td><span id="cnt-phone2"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Tel&eacute;fono M&oacute;vil</td>
+                                    <td><span id="cnt-mobile"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Fax</td>
+                                    <td><span id="cnt-fax"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Correo electr&oacute;nico</td>
+                                    <td><span id="cnt-email"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>C&eacute;dula de identidad</td>
+                                    <td><span id="cnt-identityCard"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Activo</td>
+                                    <td><i id="cnt-active" class="fas"></i></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab4" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div id="address-list"></div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <table class="address-detail table table-condensed2 table-bordered">
+                                <tr>
+                                    <td>ID de direcci&oacute;n</td>
+                                    <td><span id="add-name"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Direcci&oacute;n 1</td>
+                                    <td><span id="add-address1"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Direcci&oacute;n 2</td>
+                                    <td><span id="add-address2"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Direcci&oacute;n 3</td>
+                                    <td><span id="add-address3"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Contacto</td>
+                                    <td><span id="add-contact"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Pa&iacute;s</td>
+                                    <td><span id="add-country"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Departamento</td>
+                                    <td><span id="add-state"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Ciudad</td>
+                                    <td><span id="add-city"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Ind. Impuesto</td>
+                                    <td><span id="add-tax"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab5" role="tabpanel">
+                    <div id="attach-list"></div>
+                </div>
+                <div class="tab-pane" id="tab6" role="tabpanel">
+                    <div id="mail-list"></div>
+                </div>
+                <div class="tab-pane" id="tab7" role="tabpanel">
+                    <div class="row">
+                        <div class="col"><span class="font-weight-bold text-nowrap">Primera Compra:</span></div><div class="col"><span id="firstInvoice"></span></div>
+                        <div class="col"><span class="font-weight-bold text-nowrap">&Uacute;ltima Compra:</span></div><div class="col"><span id="lastInvoice"></span></div>
+                        <div class="col"><span class="font-weight-bold text-nowrap">Promedio de d&iacute;as de Mora:</span></div><div class="col"><span id="dueDays"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span class="font-weight-bold text-nowrap">Total:</span></div><div class="col"><span id="totalInvoice"></span></div>
+                        <div class="col"><span class="font-weight-bold text-nowrap d-none" id="margin-label">Margen:</span></div><div class="col"><span id="margin" class="d-none"></span></div>
+                        <div class="col"><span class="font-weight-bold text-nowrap">Cant. de Compras:</span></div><div class="col"><span id="quantityInvoice"></span></div>
+                        <div class="col"><span class="font-weight-bold text-nowrap">Prom. por Compra:</span></div><div class="col"><span id="averageInvoice"></span></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col"><h5 class="font-weight-bold">Resumen de Compras por a&ntilde;o</h5></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="listYears"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-kendo-tmpl" id="contact-template">
+    <div class="client-contact action" data-id="#:id#">
+        #:name#
+    </div>
+</script>
+<style type="text/css">
+    .table-condensed2 > tbody > tr > td {
+        padding: 2px 5px;
+    }
+
+    .contact-detail td:first-child, .address-detail td:first-child {
+        width: 120px;
+        background-color: #eee;
+        font-weight: 600;
+    }
+
+    .client-contact {
+        border-bottom: 1px solid #DDD;
+        padding-bottom: 3px;
+        padding-top: 3px;
+        padding-left: 8px;
+    }
+</style>
+@section Scripts {
+    <script type="text/javascript">
+		var urlClient = "@Url.Action("GetClient", "CustomerDetail")",
+			urlContactData = "@Url.Action("GetContactData", "CustomerDetail")",
+			urlAddressData = "@Url.Action("GetAddressData", "CustomerDetail")",
+            urlAttachsData = "@Url.Action("GetAttachmentData", "CustomerDetail")",
+            urlMonths = "@Url.Action("GetMonths", "CustomerDetail")",
+			urlService = "@Url.Content("~/api/reports/")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/customerdetail.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/customerdetail.min.js" asp-append-version="true"></script>
+    </environment>
+}

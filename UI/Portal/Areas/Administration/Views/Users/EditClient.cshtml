@@ -1,0 +1,69 @@
+﻿@model BEntities.Security.User
+<form asp-action="Edit" asp-controller="Users" asp-area="Administration" method="post">
+	<div class="form-horizontal">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="AccountHolder" />
+		<input type="hidden" asp-for="Commentaries" />
+		<input type="hidden" asp-for="CardCode" />
+		<input type="hidden" asp-for="AllowLinesBlocked" />
+		<div class="row mb-1">
+			<label for="FirstName" class="col-md-2">Nombres</label>
+			<div class="col-md-10">
+				<input asp-for="FirstName" class="form-control" />
+			</div>
+		</div>
+		<div class="row mb-1">
+			<label for="LastName" class="col-md-2">Apellidos</label>
+			<div class="col-md-10">
+				<input asp-for="LastName" class="form-control" />
+			</div>
+		</div>
+		<div class="row mb-1">
+			<label for="EMail" class="col-md-2">Usuario (E-Mail)</label>
+			<div class="col-md-4">
+				<input asp-for="EMail" type="email" class="form-control" />
+			</div>
+			<label for="Password" class="col-md-1">Contraseña</label>
+			<div class="col-md-5">
+				<input asp-for="Password" type="password" class="form-control" value="@Model.Password" />
+			</div>
+		</div>
+		<div class="row mb-1">
+			<label for="Address" class="col-md-2">Direcci&oacute;n</label>
+			<div class="col-md-10">
+				<textarea asp-for="Address" rows="3" class="form-control"></textarea>
+			</div>
+		</div>
+		<div class="row mb-1">
+			<label for="Phone" class="col-md-2">Tel&eacute;fono</label>
+			<div class="col-md-10">
+				<input asp-for="Phone" class="form-control" />
+			</div>
+		</div>
+		<div class="row mb-1">
+			<label for="IdProfile" class="col-md-2">Perfil</label>
+			<div class="col-md-4">
+				<input asp-for="IdProfile" style="width: 100%;" />
+			</div>
+			<label for="Position" class="col-md-1">Cargo</label>
+			<div class="col-md-5">
+				<input asp-for="Position" class="form-control" />
+			</div>
+		</div>
+		<div class="row mb-1">
+			<label for="Enabled" class="col-md-2">Habilitado</label>
+			<div class="col-md-3">
+				<input type="hidden" name="Enabled" value="false" />
+				<label class="switch">
+					@{ string enabledChecked = Model.Enabled ? @"checked=""checked""" : ""; }
+					<input type="checkbox" id="Enabled" name="Enabled" @enabledChecked value="@Model.Enabled" />
+					<span class="slider round"></span>
+				</label>
+			</div>
+		</div>
+		<div class="text-right">
+			<button type="button" id="action-cancel" class="btn btn-outline-secondary">Cancelar</button>
+			<button type="button" id="action-save" class="btn btn-primary">Guardar</button>
+		</div>
+	</div>
+</form>

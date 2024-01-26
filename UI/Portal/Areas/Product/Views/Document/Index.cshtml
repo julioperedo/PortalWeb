@@ -1,0 +1,226 @@
+﻿@{
+    ViewBag.Title = "Documentos de Productos";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary" id="open-receivers-config" title="Configurar Destinatarios" role="button"><i class="fas fa-users-cog"></i></a>
+        <a class="btn btn-secondary" id="open-mail-config" title="Configurar Cabecera y Pie del Correo" role="button"><i class="fas fa-cog"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-md-3 pt-3">
+        <div id="Listado"></div>
+    </div>
+    <div class="col col-md-9 pt-3">    
+        <div id="Documents"></div>
+    </div>
+</div>
+<div id="Detail">
+    <form>
+        <div class="row">
+            <input id="id" name="id" type="hidden" />
+            <label for="name" class="col-2 col-md-1 text-nowrap">Nombre</label>
+            <div class="col-10 col-md-11">
+                <input id="name" name="name" class="form-control" required />
+            </div>
+        </div>
+        <div class="row">
+            <label for="description" class="col-2 col-md-1 text-nowrap">Descripci&oacute;n</label>
+            <div class="col-10 col-md-11">
+                <textarea id="description" name="description" class="form-control" rows="3" style="height: 360px"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <label for="typeIdc" class="col-2 col-md-1 text-nowrap">Tipo</label>
+            <div class="col-10 col-md-5">
+                <input id="typeIdc" name="typeIdc" class="w-100" required />
+            </div>
+            <label for="releaseDate" class="col-2 col-md-1 text-nowrap">Fecha</label>
+            <div class="col-10 col-md-5">
+                <input id="releaseDate" name="releaseDate" required />
+            </div>
+        </div>
+        <div class="row">
+            <label for="idLine" class="col-2 col-md-1 text-nowrap">L&iacute;nea</label>
+            <div class="col-10 col-md-5">
+                <input id="idLine" name="idLine" class="w-100" required />
+            </div>
+            <label for="idProduct" class="col-2 col-md-1 text-nowrap">Producto</label>
+            <div class="col-10 col-md-5">
+                <input id="idProduct" name="idProduct" class="w-100" required />
+            </div>
+        </div>
+        <div class="row">
+            <label for="fileURL" class="col-2 col-md-1 text-nowrap">Archivo</label>
+            <div class="col-10 col-md-11 pb-2">
+                <input id="filesData" name="filesData" type="hidden" />
+                <div id="fileList"></div>            
+                <div id="file-wrapper">
+                    <input id="files" name="files" type="file" aria-label="files" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label for="enabled" class="col-2 col-md-1 text-nowrap">Habilitado</label>
+            <div class="col-4 col-md-5">
+                <input id="enabled" name="enabled" type="checkbox" />
+            </div>
+            <div class="col-6 text-right pt-2">
+                <button class="btn btn-primary save-document" id="save-document">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="DetailReceiver">
+    <section>
+        <div id="Receivers"></div>
+    </section>
+    <form id="receiver-form" class="d-none form-x">
+        <div class="row">
+            <input id="id-receiver" name="id-receiver" type="hidden" />
+            <div class="col">
+                <div class="form-group">
+                    <label for="name-receiver" class="col">Nombre</label>
+                    <input id="name-receiver" name="name-receiver" class="form-control" required />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="email-receiver" class="col">E-Mail</label>
+                    <input id="email-receiver" name="email-receiver" type="email" class="form-control" required />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="id-client-receiver" class="col">Cliente</label><input id="id-client-receiver" name="id-client-receiver" class="w-100" required />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="enabled-receiver">Habilitado</label>
+                <input id="enabled-receiver" name="enabled-receiver" type="checkbox" />
+            </div>
+            <div class="col text-right pt-2">
+                <button class="btn btn-primary" id="save-receiver">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="Emails">
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="email-subject">T&iacute;tulo</label>
+                <input id="email-subject" name="email-subject" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <h5>Documentos Habilitados para enviar</h5>
+                    <div id="available-docs"></div>
+                </div>
+                <div class="col">
+                    <div><span class="h5">Clientes Habilitados para enviar</span><span id="all-receivers">Todos</span></div>                    
+                    <div id="available-clients"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col pt-1">
+            <label for="show-signature" class="text-nowrap">Con Firma</label>
+            <input id="show-signature" name="show-signature" type="checkbox" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-right pt-2">
+            <button class="btn btn-primary" id="send-email">Enviar Correo</button>
+        </div>
+    </div>
+</div>
+<div id="email-settings">
+    <input type="hidden" id="mail-settings-id" />
+    <div class="row">
+        <div class="col">
+            <label for="mail-header">Cabecera</label>
+            <textarea id="mail-header" name="mail-header" rows="3" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="mail-footer">Pie</label>
+            <textarea id="mail-footer" name="mail-footer" rows="3" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-right pt-2">
+            <button id="save-mail-settings" class="btn btn-primary">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="template">
+    <div class="line">
+        <h5>#= data.value #</h5>
+        <div class="product-list">
+            # for (var i = 0; i < data.items.length; i++) { #
+                <div class="product" data-id="#=data.items[i].id#" data-idLine="#=data.items[i].idLine#">
+                    <span class="item-code">#= data.items[i].itemCode #</span><br />
+                    <span class="name">#= data.items[i].name #</span>
+                </div>
+            # } #
+        </div>
+    </div>
+</script>
+@section Styles{
+    <environment include="Development">
+        <link href="~/css/areas/product/document.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/product/document.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+    @section Scripts {
+    <script type="text/javascript">
+        var urlDelete = "@Url.Action("Delete")",
+            urlEdit = "@Url.Action("Edit")",
+            urlEditReceiver = "@Url.Action("EditReceiver")",
+            urlDeleteReceiver = "@Url.Action("DeleteReceiver")",
+            urlFilter = "@Url.Action("Filter")",
+            urlAllReceivers = "@Url.Action("GetAllReceivers")",
+            urlSendMail = "@Url.Action("SendDocument")",
+            urlGetTypes = "@Url.Action("GetTypes")",
+            urlGetAvailableProducts = "@Url.Action("GetAvailableProducts")",
+            urlGetProducts = "@Url.Action("GetProducts")",
+            urlGetLines = "@Url.Action("GetSAPLines")",
+            urlGetClients = "@Url.Action("GetClients")",
+            urlConfigMail = "@Url.Action("GetConfigMail")",
+            urlRemoveFile = "@Url.Action("RemoveFile")",
+            urlSaveFile = "@Url.Action("SaveFile")",
+            urlGetMailConfig = "@Url.Action("GetMailConfig")",
+            urlSaveMailConfig = "@Url.Action("SaveMailConfig")",
+            urlDownloadFile = "@Url.Action("DownloadFile")",
+            urlDownloadFiles = "@Url.Action("DownloadFiles")",
+            urlImage = "@Url.Content("~/images/productdocs/{0}")",
+            urlImageUpload = "@Url.Action("Upload", "ImageBrowser", new { area = "" })",
+            urlImageRead = "@Url.Action("Read", "ImageBrowser", new { area = "" })",
+            urlImageCreate = "@Url.Action("Create", "ImageBrowser", new { area = "" })",
+            urlImageDestroy = "@Url.Action("Destroy", "ImageBrowser", new { area = "" })",
+            _deletePremission = "@ViewData["DeleteDocument"]" === "Y";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/document.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/document.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,265 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+    int year = DateTime.Today.Year;
+}
+<input type="hidden" id="Charts" value="@ViewBag.Charts" />
+<input type="hidden" id="SeeAllSalesDetail" value="@ViewBag.SeeAllSalesDetail" />
+<div class="myaccordion" id="accordion">
+    <div class="card card-regional">
+        <div class="card-header" id="headingRegional">
+            <h5 class="mb-0">
+                <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#contentRegional" aria-expanded="true" aria-controls="contentRegional">
+                    Regional
+                    <i class="fas fa-angle-down"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="contentRegional" class="collapse show" aria-labelledby="headingRegional" data-parent="#accordion">
+            <div class="card-body">
+                <div id="resumeSales">
+                    <div class="row">
+                        <div class="col-12 col-lg col-xl text-nowrap">
+                            Desde <input type="date" id="regional-since" class="form-date" /> Hasta <input type="date" id="regional-until" class="form-date" />
+                        </div>
+                        <div class="col-12 col-lg col-xl text-right">
+                            <div class="btn-group btn-group-toggle action" data-toggle="buttons" id="divisions">
+                                <div class="btn btn-light active"><input type="radio" name="division" value="General">General</div>
+                                <div class="btn btn-light"><input type="radio" name="division" value="Consumer">Consumer</div>
+                                <div class="btn btn-light"><input type="radio" name="division" value="Enterprise">Enterprise</div>
+                                <div class="btn btn-light"><input type="radio" name="division" value="Mobile">Mobile</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div id="tableResume" class="mt-2"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button type="button" class="btn btn-outline-secondary mt-2 d-none d-xl-inline" id="switch-warehouses">Ver Almacenes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-4"><div id="chartResume"></div></div>
+                        <div class="col-12 col-lg-8"><div id="chartProjection"></div></div>
+                    </div>
+                </div>
+                <hr />
+                <div id="topClients" class="mt-2">
+                    <div class="row">
+                        <div class="col-12 col-lg">
+                            <h4>Top 10 Clientes</h4>
+                        </div>
+                        <div class="col-12 col-lg text-right">
+                            <div class="btn-group btn-group-toggle action" data-toggle="buttons" id="subsidiaries">
+                                <div class="btn btn-light active"><input type="radio" name="subsidiary" value="General">General</div>
+                                <div class="btn btn-light"><input type="radio" name="subsidiary" value="Santa Cruz">Santa Cruz</div>
+                                <div class="btn btn-light"><input type="radio" name="subsidiary" value="Iquique">Iquique</div>
+                                <div class="btn btn-light"><input type="radio" name="subsidiary" value="Miami">Miami</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-xl-6">
+                            <div class="pt-2">
+                                <div id="tableTopClients" class="mt-2"></div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-6">
+                            <div id="chartTopClients"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-kbytes">
+        <div class="card-header" id="headingKbytes">
+            <h5 class="mb-0">
+                <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#contentKbytes" aria-expanded="true" aria-controls="contentKbytes">
+                    Kbytes
+                    <i class="fas fa-angle-up"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="contentKbytes" class="collapse" aria-labelledby="headingKbytes" data-parent="#accordion">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col pt-1" id="resumes"></div>
+                </div>
+                <div class="row">
+                    <div id="notesContainer" class="col-12">
+                        <div id="listNotes"></div>
+                    </div>
+                    <div id="awardsContainer" class="col-12">
+                        <div id="listAwards"></div>
+                    </div>
+                    <div id="pointsContainer" class="col-12">
+                        <div id="listPoints"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-products">
+        <div class="card-header" id="headingProducts">
+            <h5 class="mb-0">
+                <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#contentProducts" aria-expanded="false" aria-controls="contentProducts">
+                    Productos
+                    <i class="fas fa-angle-up"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="contentProducts" class="collapse" aria-labelledby="headingProducts" data-parent="#accordion">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        Desde <input type="date" id="products-since" class="form-date" /> Hasta <input type="date" id="products-until" class="form-date" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="chartLines"></div>
+                        <div id="chartCategories"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-team">
+        <div class="card-header" id="headingTeam">
+            <h5 class="mb-0">
+                <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#contentTeam" aria-expanded="false" aria-controls="contentTeam">
+                    Rendimiento de Equipo
+                    <i class="fas fa-angle-up"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="contentTeam" class="collapse" aria-labelledby="headingTeam" data-parent="#accordion">
+            <div class="card-body">
+                <div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="chartTeamQuota"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="sellersResume">
+                    <div class="row">
+                        <div class="col-12">
+                            Desde <input type="date" id="seller-resume-since" class="form-date" /> Hasta <input type="date" id="seller-resume-until" class="form-date" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="chartSellersResume"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="chartSellersOnTime"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-events">
+        <div class="card-header" id="headingEvents">
+            <h5 class="mb-0">
+                <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#contentEvents" aria-expanded="false" aria-controls="contentEvents">
+                    Eventos
+                    <i class="fas fa-angle-up"></i>
+                </button>
+            </h5>
+        </div>
+        <div id="contentEvents" class="collapse" aria-labelledby="headingEvents" data-parent="#accordion">
+            <div class="card-body">
+                <div id="events-container" class="row"></div>
+                <div class="row">
+                    <div class="col">
+                        <a class="action-link" asp-action="Index" asp-controller="Events" asp-area="Marketing">Ver todos los eventos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divOrder"></div>
+<script type="text/x-kendo-template" id="templateComments">
+    <h3>Iniciales</h3>
+    <p>#= data.header #</p>
+    <h3># if (data.footer) { # Finales # } #</h3>
+    <p># if (data.footer) { # #= data.footer # #} #</p>
+</script>
+<script type="text/x-kendo-template" id="templateAttach">
+    # for (var i = 0; i < data.files.length; i++) { #
+    <a href="\\#" data-file="#=data.id#" data-subsidiary="#=data.subsidiary#" class="open-file action action-link"><span>#= data.files[i] #</span></a>
+    <br />
+    # } #
+</script>
+<div id="Detail">
+    <div id="openOVs"></div>
+    <div id="notesBilled"></div>
+    <div id="stockDetail"></div>
+    <div id="justDelivered"></div>
+</div>
+<div id="Report">
+    <div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;"></div>
+</div>
+<div id="Detail2"></div>
+@section Styles{
+    <environment include="Development">
+        <link href="~/css/areas/home.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/home.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section Scripts {
+    <script type="text/javascript">
+        var ulrSalesResume = "@Url.Action("SalesResume", "Home")",
+            ulrTopClients = "@Url.Action("TopClients", "Home")",
+            urlOpenOrders = "@Url.Action("OpenOrders", "Home")",
+            urlOrderDetail = "@Url.Action("DetailOrder", "Home")",
+            urlTodayBills = "@Url.Action("TodayBills", "Home")",
+            urlPeriodBills = "@Url.Action("PeriodBills", "Home")",
+            urlNoteDetail = "@Url.Action("DetailNote", "Home")",
+            urlDeliveryNoteDetail = "@Url.Action("DetailDeliveryNote", "Home")",
+            urlStock = "@Url.Action("StockDetail", "Home")",
+            urlStockWarehouse = "@Url.Action("StockDetailByWarehouse", "Home")",
+            urlGetStock = "@Url.Action("GetStockDetail", "Home")",
+            urlDownloadFile = "@Url.Action("DownloadFile")",
+            urlReservedItems = "@Url.Action("GetReservedItems", "Orders", new { area = "Commercial" })",
+            urlKbytes = "@Url.Action("KbytesResume", "Home")",
+            urlResumeLines = "@Url.Action("ProductsResumeByLines", "Home")",
+            urlResumeCategories = "@Url.Action("ProductsResumeByCategories", "Home")",
+            ulrLastEvents = "@Url.Action("LastEvents", "Home")",
+            urlEvent = "@Url.Action("Detail", "Events", new { area = "Marketing" })",
+            urlTeamQuota = "@Url.Action("TeamQuota", "Home")",
+            urlTeamResume = "@Url.Action("TeamResume", "Home")",
+            urlTeamResumeInTime = "@Url.Action("TeamResumeInTime", "Home")",
+            urlAwards = "@Url.Action("GetAwardsClaimed", "Home")",
+            urlNotes = "@Url.Action("GetPointsResume", "Home")",
+            urlAvailablePoints = "@Url.Action("GetAvailablePoints", "Home")",
+            urlOpenDeliveryNotes = "@Url.Action("GetOpenDeliveryNotes", "Home")",
+            urlService = "@Url.Content("~/api/reports/")";
+    </script>
+    <script src="~/lib/kendo-ui/js/jszip.min.js"></script>
+    <script src="~/lib/highcharts/highcharts.min.js"></script>
+    <script src="~/lib/highcharts/modules/exporting.min.js"></script>
+    <script src="~/lib/highcharts/modules/drilldown.min.js"></script>
+    <script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+    <script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/home.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/home.min.js" asp-append-version="true"></script>
+    </environment>
+}

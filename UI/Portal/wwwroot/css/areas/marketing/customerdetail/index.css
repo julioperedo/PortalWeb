@@ -1,0 +1,58 @@
+﻿#Save {
+	margin: 10px 20px 6px 0;
+}
+
+.day-list-wrapper {
+	background: #dddddd;
+	border: 1px solid #c7c6c6;
+	border-radius: 4px;
+	margin: 3px;
+	padding: 8px 0 0 0;
+}
+
+	.day-list-wrapper span {
+		margin-left: 8px;
+		font-weight: 600;
+		font-size: 1.1em;
+	}
+
+.week-days .day-list-wrapper {
+	float: left;
+	width: 210px;
+}
+
+.day-list {
+	min-height: 110px;
+	margin: 0;
+	padding: 0;
+}
+
+.list-item {
+	list-style-type: none;
+	min-width: 180px;
+	margin: 5px;
+	line-height: 30px;
+	text-align: center;
+	background-color: #47a3cc;
+	color: #141313;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+	.list-item:hover {
+		background-color: #33708b;
+	}
+
+#available-days .list-item {
+	background-color: #66cc66;
+	color: #000000;
+}
+
+	#available-days .list-item:hover {
+		background-color: #448944;
+	}
+
+#placeholder.list-item {
+	background-color: #faf8b2;
+	color: #777;
+}

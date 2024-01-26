@@ -1,0 +1,285 @@
+﻿@{
+    ViewData["Title"] = "Cotizador";
+}
+<div class="row title">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary" title="Limpia el formulario" role="button" href="#" id="action-new"><i class="fas fa-file"></i>&nbsp;&nbsp;&nbsp;Nuevo</a>
+        <a class="btn btn-secondary" title="Elimina la Cotizaci&oacute;n actual" role="button" href="#" id="action-delete"><i class="fas fa-trash"></i>&nbsp;&nbsp;&nbsp;Eliminar</a>
+        <a class="btn btn-secondary" title="Guardar la Cotizaci&oacute;n" role="button" href="#" id="action-save"><i class="fas fa-save"></i>&nbsp;&nbsp;&nbsp;Guardar</a>
+        <a class="btn btn-secondary" title="Enviar la Cotizaci&oacute;n" role="button" href="#" id="action-sendmail"><i class="fas fa-paper-plane"></i>&nbsp;&nbsp;&nbsp;Enviar</a>
+    </div>
+</div>
+<div class="quote row">
+    <div class="filter col-sm-4 col-md-4 col-lg-3">
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Cotizaciones Anteriores</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active show" id="tab1" role="tabpanel">
+                    <div class="row quote-filter" id="product-filters">
+                        <div class="col-sm-12">
+                            <label for="Line">L&iacute;nea</label>
+                            <div>
+                                <input id="Line" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="Category">Categor&iacute;a</label>
+                            <div class="category">
+                                <select multiple="multiple" id="Category"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="Subsidiary">Sucursal</label>
+                            <div>
+                                <select multiple="multiple" id="Subsidiary"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-8">
+                            <label for="ProductName">Descripci&oacute;n</label>
+                            <div>
+                                <input type="text" id="ProductName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg text-right pt-4">
+                            <label for="search-products">&nbsp;</label>
+                            <button class="btn btn-primary" id="search-products">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="pt-2 pb-2">
+                        <div id="Products"></div>
+                    </div>
+                    <div class="row filter-footer"><span id="products-resume"></span></div>
+                </div>
+                <div class="tab-pane" id="tab2" role="tabpanel">
+                    <div class="row quote-filter quote-filter-2" id="quote-filters">
+                        <div class="col-sm-12 col-lg-6">
+                            <label for="SinceDate">Desde</label>
+                            <div>
+                                <input type="date" id="SinceDate" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <label for="UntilDate">Hasta</label>
+                            <div>
+                                <input type="date" id="UntilDate" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-9">
+                            <label for="Name">Cliente</label>
+                            <div>
+                                <input type="text" id="Name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-1 text-right">
+                            <label for="search-quotes">&nbsp;</label>
+                            <button class="btn btn-primary" id="search-quotes">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="pt-2 pb-2">
+                        <div id="Quotes"></div>
+                    </div>
+                    <div class="row filter-footer"><span id="quotes-resume"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content col-sm-8 col-md-8 col-lg-9">
+        <div class="inner">
+            <form id="form-quote">
+                <input type="hidden" id="IdQuote" />
+                <div class="row quote-header">
+                    <div class="col-12"><span class="code"></span></div>
+                    <div class="col-12 quote-sent"></div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="Client" class="h4">Cliente</label>
+                        <div>
+                            <input id="Client" class="w-50" required />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="ClientName">Nombre</label>
+                        <div>
+                            <input type="text" id="ClientName" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="ClientMail">Correo</label>
+                        <div>
+                            <input type="email" id="ClientMail" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 pt-2">
+                        <label for="Header" class="h4">Cabecera</label>
+                        <div>
+                            <textarea id="Header" style="height: 180px;" class="w-100"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 pt-2">
+                        <label for="quote-detail" class="h4">Detalle</label> <span>( </span><span id="detail-count-label"></span><span> de 50 items )</span>
+                        <input type="hidden" id="detail-count" />
+                        <div id="quote-detail"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 pt-2">
+                        <label for="Footer" class="h4">Pie</label>
+                        <div>
+                            <textarea id="Footer" style="height: 180px;" class="w-100"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="signature" class="mt-3"></div>
+    </div>
+</div>
+<script type="text/x-kendo-tmpl" id="productTemplate">
+    <div class="product">
+        <label class="selector"><input type="checkbox" class="option-input checkbox-state selected-product" data-value="#:itemCode#" /> </label>
+        <div class="data">
+            <span class="code"><strong>#:itemCode#</strong></span><br />
+            <span>#:name#</span><br />
+            # if(prices.length > 0) { #
+            #   for (var i = 0; i < prices.length; i++) { #
+            <i>#:prices[i].subsidiary#</i> : US$ #=kendo.toString(prices[i].regular, "N2")# &nbsp;&nbsp;&nbsp;&nbsp;
+            #   } #
+            # } #
+            # if(stock.length > 0) { #
+            <br /><span><strong>Stock</strong></span>
+            #   for (var i = 0; i < stock.length; i++) { #
+            <br /><i>#:stock[i].warehouse#</i> : #:stock[i].available#&nbsp;&nbsp;&nbsp;&nbsp;
+            #       if(stock[i].inTransit > 0) { #
+            <span>En tr&aacute;nsito : #:stock[i].inTransit#</span>
+            #       } #
+            #   } #
+            # } #
+        </div>
+        # if (itemCode === "TODOS") { #
+        <button class="btn btn-primary add-selected">Agregar Seleccionados <i class="fas fa-arrow-right"></i></button>
+        # } else { #
+        <a><span class="fa fa-arrow-right"></span></a>
+        # } #
+    </div>
+</script>
+<script type="text/x-kendo-tmpl" id="quoteTemplate">
+    <div class="quote-result">
+        <div class="data">
+            <input type="hidden" value="#:id#" class="IdQuote" />
+            <span class="quote-code">#:quoteCode#</span><br />
+            <span class="code">#:cardCode# - #:cardName#</span><br />
+            <span>#:clientName# ( #:clientMail# )</span><br />
+            <span>#=kendo.toString(JSON.toDate(quoteDate), "dd/MM/yyyy")#</span>
+        </div>
+        <a><span class="fa fa-arrow-right"></span></a>
+    </div>
+</script>
+<script type="text/x-kendo-tmpl" id="addedProductTemplate">
+    <div class="row quote-product">
+        <input type="hidden" id="IdProduct" value="#=idProduct#" />
+        <div class="image">
+            <img src="#=imageUrl#" />
+        </div>
+        <div class="desc">
+            # if($.trim(productLink) !== "") { #
+            <a href="#=productLink#" target="_blank"><span class="code">#=productCode#</span></a>
+            # } else { #
+            <span class="code">#=productCode#</span>
+            # } #
+            <br />
+            <span class="name">#=productName#</span><br />
+            <div id="#=name#" class="w-100 description-editor">#=productDescription#</div>
+        </div>
+        <div class="prices">
+            # for (var i = 0; i < prices.length; i++) { #
+            #    var name = idProduct + "-" + prices[i].idSubsidiary + "-" + (new Date()).getTime(); #
+            <div class="price">
+                <div class="custom-control custom-switch">
+                    # if(prices[i].selected) { #
+                    <input type="checkbox" class="selected-price custom-control-input" value="#=prices[i].idSubsidiary#" id="Selected-#=name#" checked="checked" />
+                    # } else { #
+                    <input type="checkbox" class="selected-price custom-control-input" value="#=prices[i].idSubsidiary#" id="Selected-#=name#" />
+                    # } #
+                    <label class="custom-control-label subsidiary" for="Selected-#=name#">#=prices[i].subsidiary#</label>
+                </div>
+                <p class="regular">
+                    US$ <input type="number" id="Price-#=name#" value="#=prices[i].price#" class="k-textbox w-75" required />
+                </p>
+                <p class="regular">
+                    <input type="number" id="Quantity-#=name#" value="#=prices[i].quantity#" class="k-textbox w-50" required />	Unidades
+                </p>
+                <p class="observations">#=$.trim(prices[i].observations)#</p>
+            </div>
+            # } #
+            # if(volume && volume.length > 0) { #
+            <div class="volume">
+                <span><strong>Precios por Volumen</strong> (No se incluir&aacute; en el correo)</span>
+                # for (var i = 0; i < volume.length; i++) { #
+                <p>
+                    #=volume[i].subsidiary# - #=volume[i].quantity# unidades - US$ #=kendo.toString(volume[i].price, "N2")#
+                    # if($.trim(volume[i].observations) !== "") { #
+                    <br />volume[i].observations
+                    # } #
+                </p>
+                # } #
+            </div>
+            # } #
+            # if(stock && stock.length > 0) { #
+            <div class="stock">
+                <span><strong>Stock</strong> (No se incluir&aacute; en el correo)</span>
+                # for (var i = 0; i < stock.length; i++) { #
+                <br /><span>#=stock[i].warehouse# : #=stock[i].available# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                #    if(stock[i].inTransit > 0) { #
+                <span>En Tr&aacute;nsito : #=stock[i].inTransit#</span>
+                #    } #
+                # } #
+            </div>
+            # } #
+        </div>
+        <span class="fas fa-sync-alt refresh-product"></span>
+        <i class="fas fa-times remove-product"></i>
+    </div>
+</script>
+<link href="~/css/areas/commercial/quoteorder.css" rel="stylesheet" />
+
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilterProducts = "@Url.Action("Products", "QuoteOrder")",
+			urlFilterProducts2 = "@Url.Action("Products2", "QuoteOrder")",
+			urlProduct = "@Url.Action("Product", "QuoteOrder")",
+			urlEdit = "@Url.Action("Edit", "QuoteOrder")",
+			urlDelete = "@Url.Action("Delete", "QuoteOrder")",
+			urlGetSignature = "@Url.Action("GetSignature", "QuoteOrder")",
+			urlGetLines = "@Url.Action("GetLines2", "QuoteOrder")",
+			urlGetCategories = "@Url.Action("GetCategories", "QuoteOrder")",
+			urlGetSubsidiaries = "@Url.Action("GetSubsidiariesItems", "QuoteOrder")",
+			urlClients = "@Url.Action("GetClients", "QuoteOrder")",
+			urlFolder = "@Url.Content("~/images/products/")",
+			urlNoImage = "@Url.Content("~/images/no-image.jpg")",
+			urlClient = "@Url.Action("Client", "QuoteOrder")",
+			urlFilter = "@Url.Action("Filter", "QuoteOrder")";
+    </script>
+    <script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+    <script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/quoteorder.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/quoteorder.min.js" asp-append-version="true"></script>
+    </environment>
+}

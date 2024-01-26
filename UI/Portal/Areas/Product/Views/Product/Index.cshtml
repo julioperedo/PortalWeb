@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "Configuración de Productos";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilProduct">Producto</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="FilProduct" type="text" class="form-control" />
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilEnabled">Habilitado</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <select id="FilEnabled" class="w-50">
+                        <option value="A">AMBOS</option>
+                        <option value="V" selected="selected">Si</option>
+                        <option value="F">No</option>
+                    </select>
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilLine">L&iacute;nea</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="FilLine" class="w-100" />
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilCategory">Categor&iacute;a</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="FilCategory" class="w-100" />
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilOffers">Ofertas</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <select id="FilOffers" class="w-50">
+                        <option value="A" selected="selected">AMBOS</option>
+                        <option value="V">Si</option>
+                        <option value="F">No</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Detail" visible="false" title="Producto" modal="true" draggable="true" width="1100" on-refresh="onRefresh" on-close="onCloseWindow">
+    <content><div style='text-align: center;'>Cargando ...</div></content>
+</kendo-window>
+<script id="detailTemplate" type="text/x-kendo-tmpl">
+    <div class="row">
+        <input id="Id" type="hidden" value="#:id#" />
+        <input id="IdProduct" type="hidden" value="#:idProduct#" />
+        <input id="IdSubsidiary" type="hidden" value="#:idSubsidiary#" />
+        <label for="Quantity" class="col col-sm-2">Cantidad</label>
+        <div class="col col-sm-4">
+            <input id="Quantity" name="Quantity" type="number" value="#:quantity#" min="0" />
+        </div>
+        <label for="Price" class="col col-sm-2">Precio</label>
+        <div class="col col-sm-4">
+            <input id="Price" name="Price" type="number" value="#:price#" min="0" />
+        </div>
+    </div>
+    <div class="row">
+        <label for="Observations" class="col-12 col-sm-2">Observaciones</label>
+        <div class="col col-sm-10">
+            <textarea name="Observations" class="k-textbox" id="Observations" style="width: 100%;" rows="3" cols="20" data-val="true" data-val-length-max="255" data-val-length="No debe exceder los 255 caracteres.">#:observations#</textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-right mt-1">
+            <button class="per-update btn btn-light cancel-volume-price" role="button" type="button">Cancelar</button>&nbsp;
+            <button class="per-update btn btn-info save-volume-price" role="button" type="button">Guardar</button>
+        </div>
+    </div>
+</script>
+<kendo-window name="HistoryDetail" visible="false" title="Historial de Precios" modal="true" draggable="true" width="1100">
+    <content>
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" id="history-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#price-tab" role="tab" aria-controls="price-tab" aria-selected="true">Precios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#volume-tab" role="tab" aria-controls="volume-tab" aria-selected="false">Precios por Volumen</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="price-tab" role="tabpanel" aria-labelledby="home-tab"><div id="prices-history-grid"></div></div>
+                <div class="tab-pane" id="volume-tab" role="tabpanel" aria-labelledby="profile-tab"><div id="volume-prices-history-grid"></div></div>
+            </div>
+        </div>
+    </content>
+</kendo-window>
+<script id="detailLotTemplate" type="text/x-kendo-tmpl">
+    <div class="row">
+        <input id="Id" name="Id" type="hidden" value="#:id#" />
+        <input id="IdProduct" name="IdProduct" type="hidden" value="#:idProduct#" />
+        <label for="InitialQuantity" class="control-label col-2">Cantidad Inicial</label>
+        <div class="col-4">
+            <input id="InitialQuantity" name="InitialQuantity" type="number" value="#:initialQuantity#" min="0" />
+        </div>
+        <label for="Quantity" class="control-label col-2">Cantidad</label>
+        <div class="col-4">
+            <input id="Quantity" name="Quantity" type="number" value="#:quantity#" min="0" />
+        </div>
+    </div>
+    <div class="row">
+        <label for="InitialDate" class="control-label col-2">Desde</label>
+        <div class="col-4">
+            <input id="InitialDate" name="InitialDate" type="date" />
+        </div>
+        <label for="FinalDate" class="control-label col-2">Hasta</label>
+        <div class="col-4">
+            <input id="FinalDate" name="FinalDate" type="date" />
+        </div>
+    </div>
+    <div class="row">
+        <label for="Accelerator" class="control-label col-2">Acelerador</label>
+        <div class="col-4">
+            <input id="Accelerator" name="Accelerator" type="number" value="#:accelerator#" min="0" />
+        </div>
+        <div class="col-4">
+            <div class="custom-control custom-switch">
+                <input id="AccEnabled" name="AccEnabled" type="checkbox" class="custom-control-input selected" />
+                <label class="custom-control-label" for="AccEnabled"> Habilitado</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-right pr-3">
+            <button tabindex="0" class="per-update btn btn-light" id="cancel-lot" role="button" aria-disabled="false" type="button" data-role="button">Cancelar</button>&nbsp;&nbsp;
+            <button tabindex="0" class="per-update btn btn-info" id="save-lot" role="button" aria-disabled="false" type="button" data-role="button">Guardar</button>
+        </div>
+    </div>
+</script>
+<link href="~/lib/magicsuggest/magicsuggest-min.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter")",
+            urlEdit = "@Url.Action("Edit")",
+            urlDelete = "@Url.Action("Delete")",
+            urlHistory = "@Url.Action("PriceHistory")",
+            urlExcel = "@Url.Action("ExportExcel")",
+            urlSync = "@Url.Action("Sync")",
+            urlLines = "@Url.Action("GetLines2")",
+            urlImages = "@Url.Content("~/images/products/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")",
+            urlCategories = "@Url.Action("GetCategories2")";
+    </script>
+    <script src="~/lib/magicsuggest/magicsuggest-min.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/product/product.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/product.min.js" asp-append-version="true"></script>
+    </environment>
+}

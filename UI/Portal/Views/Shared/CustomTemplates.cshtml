@@ -1,0 +1,252 @@
+﻿<div class="loadingmodal">
+	<img src="~/lib/kendo-ui/styles/Material/loading-image.gif" alt="Cargando" />
+	<span>Cargando ...</span>
+</div>
+<div id="notifications"></div>
+<script id="notificationTemplate" type="text/x-kendo-template">
+	<div class="notifications">
+		# if(data.length > 1) { #
+		<div>
+			<div class="tool">
+				<span id="tool-prior" class="glyphicon glyphicon-triangle-left" title="Anterior"></span>
+				<span id="tool-next" class="glyphicon glyphicon-triangle-right" title="Pr&oacute;ximo"></span>
+				<span class="title">&nbsp;&nbsp;#= data[0].Name #</span>
+				<div class="right hidden-xs">
+					<span id="tool-mail" class="fa fa-envelope" title="Enviar por Correo"></span>
+					<span id="tool-save" class="fas fa-save" title="Guardar"></span>
+					<span id="tool-print" class="fa fa-print" title="Imprimir"></span>
+				</div>
+			</div>
+		</div>
+		# } #
+		<div class="row content-wrapper">
+			<div class="content col-sm-8 col-md-8 col-lg-9">
+				# for(var i = 0; i < data.length; i++) { #
+				#   if (i == 0) { #
+				<div id="content-#= data[i].Id #" class="content-item selected" title="#= data[i].Name #">#= data[i].Value #</div>
+				#   } else { #
+				<div id="content-#= data[i].Id #" class="content-item" title="#= data[i].Name #">#= data[i].Value #</div>
+				#   } #
+				# } #
+			</div>
+			# if (data.length > 1) { #
+			<div class="menu hidden-xs col-sm-4 col-md-4 col-lg-3">
+				# for (var i = 0; i < data.length; i++) { #
+				#   if (i == 0) { #
+				<div id="menu-#= data[i].Id #" class="menu-item selected">#= data[i].Name #</div>
+				#   } else { #
+				<div id="menu-#= data[i].Id #" class="menu-item">#= data[i].Name #</div>
+				#   } #
+				# } #
+			</div>
+			# } #
+		</div>
+	</div>
+</script>
+<div id="shoppingcart"></div>
+<script id="shoppingcartTemplate" type="text/x-kendo-template">
+	<input class="shopping-cart-id" type="hidden" value="#= data.Id #" />
+	<div class="shoppingcart form-horizontal" role="form">
+		<div class="toolbar">
+			# if (data.CollectionShoppingCartDetail != null && data.CollectionShoppingCartDetail.length > 0) { #
+			<a class="save-cart" href="javascript:SaveCart()"><span class="fas fa-save"></span>&nbsp; Guardar</a>
+			#   if (data.SellerName != null && data.SellerName != "DMC") { #
+			<a class="send-cart" href="javascript:SendCart()"><span class="fas fa-paper-plane"></span>&nbsp; Enviar</a>
+			#   } else { #
+			<a class="send-cart disabled" href="javascript:SendCart()"><span class="fas fa-paper-plane"></span>&nbsp; Enviar</a>
+			#   } #
+			<a class="delete-cart" href="javascript:DeleteCart()"><span class="fas fa-trash-alt"></span>&nbsp; Eliminar</a>
+			# } else { #
+			<a class="save-cart disabled" href="javascript:SaveCart()"><span class="fas fa-save"></span>&nbsp; Guardar</a>
+			<a class="send-cart disabled" href="javascript:SendCart()" title="Enviar Carrito"><span class="fas fa-paper-plane"></span>&nbsp; Enviar</a>
+			<a class="delete-cart disabled" href="javascript:DeleteCart()" title="Limpiar Carrito"><span class="fas fa-trash-alt"></span>&nbsp; Eliminar</a>
+			# } #
+		</div>
+		<div class="header">
+			<input type="hidden" id="sellerCode" value="#= data.SellerCode #" />
+			# if ((data.SellerName != null && data.SellerName != "DMC")) { #
+			<span>Ejecutivo de Ventas: #= data.SellerName #</span>
+			# } else { #
+			<span>Ejecutivo de Ventas: NO tiene asignado ning&uacute;n Ejecutivo de Ventas</span>
+			# } #
+		</div>
+		<div class="header2">
+			<span>Los descuentos por volumen de compra ser&aacute;n confirmados por su Ejecutivo de Cuenta al procesar la orden.</span>
+		</div>
+		<div id="tabshoppingcart" class="tabs">
+			<ul>
+				<li class="k-state-active">Items</li>
+				<li>Datos de Entrega</li>
+			</ul>
+			<div>
+				# if (data.CollectionShoppingCartDetail != null && data.CollectionShoppingCartDetail.length > 0) { #
+				<table class="table table-hover">
+					<thead>
+						<tr class="active">
+							<td>C&oacute;digo</td>
+							<td>Nombre</td>
+							<td>Sucursal</td>
+							<td class="text-right">Precio</td>
+							<td>Cantidad</td>
+							<td class="text-right">Subtotal</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						# var total = 0; #
+						# for (var i = 0; i < data.CollectionShoppingCartDetail.length; i++) { #
+						# var detail = data.CollectionShoppingCartDetail[i]; #
+						<tr>
+							<td>
+								<span class="item-code">#= detail.Product.ItemCode #</span>
+								<input type="hidden" class="product-id" value="#=detail.IdProduct#" />
+								<input type="hidden" class="detail-id" value="#=detail.Id#" />
+								<input type="hidden" class="detail-data" />
+							</td>
+							<td>#= detail.Product.Name #</td>
+							<td style="width: 95px;">
+								# if(detail.IdSubsidiary) { #
+								<input id="subsidiaries_#= detail.Id #" class="item-subsidiary" style="width: 100%;" value="#=detail.IdSubsidiary#" />
+								# } else { #
+								<input id="subsidiaries_#= detail.Id #" class="item-subsidiary" style="width: 100%;" />
+								# } #
+							</td>
+							<td class="text-right"><span class="price">#= $.format.number(detail.Price) #</span></td>
+							<td><input class="k-textbox item-quantity" type="number" value="#= detail.Quantity #" min="1" style="width: 80px;" /> </td>
+							<td class="text-right"><span class="subtotal">#= $.format.number(detail.Quantity * detail.Price) #</span></td>
+							<td class="text-center"><span class="fas fa-trash-alt delete-item" title="Quitar Producto"></span></td>
+						</tr>
+						# total += detail.Quantity * detail.Price; #
+						# } #
+					</tbody>
+					<tfoot>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td class="active text-right"><span class="total">#= $.format.number(total) #</span></td>
+							<td></td>
+						</tr>
+					</tfoot>
+				</table>
+				<div class="alert alert-warning hidden no-items">No hay ning&uacute;n item en el carrito.</div>
+				# } else { #
+				<div class="alert alert-warning">No hay ning&uacute;n item en el carrito.</div>
+				# } #
+			</div>
+			<div>
+				<div class="row">
+					<div class="form-group">
+						<label for="shoppingcart-name" class="col-sm-2 col-md-2 col-lg-2">Nombre:</label>
+						<div class="col-sm-10 col-md-10 col-lg-10">
+							<input id="shoppingcart-name" type="text" class="k-textbox" value="#= data.Name #" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shoppingcart-address" class="col-sm-2 col-md-2 col-lg-2">Direcci&oacute;n:</label>
+						<div class="col-sm-10 col-md-10 col-lg-10">
+							<textarea id="shoppingcart-address" class="k-textbox"># if (data.Address != null ) { # #= data.Address # # } #</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shoppingcart-comments" class="col-sm-2 col-md-2 col-lg-2">Comentarios:</label>
+						<div class="col-sm-10 col-md-10 col-lg-10">
+							<textarea id="shoppingcart-comments" class="k-textbox"># if (data.Commentaries != null ) { # #= data.Commentaries # # } #</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shoppingcart-clientsalenote" class="col-sm-2 col-md-2 col-lg-2">Orden Compra Cliente:</label>
+						<div class="col-sm-10 col-md-10 col-lg-10">
+							<input id="shoppingcart-clientsalenote" type="text" class="k-textbox" value="# if (data.ClientSaleNote != null ) { # #= data.ClientSaleNote # # } #" />
+						</div>
+					</div>
+					<div class="form-group hidden">
+						<label for="shoppingcart-dropship" class="col-sm-2 col-md-2 col-lg-2 label-checkbox">Con DropShip:</label>
+						<div class="col-sm-10 col-md-10 col-lg-10 text-left">
+							# if (data.WithDropShip) { #
+							<input id="shoppingcart-dropship" type="checkbox" class="checkbox-inline" checked />
+							# } else { #
+							<input id="shoppingcart-dropship" type="checkbox" class="checkbox-inline" />
+							# } #
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<div id="tempsale"></div>
+<script id="tempsaleTemplate" type="text/x-kendo-template">
+	<input class="tempsale-id" type="hidden" value="#= data.Id #" />
+	<div class="tempsale form-horizontal" role="form">
+		<div class="toolbar">
+			# var attrDisabled = data.CollectionTempSaleDetail != null && data.CollectionTempSaleDetail.length > 0 ? "" : "disabled"; #
+			# var itemsCount = data.CollectionTempSaleDetail == null ? 0 : data.CollectionTempSaleDetail.length; #
+			<a class="save-tempsale #=attrDisabled#" href="javascript:SaveTempSale()" title="Guardar Cambios"><span class="fas fa-save"></span>&nbsp; Guardar Cambios</a>
+			<a class="send-tempsale #=attrDisabled#" href="javascript:SendTempSale()" title="Guardar y Enviar Carrito"><span class="fas fa-paper-plane"></span>&nbsp; Guardar y Enviar</a>
+			<a class="delete-tempsale #=attrDisabled#" href="javascript:DeleteTempSale()" title="Limpiar Carrito"><span class="fas fa-trash-alt"></span>&nbsp; Eliminar Todo</a>
+			<input type="hidden" class="items-count" value="#=itemsCount#" />
+		</div>
+		# if (data.CollectionTempSaleDetail != null && data.CollectionTempSaleDetail.length > 0) { #
+		<table class="table table-hover">
+			<thead>
+				<tr class="active">
+					<td>C&oacute;digo</td>
+					<td>Nombre</td>
+					<td>Sucursal</td>
+					<td class="text-right">Precio</td>
+					<td>Cantidad</td>
+					<td class="text-right">Stock</td>
+					<td class="text-right">Subtotal</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				# var total = 0; #
+				# for (var i = 0; i < data.CollectionTempSaleDetail.length; i++) { #
+				# var detail = data.CollectionTempSaleDetail[i]; #
+				<tr>
+					<td>
+						<span class="item-code">#= detail.Product.ItemCode #</span>
+						<input type="hidden" class="product-id" value="#=detail.IdProduct#" />
+						<input type="hidden" class="detail-id" value="#=detail.Id#" />
+						<input type="hidden" class="detail-data" />
+					</td>
+					<td>#= detail.Product.Name #</td>
+					<td>
+						# if(detail.IdSubsidiary) { #
+						<input id="subsidiaries_#= detail.Id #" class="item-subsidiary" style="width: 100%;" value="#=detail.IdSubsidiary#" />
+						# } else { #
+						<input id="subsidiaries_#= detail.Id #" class="item-subsidiary" style="width: 100%;" />
+						# } #
+					</td>
+					<td><input class="k-textbox price" type="number" value="#= detail.Price #" step="0.1" min="0" style="width: 80px;" lang="en-us" /></td>
+					<td><input class="k-textbox item-quantity" type="number" value="#= detail.Quantity #" min="1" style="width: 80px;" /></td>
+					<td class="text-right"><span class="text-right stock">#=detail.Stock#</span> </td>
+					<td class="text-right"><span class="subtotal">#= $.format.number(detail.Quantity * detail.Price) #</span></td>
+					<td class="text-center"><span class="fas fa-trash-alt delete-item" title="Quitar Producto"></span></td>
+				</tr>
+				# total += detail.Quantity * detail.Price; #
+				# } #
+			</tbody>
+			<tfoot>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class="active text-right"><span class="total">#= $.format.number(total) #</span></td>
+					<td></td>
+				</tr>
+			</tfoot>
+		</table>
+		<div class="alert alert-warning hidden no-items">No hay ning&uacute;n item en el carrito.</div>
+		# } else { #
+		<div class="alert alert-warning no-items">No hay ning&uacute;n item en el carrito.</div>
+		# } #
+	</div>
+</script>

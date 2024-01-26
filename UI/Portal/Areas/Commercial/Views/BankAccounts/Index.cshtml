@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Portal.Areas.Administration.Models.BankAccountGroup>
+@{
+    ViewBag.Title = "Listado de Cuentas de DMC";
+    List<string> banks = new List<string>();
+    foreach (var item in Model)
+    {
+        foreach (var i in item.Items)
+        {
+            if (!banks.Contains(i.Bank)) { banks.Add(i.Bank); }
+        }
+    }
+    var bankClasses = banks.Select(x => new { bank = x, style = $"bank-{banks.IndexOf(x)}" });
+}
+<div style="padding: 16px;">
+    <h4>@ViewBag.Title</h4>
+    @foreach (var group in Model)
+    {
+        string typeStyle = group.Items.Count(i => !string.IsNullOrWhiteSpace(i.Type)) > 0 ? "" : "display: none;";
+        string abaStyle = group.Items.Count(i => !string.IsNullOrWhiteSpace(i.ABANumber)) > 0 ? "" : "display: none;";
+        string swiftStyle = group.Items.Count(i => !string.IsNullOrWhiteSpace(i.Swift)) > 0 ? "" : "display: none;";
+        string commentStyle = group.Items.Count(i => !string.IsNullOrWhiteSpace(i.Comments)) > 0 ? "" : "display: none;";
+        <div class="card">
+            <div class="card-header">@group.Name</div>
+            <div class="card-body">
+                <table class="table table-condensed bank-table">
+                    <thead>
+                        <tr>
+                            <th>BANCO</th>
+                            <th>BENEFICIARIO (para transferencias ACH)</th>
+                            <th>MONEDA</th>
+                            <th>NO. DE CUENTA</th>
+                            <th>PAIS</th>
+                            <th style="@typeStyle">TIPO DE CUENTA</th>
+                            <th style="@abaStyle">ABA No.</th>
+                            <th style="@swiftStyle">SWIFT</th>
+                            <th style="@commentStyle"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var account in group.Items)
+                        {
+                            string style = bankClasses.FirstOrDefault(x => x.bank.ToLower() == account.Bank.ToLower())?.style ?? "";
+                            <tr class="@style">
+                                <td>@account.Bank</td>
+                                <td>@account.Name</td>
+                                <td>@account.Currency</td>
+                                <td>@account.Number</td>
+                                <td>@account.Country</td>
+                                <td style="@typeStyle">@account.Type</td>
+                                <td style="@abaStyle">@account.ABANumber</td>
+                                <td style="@swiftStyle">@account.Swift</td>
+                                <td style="@commentStyle">@account.Comments</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(account.QR))
+                                    {
+                                        <a class="qr-tooltip" data-image="@account.QR"><i class="fas fa-qrcode"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<style type="text/css">
+    .bank-0 {
+        background-color: #d9e1f2;
+    }
+
+    .bank-1 {
+        background-color: #fce4d6;
+    }
+
+    .bank-2 {
+        background-color: #e2efda;
+    }
+
+    .bank-3 {
+        background-color: #fff2cc;
+    }
+
+    .bank-4 {
+        background-color: #ededed;
+    }
+
+    .bank-5 {
+        background-color: #b3fbfb;
+    }
+
+    .bank-6 {
+        background-color: #fccdfe;
+    }
+
+    .template-wrapper {
+        display: flex;
+        flex-direction: row;
+        height: 792px;
+    }
+
+        .template-wrapper img {
+            max-height: 792px;
+            max-width: 612px;
+        }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".bank-table").kendoTooltip({
+            autoHide: false,
+            filter: "a",
+            content: kendo.template($("#template").html()),
+            width: 612,
+            height: 812,
+            position: "left"
+        });
+    });
+</script>
+<script id="template" type="text/x-kendo-template">
+    <div class="template-wrapper">
+        <img src="../../images/qr/#=target.data('image')#"  />
+        <p>#=target.data('title')#</p>
+    </div>
+</script>

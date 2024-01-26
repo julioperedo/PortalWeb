@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Productos Solicitados por Clientes";
+    int permission = ViewBag.Permission;
+}
+<div class="row">
+    <div class="col-9">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-3 text-right">
+        @*<a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>*@
+        <a class="btn btn-secondary d-none" title="Enviar Correo" role="button" href="#" id="action-email">Enviar correo <i class="fab fa-telegram-plane"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <div class="col-4 col-sm-2 col-md-2 col-lg-2 col-xl-1"><label for="fil-product">Producto</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="fil-product" class="w-100">
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="fil-subsidiary">Sucursal</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="fil-subsidiary" class="w-100">
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="fil-client">Cliente</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="fil-client" class="w-100">
+                </div>
+                <label for="fil-since" class="col-2 col-xl-1 text-nowrap">Desde</label>
+                <div class="col-4 col-xl-2">
+                    <input id="fil-since" type="date" style="width: 120px;">
+                </div>
+                <label for="fil-until" class="col-2 col-xl-1 text-nowrap">Hasta</label>
+                <div class="col-4 col-xl-2">
+                    <input id="fil-until" type="date" style="width: 120px;">
+                </div>
+                <label for="fil-reported" class="col-4 col-sm-2 col-xl-1 text-nowrap">Reportado</label>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <select id="fil-reported" style="width: 120px;">
+                        <option value="B">Ambos</option>
+                        <option value="Y">Si</option>
+                        <option value="N" selected="selected">No</option>
+                    </select>
+                </div>
+                <div class="col-12 col-xl-6 text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="detail">
+    <form>
+        <input id="Id" name="Id" type="hidden" />
+        <input id="IdUser" name="IdUser" type="hidden" />
+        <input id="RequestDate" name="RequestDate" type="hidden" />
+        <input id="Reported" name="Reported" type="hidden" />
+        <div class="row mt-1">
+            <div class="col-2"><label for="IdProduct">Producto</label></div>
+            <div class="col-10"><input id="IdProduct" name="IdProduct" class="w-100" required /></div>
+        </div>
+        <div class="row pt-1">
+            <div class="col-2"><label for="CardCode">Cliente</label></div>
+            <div class="col-10"><input id="CardCode" name="CardCode" class="w-100" required /></div>
+        </div>
+        <div class="row pt-1">
+            <div class="col-2"><label for="IdSubsidiary">Sucursal</label></div>
+            <div class="col-4"><input id="IdSubsidiary" name="IdSubsidiary" class="w-100" required /></div>
+            <div class="col-2"><label for="Quantity">Cantidad</label></div>
+            <div class="col-4"><input id="Quantity" name="Quantity" type="number" class="form-control" min="1" required /></div>
+        </div>
+        <div class="row pt-1">
+            <div class="col-2"><label for="Description">Comentarios</label></div>
+            <div class="col-10"><textarea id="Description" name="Description" class="form-control" rows="3"></textarea></div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-2">
+                <button class="btn btn-primary" id="save-request">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Styles {
+<style type="text/css">
+    .k-virtual-item p {
+        font-size: 0.8em;
+        font-style: italic;
+    }
+
+    .k-grid a.action:not(:first-child) {
+        margin-left: 8px;
+    }
+
+    .row label.custom-control-label {
+        margin-top: 0;
+        margin-left: 8px;
+    }
+</style>
+}
+@section Scripts {
+<script type="text/javascript">
+    var urlFilter = "@Url.Action("Filter")",
+        urlEdit = "@Url.Action("Edit")",
+        urlDelete = "@Url.Action("Delete")",
+        urlProducts = "@Url.Action("GetProducts")",
+        urlSubsidiaries = "@Url.Action("GetSubsidiaries")",
+        urlSendEmail = "@Url.Action("SendEmail")",
+        urlClients = "@Url.Action("GetClients")",
+        urlImages = "@Url.Content("~/images/products/")",
+        urlNoImage = "@Url.Content("~/images/no-image.jpg")",
+        permission = @permission;
+</script>
+<environment include="Development">
+    <script src="~/js/areas/product/request.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/areas/product/request.min.js" asp-append-version="true"></script>
+</environment>
+}

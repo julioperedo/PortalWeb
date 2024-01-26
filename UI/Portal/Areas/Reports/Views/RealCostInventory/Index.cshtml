@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Saldos con Costo Real";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Subsidiary" class="col-3 col-sm-2 col-lg-1 text-nowrap">Sucursal</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Subsidiary" multiple="multiple"></select>
+                </div>
+                <label for="Storehouse" class="col-3 col-sm-2 col-lg-1 text-nowrap">Almac&eacute;n</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Storehouse" multiple="multiple"></select>
+                </div>
+                <label for="ItemCode" class="col-3 col-sm-2 col-lg-1 text-nowrap">Cod. Item</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <input type="text" id="ItemCode" class="form-control" />
+                </div>
+                <label for="Description" class="col-3 col-sm-2 col-lg-1 text-nowrap">Descripci&oacute;n</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <input type="text" id="Description" class="form-control" />
+                </div>
+                <label for="Category" class="col-3 col-sm-2 col-lg-1 text-nowrap">Categor&iacute;a</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <input id="Category" class="w-100" />
+                </div>
+                <label for="SubCategory" class="col-3 col-sm-2 col-lg-1 text-nowrap">Subcategor&iacute;a</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <input id="SubCategory" class="w-100" />
+                </div>
+                <label for="Line" class="col-3 col-sm-2 col-lg-1 text-nowrap">L&iacute;nea</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <select id="Line" multiple="multiple"></select>
+                </div>
+                <label for="Blocked" class="col-3 col-sm-2 col-lg-1 text-nowrap">Items Bloqueados</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <input id="Blocked" />
+                </div>
+                <div class="col-4 col-sm-4 col-md-12 col-lg-12 text-right">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail">
+    <div class="row">
+        <div class="col-2">
+            <strong>Item</strong>
+        </div>
+        <div class="col-10">
+            <span id="item-code"></span>
+        </div>
+    </div>
+    <div class="row bg-interline">
+        <div class="col-2">
+            <strong>Descripci&oacute;n</strong>
+        </div>
+        <div class="col-10">
+            <span id="item-name"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <strong>Categor&iacute;a</strong>
+        </div>
+        <div class="col-10">
+            <span id="category"></span>
+        </div>
+    </div>
+    <div class="row bg-interline">
+        <div class="col-2">
+            <strong>Subcategor&iacute;a</strong>
+        </div>
+        <div class="col-10">
+            <span id="subcategory"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <strong>L&iacute;nea</strong>
+        </div>
+        <div class="col-10">
+            <span id="line"></span>
+        </div>
+    </div>
+    <div class="row bg-interline">
+        <div class="col-2">
+            <strong>Detalle</strong>
+        </div>
+        <div class="col-10">
+            <span id="detail"></span>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-10">
+            <span id="comments"></span>
+        </div>
+    </div>
+</div>
+<div id="Detail2"></div>
+<style type="text/css">
+    .bg-interline {
+        background-color: #F5F5F5;
+    }
+</style>
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "RealCostInventory")",
+			urlGetSubsidiaries = "@Url.Action("GetSubsidiaries", "RealCostInventory")",
+			urlWarehouses = "@Url.Action("GetWarehouses", "RealCostInventory")",
+			urlCategories = "@Url.Action("GetCategories", "RealCostInventory")",
+			urlSubcategories = "@Url.Action("GetSubcategories", "RealCostInventory")",
+			urlLines = "@Url.Action("GetLines", "RealCostInventory")",
+			urlExport = "@Url.Action("Export", "RealCostInventory")",
+            urlDetail = "@Url.Action("Detail", "RealCostInventory")",
+            urlGetReservedItems = "@Url.Action("GetReservedItems", "PriceList", new { area = "Product" })";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/reports/realcostinventory.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/reports/realcostinventory.min.js" asp-append-version="true"></script>
+    </environment>
+}

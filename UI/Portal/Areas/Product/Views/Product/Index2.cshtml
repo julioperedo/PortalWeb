@@ -1,0 +1,274 @@
+﻿@{
+    ViewData["Title"] = "Configuración de Productos";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title" id="page-title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Volver a la lista" role="button" href="#" id="back-list"><i class="fas fa-arrow-left"></i></a>
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box" id="toggle-filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilProduct">Producto</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="FilProduct" type="text" class="form-control" />
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilEnabled">Habilitado</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <select id="FilEnabled" class="w-50">
+                        <option value="A">AMBOS</option>
+                        <option value="V" selected="selected">Si</option>
+                        <option value="F">No</option>
+                    </select>
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilLine">L&iacute;nea</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="FilLine" class="w-100" />
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilCategory">Categor&iacute;a</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <input id="FilCategory" class="w-100" />
+                </div>
+                <div class="col-4 col-sm-2 col-xl-1"><label for="FilOffers">Ofertas</label></div>
+                <div class="col-8 col-sm-4 col-xl-5">
+                    <select id="FilOffers" class="w-50">
+                        <option value="A" selected="selected">AMBOS</option>
+                        <option value="V">Si</option>
+                        <option value="F">No</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail" class="d-none">
+    <form>
+        <div class="form-horizontal">
+            <input id="Id" name="Id" type="hidden" />
+            <div class="row">
+                <label for="ItemCode" class="col-3 col-sm-2 col-md-2 col-lg-1 text-nowrap">C&oacute;digo</label>
+                <div class="col-9 col-sm-10 col-md-10 col-lg-11">
+                    <input id="ItemCode" name="ItemCode" class="form-control" />
+                    <input type="checkbox" id="Editable" name="Editable" class="d-none" />
+                </div>
+            </div>
+            <div class="row">
+                <label for="Name" class="col-3 col-sm-2 col-md-2 col-lg-1 text-nowrap">Nombre</label>
+                <div class="col-9 col-sm-10 col-md-10 col-lg-11">
+                    <input id="Name" name="Name" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col pt-4">
+                    <div class="custom-tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Detalle</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab-prices" role="tab">Precios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab-volume-prices" role="tab"><span class="d-none d-sm-inline">Precios por</span> Volumen</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab4" role="tab">Imagen</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab5" role="tab">KBytes</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content main-tab">
+                            <div class="tab-pane active show pt-3" id="tab1" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-12 col-sm-3 col-md-3 col-lg-2">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input selected" id="Enabled" name="Enabled" />
+                                            <input name="Enabled" type="hidden" value="false" />
+                                            <label class="custom-control-label" for="Enabled"> Habilitado</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input selected" id="ShowAlways" name="ShowAlways" />
+                                            <input name="ShowAlways" type="hidden" value="false" />
+                                            <label class="custom-control-label" for="ShowAlways"> Mostrar Siempre</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input selected" id="ShowInWeb" name="ShowInWeb" />
+                                            <input name="ShowInWeb" type="hidden" value="false" />
+                                            <label class="custom-control-label" for="ShowInWeb"> Mostrar en Pag. Web</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input selected" id="ShowTeamOnly" name="ShowTeamOnly" />
+                                            <input name="ShowTeamOnly" type="hidden" value="false" />
+                                            <label class="custom-control-label" for="ShowTeamOnly"> Visible s&oacute;lo DMC</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input selected" id="IsDigital" name="IsDigital" />
+                                            <input name="IsDigital" type="hidden" value="false" />
+                                            <label class="custom-control-label" for="IsDigital"> Producto Digital</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="Description" class="col-3 col-sm-2 col-md-2">Descripci&oacute;n</label>
+                                    <div class="col-9 col-sm-10">
+                                        <textarea id="Description" name="Description" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="Commentaries" class="col-3 col-sm-2 col-md-2">Comentarios</label>
+                                    <div class="col-9 col-sm-10">
+                                        <textarea id="Commentaries" name="Commentaries" class="form-control" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="Link" class="col-sm-2 col-md-2">V&iacute;nculo</label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <input id="Link" name="Link" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="Warranty" class="col-3 col-sm-2 col-md-2">Garant&iacute;a</label>
+                                    <div class="col-9 col-sm-4 col-md-4">
+                                        <input id="Warranty" name="Warranty" class="form-control" />
+                                    </div>
+                                    <label for="Consumables" class="col-3 col-sm-2 col-md-2">Consumibles</label>
+                                    <div class="col-9 col-sm-4 col-md-4">
+                                        <input id="Consumables" name="Consumables" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="Line" class="col-3 col-sm-2 col-md-2">L&iacute;nea</label>
+                                    <div class="col-9 col-sm-6 col-md-4">
+                                        <input id="Line" name="Line" class="w-100" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="Category" class="col-3 col-sm-2 col-md-2">Categor&iacute;a</label>
+                                    <div class="col-9 col-sm-4 col-md-4">
+                                        <input id="Category" name="Category" class="w-100" />
+                                    </div>
+                                    <label for="SubCategory" class="col-4 col-sm-2 col-md-2">Subcategor&iacute;a</label>
+                                    <div class="col-8 col-sm-4 col-md-4">
+                                        <input id="SubCategory" name="SubCategory" class="w-100" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="ExtraComments" class="col-sm-2 col-md-2">Com. Adicionales</label>
+                                    <div class="col-sm-10 col-md-10">
+                                        <textarea id="ExtraComments" name="ExtraComments" style="height: 200px;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane pt-3" id="tab-prices" role="tabpanel">
+                                <div class="custom-tab">
+                                    <ul class="nav nav-tabs" role="tablist"></ul>
+                                    <div class="tab-content"></div>
+                                </div>
+                            </div>
+                            <div class="tab-pane pt-3" id="tab-volume-prices" role="tabpanel">
+                                <div class="custom-tab">
+                                    <ul class="nav nav-tabs" role="tablist"></ul>
+                                    <div class="tab-content"></div>
+                                </div>
+                            </div>
+                            <div class="tab-pane pt-3" id="tab4" role="tabpanel">
+                                <div class="col-md-4">
+                                    <input type="hidden" id="ImageURL" name="ImageURL" />
+                                    <input type="hidden" id="NewImageURL" name="NewImageURL" />
+                                    <img id="Photo" style="max-height: 180px; height: auto; width: auto; margin-left: 10px;" /><br />
+                                    <button id="DeletePhoto" class="btn btn-sm btn-outline-secondary mt-2 ml-3 mb-2" type="button"><i class="fas fa-trash-alt"></i> Eliminar Imagen</button>
+                                    <kendo-upload name="files" multiple="false" on-success="onUploadSucceded" on-select="onSelect" style="width: 350px">
+                                        <async save-url="@Url.Action("UploadImage", "Product")" remove-url="@Url.Action("DeleteImage", "Product")" auto-upload="true" />
+                                    </kendo-upload>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab5" role="tabpanel">
+                                <div class="kbyte-detail pt-3 pb-3">
+                                    <div id="AcceleratorLots"></div>
+                                    <div class="card d-none mt-4">
+                                        <div class="card-header">Detalle Lote Acelerador</div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-3 pb-5 pb-sm-1">
+                <button class="btn btn-outline-secondary" id="cancel-product">Cancelar Edici&oacute;n</button>
+                <button class="btn btn-primary" id="save-product">Guardar Producto</button>
+            </div>
+        </div>
+    </form>
+</div>
+<kendo-window name="HistoryDetail" visible="false" title="Historial de Precios" modal="true" draggable="true" width="1600">
+    <content>
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" id="history-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#price-tab" role="tab" aria-controls="price-tab" aria-selected="true">Precios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#volume-tab" role="tab" aria-controls="volume-tab" aria-selected="false">Precios por Volumen</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="price-tab" role="tabpanel" aria-labelledby="home-tab"><div id="prices-history-grid"></div></div>
+                <div class="tab-pane" id="volume-tab" role="tabpanel" aria-labelledby="profile-tab"><div id="volume-prices-history-grid"></div></div>
+            </div>
+        </div>
+    </content>
+</kendo-window>
+<link href="~/lib/magicsuggest/magicsuggest-min.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter")",
+            urlEdit = "@Url.Action("Edit2")",
+            urlDelete = "@Url.Action("Delete")",
+            urlHistory = "@Url.Action("PriceHistory")",
+            urlExcel = "@Url.Action("ExportExcel")",
+            urlSync = "@Url.Action("Sync")",
+            urlLines = "@Url.Action("GetLines2")",
+            urlSAPLines = "@Url.Action("GetSAPLines")",
+            urlSAPCategories = "@Url.Action("GetSAPCategories")",
+            urlSAPSubcategories = "@Url.Action("GetSAPSubcategories")",
+            urlImages = "@Url.Content("~/images/products/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")",
+            urlCategories = "@Url.Action("GetCategories2")";
+    </script>
+    <script src="~/lib/magicsuggest/magicsuggest-min.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/product/product2.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/product2.min.js" asp-append-version="true"></script>
+    </environment>
+}

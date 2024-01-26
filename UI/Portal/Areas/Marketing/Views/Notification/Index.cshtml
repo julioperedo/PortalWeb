@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Notificaciones";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="filter-name" class="col-2 col-lg-1 text-nowrap">Nombre</label>
+                <div class="col-10 col-sm-4 col-lg-3 col-xl-2">
+                    <input type="text" id="filter-name" class="form-control" />
+                </div>
+                <label for="filter-state" class="col-2 col-lg-1 text-nowrap">Estado</label>
+                <div class="col-10 col-sm-4 col-lg-3 col-xl-2">
+                    <input id="filter-state" />
+                </div>
+                <label for="filter-initial-date" class="col-2 col-lg-1 text-nowrap">F. Inicial</label>
+                <div class="col-10 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+                    <input type="date" id="filter-initial-date" style="width: 115px" />
+                </div>
+                <label for="filter-final-date" class="col-2 col-lg-1 text-nowrap">F. Final</label>
+                <div class="col-10 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+                    <input type="date" id="filter-final-date" style="width: 115px" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail"></div>
+<span id="notification" style="display:none;"></span>
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="connection-error">
+        <i class="far fa-times-circle"></i>
+        <h4>#= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="connection-success">
+        <i class="far fa-check-circle"></i>
+        <h4>#= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>
+<style type="text/css">
+    .connection-error, .connection-success {
+        min-width: 300px;
+        padding: 8px;
+    }
+        .connection-error i, .connection-success i {
+            font-size: 2.8em;
+            margin-top: 5px;
+            margin-left: 10px;
+            float: left;
+        }
+        .connection-error h4, .connection-success h4 {
+            margin-left: 50px;
+            margin-top: 15px;
+            font-size: 1.2em;
+        }
+        .connection-error p, .connection-success p {
+            margin-left: 50px;
+        }
+</style>
+@section Scripts {
+    <script type="text/javascript">
+	var urlFilter = "@Url.Action("Filter")",
+		urlEdit = "@Url.Action("Edit")",
+		urlDelete = "@Url.Action("Delete")",
+        urlLines = "@Url.Action("GetLinesLocal")",
+        urlClients = "@Url.Action("GetClients")",
+		urlImage = "@Url.Content("~/images/notification/{0}")",
+		urlImageUpload = "@Url.Action("Upload", "ImageBrowser", new { area = "" })",
+		urlImageRead = "@Url.Action("Read", "ImageBrowser", new { area = "" })",
+		urlImageCreate = "@Url.Action("Create", "ImageBrowser", new { area = "" })",
+		urlImageDestroy = "@Url.Action("Destroy", "ImageBrowser", new { area = "" })",
+        _Permission = "@ViewData["Permission"]",
+        urlNoPhoto = "@Url.Content("~/images/no-image.jpg")",
+        urlFolderPhotos = "@Url.Content("~/images/notification/")",
+		urlSavePhoto = "@Url.Action("SavePhotoBase64", "Notification")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/marketing/notification.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/marketing/notification.min.js" asp-append-version="true"></script>
+    </environment>
+}

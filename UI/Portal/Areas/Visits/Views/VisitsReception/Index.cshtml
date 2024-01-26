@@ -1,0 +1,160 @@
+﻿@model IEnumerable<BEntities.Visits.VisitReception>
+@{
+    ViewBag.Title = "Visitas en Recepción";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilClient" class="col-2 col-sm-1 text-nowrap">Cliente</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input id="FilClient" style="width: 100%;" />
+                </div>
+                <label for="FilVisitor" class="col-2 col-sm-1 text-nowrap">Visitante</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input type="text" id="FilVisitor" class="form-control" />
+                </div>
+                <label for="Staff" class="col-2 col-sm-1 text-nowrap">Visitado</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input id="FilStaff" style="width: 100%;" />
+                </div>
+                <label for="FilSince" class="col-2 col-sm-1 text-nowrap">Desde</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input type="date" id="FilSince" style="width: 120px;" />
+                </div>
+                <label for="FilUntil" class="col-2 col-sm-1 text-nowrap">Hasta</label>
+                <div class="col-10 col-sm-3 col-md-2 col-lg-3">
+                    <input type="date" id="FilUntil" style="width: 120px;" />
+                </div>
+                <div class="col-6 col-sm-2">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="NotFinished" checked="checked">
+                        <label class="custom-control-label" for="NotFinished">S&oacute;lo sin salida</label>
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" id="action-filter" class="btn btn-primary">Buscar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail"></div>
+<script id="noDataTemplate" type="text/x-kendo-tmpl">
+    <div>
+        Ning&Uacute;n visitante encontrado con ese criterio. ¿Desea registrar un nuevo visitante?
+    </div>
+    <br />
+    <button class="btn btn-outline-info" onclick="addNewVisitor()">Registrar Nuevo Visitante</button>
+</script>
+<script id="newVisitorTemplate" type="text/x-kendo-tmpl">
+    <form>
+        <div class="form-horizontal">
+            <div class="row">
+                <label for="FirstName" class="col-sm-2 col-md-1">Nombres</label>
+                <div class="col-sm-4 col-md-5">
+                    <input id="FirstName" name="FirstName" type="text" class="form-control" required />
+                </div>
+                <label for="LastName" class="col-sm-2 col-md-1">Apellidos</label>
+                <div class="col-sm-4 col-md-5">
+                    <input id="LastName" name="LastName" type="text" class="form-control" required />
+                </div>
+            </div>
+            <div class="row">
+                <label for="DocumentId" class="col-sm-2 col-md-1">Doc. Id.</label>
+                <div class="col-sm-4 col-md-5">
+                    <input id="DocumentId" name="DocumentId" type="text" class="form-control" required />
+                </div>
+                <label for="Phone" class="col-sm-2 col-md-1">Tel&eacute;fono</label>
+                <div class="col-sm-4 col-md-5">
+                    <input id="Phone" name="Phone" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-right pt-1">
+                    <button class="k-button k-primary save-visitor">Guardar Visitante</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<div id="newVisitor"></div>
+@*<script id="template" type="text/x-kendo-tmpl">
+    <div class="row">
+        # var divClass = ""; #
+        # if (clientPhoto && clientPhoto != "") { #
+        # divClass = "col-8 col-sm-8 col-md-8 col-lg-8"; #
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+            <img src="../images/person/#: clientPhoto #" />
+        </div>
+        # } #
+        <div class="#=divClass#">
+            <strong><span>Cliente: </span></strong> <span>#: cardCode # - #: clientName #</span><br />
+            <strong><span>Nombre: </span></strong> <span>( #: visitor.documentId # ) #: visitor.fullName #</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            # if (licencePlate) { #
+            <strong><span>Placa: </span></strong> <span>#: licencePlate #</span>
+            # } #
+            <br />
+            <strong><span>Ingreso: </span></strong> <span>#: kendo.toString(initialDate, "dd/MM/yyyy HH:mm:ss") #</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            # if (FinalDate) { #
+            <strong><span>Salida: </span></strong> <span>#: kendo.toString(finalDate, "dd/MM/yyyy HH:mm:ss") #</span>
+            # } #
+            <br />
+            <strong><span>Personal Visitado: </span></strong> <span>#: staff.fullName #</span><br />
+            <strong><span>Motivo de Visita: </span></strong> <span>#: reasonVisit #</span><br />
+            # if (Commentaries && Commentaries != "") { #
+            <strong><span>Comentarios: </span></strong> <span>#: commentaries #</span>
+            # } #
+        </div>
+    </div>
+    <div class="row">
+        # if (clientDocId && clientDocId != "") { #
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <span class="zoom">
+                <img src="../images/person/#: clientDocId #" class="image-zoom" />
+            </span>
+        </div>
+        # } #
+        # if (clientDocIdRev && clientDocIdRev != "") { #
+        <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+            <span class="zoom">
+                <img src="../images/person/#: clientDocIdRev #" class="image-zoom" />
+            </span>
+        </div>
+        # } #
+    </div>
+</script>*@
+<link href="~/css/areas/visits/visits/index.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+	var urlFilter = "@Url.Action("Filter", "VisitsReception")",
+		urlClients = "@Url.Action("GetClients", "Visits")",
+		urlStaff = "@Url.Action("GetStaff", "Visits")",
+		urlReasons = "@Url.Action("GetReasons", "VisitsReception")",
+		urlVisitors = "@Url.Action("GetVisitors", "VisitsReception")",
+		urlEdit = "@Url.Action("Edit", "VisitsReception")",
+		urlFinish = "@Url.Action("FinishVisit", "VisitsReception")",
+		urlAddVisitor = "@Url.Action("AddVisitor", "VisitsReception")";
+    </script>    
+    <environment include="Development">
+        <script src="~/js/areas/visits/visitsreception.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/visits/visitsreception.min.js" asp-append-version="true"></script>
+    </environment>
+}

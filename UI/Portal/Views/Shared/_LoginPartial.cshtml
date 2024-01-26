@@ -1,0 +1,28 @@
+﻿@if (User.Identity.IsAuthenticated) {
+	string strName = User?.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? "";
+	string strAllowShoppingCart = User?.FindFirst("AllowShoppingCart")?.Value ?? "N";
+	string cardCode = User?.FindFirst("CardCode")?.Value ?? "";
+	<form asp-controller="account" asp-action="logout" method="post" class="navbar-right" id="logoutForm">
+		<ul class="navbar-nav flex-row">
+			<li>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;@strName <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a asp-action="PersonalData" asp-controller="User" asp-area="Administration"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;Mis Datos</a></li>
+				</ul>
+			</li>
+			@if (cardCode == "CDMC-002") {
+				<li class="hidden-xs"><a href="javascript:TempSale()"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Carrito</a></li>
+			} else {
+				if (strAllowShoppingCart == "Y") {
+					<li class="hidden-xs"><a href="javascript:ShoppingCart()"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Carrito</a></li>
+				}
+			}
+			<li><a href="javascript:Notifications(true)"><span class="fa fa-envelope"></span>&nbsp;&nbsp;Comunicados</a></li>
+			<li style="padding-right: 27px;"><a href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-off"></span>&nbsp;Salir</a></li>
+		</ul>
+	</form>
+} else {
+	<ul class="navbar-nav flex-row">
+		<li><a asp-action="Login" asp-controller="Account" id="loginLink">Ingresar</a></li>
+	</ul>
+}

@@ -1,0 +1,273 @@
+﻿body {
+}
+
+.myaccordion {
+    box-shadow: none;
+}
+
+    .myaccordion .card, .myaccordion .card:last-child .card-header {
+        border: none;
+        box-shadow: none;
+    }
+
+    .myaccordion .card-header {
+        border-bottom-color: #EDEFF0;
+        background: transparent;
+    }
+
+@media screen and (max-width: 500px) {
+    .myaccordion .card-header:first-child {
+        margin-left: 22px;
+    }
+}
+
+.myaccordion .fa-angle-down, .myaccordion .fa-angle-up {
+    font-size: 20px;
+}
+
+.myaccordion .card-header .btn {
+    width: 100%;
+    font-weight: bold;
+    color: #004987;
+    padding: 0;
+}
+
+.myaccordion .btn-link:hover, .myaccordion .btn-link:focus {
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.myaccordion li + li {
+    margin-top: 10px;
+}
+
+#tableResume, #tableTopClients, #tableKbytes {
+    display: inline-block;
+}
+
+.form-date {
+    width: 130px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+@media (min-width: 768px) {
+    .form-date {
+    }
+}
+
+.k-grid .title {
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 0;
+}
+
+    .k-grid .title.subsidiary {
+        font-size: 1.1em;
+        font-weight: 700;
+    }
+
+#tableResume tbody tr.grid-row:nth-of-type(odd) {
+    background-color: rgba(0,0,0,.05);
+}
+
+#tableResume tbody tr.grid-row.k-state-selected:nth-of-type(odd) {
+    background-color: #428bca;
+}
+
+@media(max-width: 767px) {
+    #tableResume {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    .k-grid td .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+
+        .k-grid td .row div {
+            padding-left: 5px;
+            padding-right: 0;
+        }
+}
+
+.width-panel {
+    float: left;
+    width: 270px;
+    margin-right: 1rem;
+}
+
+.panel {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0.4rem;
+    border: 1px solid #d6d8db;
+    border-radius: .25rem;
+    color: #383d41;
+    background-color: #e2e3e5;
+    margin-right: 4px;
+}
+
+    .panel.selected {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .panel.available {
+        color: #004085;
+        background-color: #cce5ff;
+        border-color: #b8daff;
+    }
+
+        .panel.available .points-title {
+            font-weight: 700;
+            font-size: 2.5em;
+        }
+
+    .panel.used {
+        color: #856404;
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+
+    .panel .points-title {
+        font-size: 1.3em;
+        font-weight: 700;
+    }
+
+.small-label {
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+    .small-label.action {
+        font-weight: 500;
+    }
+
+.year-values {
+    font-weight: 500;
+    font-size: 1.05em;
+}
+
+.year-title {
+    font-size: 3.5em;
+    font-weight: 700;
+}
+
+.details div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 12px;
+}
+
+.details-title div {
+    padding-bottom: 10px;
+    line-height: 30px;
+}
+
+.available .col div {
+    line-height: 1.1;
+}
+
+.k-state-selected .expected-positive {
+    
+}
+
+.expected-positive {
+    color: #21d921;
+    font-weight: 500;
+}
+
+.k-state-selected .expected-negative {
+    color: #f7a35c;
+}
+
+.expected-negative {
+    color: #FF0000;
+    font-weight: 500;
+}
+
+.slider-2 {
+    display: flex;
+    /*height: 350px;*/
+    max-height: auto;
+    overflow-y: hidden;
+    overflow-x: scroll !important;
+    /*padding: 16px;*/
+    transform: scroll(calc(var(--i,0)/var(--n)*-100%));
+    scroll-behavior: smooth;
+    padding-left: 16px;
+}
+
+    .slider-2::-webkit-scrollbar {
+        height: 5px;
+        width: 150px;
+        display: none;
+    }
+
+    .slider-2::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .slider-2::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+        .slider-2::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+.slide {
+    display: table;
+    min-width: 280px;
+}
+
+    .slide > div {
+        display: table-row;
+    }
+
+        .slide > div > div {
+            display: table-cell;
+        }
+
+.control-btn {
+    position: absolute;
+    top: 12px;
+    background-color: rgba(255,255,255,0.55);
+    height: 100px;
+    line-height: 100px;
+    width: 45px;
+    text-align: center;
+    box-shadow: 0 1px 3px #888;
+    user-select: none;
+    color: #444;
+    cursor: pointer;
+}
+
+    .control-btn.prev {
+        left: 297px;
+    }
+
+    .control-btn.next {
+        right: 0;
+    }
+
+@media only screen and (max-width: 420px) {
+    .slider-2 {
+        padding: 0;
+    }
+
+    .slide {
+        padding: 16px 10px;
+    }
+
+    .control-prev-btn {
+        top: 37%;
+    }
+
+    .control-next-btn {
+        top: 37%;
+    }
+}
+ 

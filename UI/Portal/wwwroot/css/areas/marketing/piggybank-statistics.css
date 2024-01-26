@@ -1,0 +1,80 @@
+﻿body {
+}
+
+.tree-folder {
+    background: url('../../../images/glyphicons-halflings.png') no-repeat -384px -120px;
+}
+
+.tree-folder-open {
+    background: url('../../../images/glyphicons-halflings.png') no-repeat -408px -120px;
+}
+
+.tree-file {
+    background: url('../../../images/glyphicons-halflings.png') no-repeat -24px -24px;
+}
+
+.panel {
+    /*border-radius: 5px;*/
+}
+
+.menu.menu-top {
+    position: absolute;
+}
+
+.datagrid-row-selected .low-margin, .datagrid-row-selected .low-margin.subtotal {
+    background-color: #ac6bff;
+}
+
+    .datagrid-row-selected .low-margin div {
+        color: #FFF;
+    }
+
+.datagrid-row-over .low-margin, .datagrid-row-over .low-margin.subtotal {
+    background-color: #c8929b;
+}
+
+.datagrid-view1 .datagrid-body-inner {
+    padding-bottom: 0 !important;
+}
+
+.low-margin {
+    background-color: pink;
+}
+
+    .low-margin.subtotal {
+        background-color: pink;
+    }
+
+.footer-note {
+    padding: 8px 16px;
+    background-color: #fbf86b;
+}
+
+    .footer-note i {
+        font-size: 1.3em;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+.with-prize {
+    background-color: #75c169;
+}
+
+/*#region --- FIX PANEL IN KENDO WINDOW WHEN EASYUI PRESENT ---*/
+
+.k-window-content .panel {
+    margin: 0 0 20px 0;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.k-window-content .panel-default {
+    border-color: #DDD;
+}
+
+.k-window-content .panel-body {
+    padding: 15px;
+    border-style: none;
+}
+
+/*#endregion*/

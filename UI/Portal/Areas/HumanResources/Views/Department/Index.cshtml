@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Areas de Trabajo";
+}
+<div class="row">
+    <div class="col-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="filter" class="col-2 col-sm-1 text-nowrap">Filtro</label>
+                <div class="col-10 col-sm-7 col-md-6 col-lg-8">
+                    <input type="text" id="filter" class="form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail">
+    <form>
+        <div class="row">
+            <div class="col">
+                <input id="id" name="id" type="hidden" />
+                <label for="name">Nombre</label>
+                <input id="name" name="name" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="enabled">Habilitado</label>
+                <input id="enabled" name="enabled" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-2">
+                <button class="btn btn-outline-secondary action-cancel">Cancelar</button>
+                <button class="btn btn-primary action-save ml-1">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter")",
+            urlEdit = "@Url.Action("Edit")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/human-resources/department.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/human-resources/department.min.js" asp-append-version="true"></script>
+    </environment>
+}

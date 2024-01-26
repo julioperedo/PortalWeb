@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Productos Desatendidos";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3>@ViewBag.Title<span id="title"></span></h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Enabled" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Habilitado</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="Enabled" class="w-100" />
+                </div>
+                <label for="Stock" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Stock</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="Stock" class="w-100" />
+                </div>
+                <label for="Comments" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Commentarios</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="Comments" class="w-100" />
+                </div>
+                <label for="Transit" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Tr&aacute;nsito</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="Transit" class="w-100" />
+                </div>
+                <label for="Price" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Precio</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="Price" class="w-100" />
+                </div>
+                <label for="Manager" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">P.M.</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="Manager" class="w-100" />
+                </div>
+                <label for="ShowInWeb" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">En Web</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="ShowInWeb" class="w-100" />
+                </div>
+                <label for="WithImage" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Con Imagen</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="WithImage" class="w-100" />
+                </div>
+                <label for="WithLink" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Con V&iacute;nculo</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="WithLink" class="w-100" />
+                </div>
+                <label for="WithRotation" class="col-3 col-md-2 col-lg-2 col-xl-1 text-nowrap">Con Rotaci&oacute;n</label>
+                <div class="col-9 col-md-4 col-xl-2">
+                    <input id="WithRotation" class="w-100" />
+                </div>
+                <div class="col text-right pt-1">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+		var urlGetPMs = "@Url.Action("GetProductManagers", "UnattendedProducts")",
+			urlFilter = "@Url.Action("Filter", "UnattendedProducts")",
+			urlExport = "@Url.Action("Export", "UnattendedProducts")",
+			urlDetail = "@Url.Action("DetailSessions", "LessActiveUsers")";
+    </script>    
+    <environment include="Development">
+        <script src="~/js/areas/reports/unattendedproducts.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/reports/unattendedproducts.min.js" asp-append-version="true"></script>
+    </environment>
+}

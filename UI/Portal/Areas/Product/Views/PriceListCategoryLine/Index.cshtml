@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Categorías de Listas de Precios por Línea";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col pb-3">
+        <label for="id-line">L&iacute;nea</label>
+        <input id="id-line" class="w-100" />
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Precios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Clientes</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active show" id="tab1" role="tabpanel">
+                    <div class="text-right pt-2 pb-2">
+                        <button type="button" class="btn btn-primary mr-2" id="action-save-prices">Guardar Precios</button>
+                    </div>
+                    <div id="spreadsheet" style="width: 100%; height: 700px"></div>
+                </div>
+                <div class="tab-pane" id="tab2" role="tabpanel">
+                    <div class="row">
+                        <div class="col">
+                            <div id="selected-clients"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="detail-client">
+    <form>
+        <div class="row">
+            <div class="col">
+                <label for="edit-client">Cliente</label>
+                <input id="edit-client" class="w-100" required />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="edit-group">Lista</label>
+                <input id="edit-group" class="w-100" required />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-2">
+                <button id="save-client" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>    
+</div>
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/product/pricelist-category-line.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/product/pricelist-category-line.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section Scripts {
+    <script type="text/javascript">
+        let urlSave = "@Url.Action("Save")",
+            urlGroups = "@Url.Action("GetGroups")",
+            urlLines = "@Url.Action("GetAvailableLines")",
+            urlProducts = "@Url.Action("GetProducts")",
+            urlClients = "@Url.Action("GetClients")",
+            urlGroupsByLine = "@Url.Action("GetGroupsByline")",
+            urlSaveClient = "@Url.Action("SaveClient")",
+            urlDeleteClient = "@Url.Action("DeleteClient")",
+            permission = "@ViewData["Permission"]";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/pricelist-category-line.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/pricelist-category-line.min.js" asp-append-version="true"></script>
+    </environment>
+}

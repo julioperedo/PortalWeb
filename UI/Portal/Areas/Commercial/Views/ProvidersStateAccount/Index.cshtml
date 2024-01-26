@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "Estado de Cuentas Proveedores";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="provider" class="col-3 col-sm-2 col-lg-1 text-nowrap">Proveedor</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="provider" multiple="multiple"></select>
+                </div>
+                <label for="subsidiary" class="col-3 col-sm-2 col-lg-1 text-nowrap">Sucursal</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="subsidiary" multiple="multiple"></select>
+                </div>
+                <label for="seller" class="col-3 col-sm-2 col-lg-1 text-nowrap">Encargado</label>
+                <div class="col-9 col-sm-4 col-lg-5">
+                    <select id="seller" multiple="multiple"></select>
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Report" visible="false" title="Producto" modal="true" draggable="true" width="1150">
+    <content>
+        <div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;">
+        </div>
+    </content>
+</kendo-window>
+
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter", "ProvidersStateAccount")",
+            urlExcel = "@Url.Action("ExportExcel", "ProvidersStateAccount")",
+            urlSubsidiaries = "@Url.Action("GetSubsidiaries", "ProvidersStateAccount")",
+            urlPMs = "@Url.Action("GetProductManagers", "ProvidersStateAccount")",
+            urlProviders = "@Url.Action("GetProviders", "ProviderOrders")",
+            urlService = "@Url.Content("~/api/reports/")";
+    </script>
+    <script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+    <script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/providerstateaccount.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/providerstateaccount.min.js" asp-append-version="true"></script>
+    </environment>
+}

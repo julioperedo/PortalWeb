@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "Visitas";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilClient" class="col-2 col-sm-1 text-nowrap">Cliente</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input id="FilClient" style="width: 100%;" />
+                </div>
+                <label for="FilVisitor" class="col-2 col-sm-1 text-nowrap">Visitante</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input type="text" id="FilVisitor" class="form-control" />
+                </div>
+                <label for="Staff" class="col-2 col-sm-1 text-nowrap">Visitado</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input id="FilStaff" style="width: 100%;" />
+                </div>
+                <label for="FilSince" class="col-2 col-sm-1 text-nowrap">Desde</label>
+                <div class="col-10 col-sm-3 col-md-3 col-lg-3">
+                    <input type="date" id="FilSince" style="width: 120px;" />
+                </div>
+                <label for="FilUntil" class="col-2 col-sm-1 text-nowrap">Hasta</label>
+                <div class="col-10 col-sm-3 col-md-2 col-lg-3">
+                    <input type="date" id="FilUntil" style="width: 120px;" />
+                </div>
+                <div class="col-6 col-sm-2">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="NotFinished" checked="checked">
+                        <label class="custom-control-label" for="NotFinished">S&oacute;lo sin salida</label>
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" id="action-filter" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail"></div>
+<script id="noDataTemplate" type="text/x-kendo-tmpl">
+    <div>
+        Ning&Uacute;n visitante encontrado con ese criterio. ¿Desea registrar un nuevo visitante?
+    </div>
+    <br />
+    <button type="button" class="btn btn-info register-new-visitor" onclick="addNewVisitor()">Registrar Nuevo Visitante</button>
+</script>
+<script id="newVisitorTemplate" type="text/x-kendo-tmpl">
+    <form>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="row">
+                    <img id="new-photo" src="@Url.Content("~/images/no-photo.jpg")" />
+                    <div class="actionbar">
+                        <a id="photo-camera" title="Sacar Foto"><i class="fas fa-camera"></i></a>
+                        <a id="photo-gallery" title="Buscar de Galer&iacute;a"><i class="fas fa-images"></i></a>
+                        <a id="photo-remove" title="Eliminar Imagen"><i class="fas fa-trash-alt"></i></a>
+                        <input type="hidden" id="photo-value" required="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    <label for="FirstName" class="col-sm-2 col-md-2">Nombres</label>
+                    <div class="col-sm-10 col-md-10">
+                        <input id="FirstName" name="FirstName" type="text" class="form-control" required />
+                    </div>
+                    <label for="LastName" class="col-sm-2 col-md-2">Apellidos</label>
+                    <div class="col-sm-10 col-md-10">
+                        <input id="LastName" name="LastName" type="text" class="form-control" required />
+                    </div>
+                    <label for="DocumentId" class="col-sm-2 col-md-2">Doc. Id.</label>
+                    <div class="col-sm-10 col-md-10">
+                        <input id="DocumentId" name="DocumentId" type="text" class="form-control" required />
+                    </div>
+                    <label for="Phone" class="col-sm-2 col-md-2">Tel&eacute;fono</label>
+                    <div class="col-sm-10 col-md-10">
+                        <input id="Phone" name="Phone" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <img id="new-docId" src="@Url.Content("~/images/visits/carnet-anverso.png")" />
+                <div class="actionbar">
+                    <a id="docId-gallery" title="Buscar de Galer&iacute;a"><i class="fas fa-images"></i></a>
+                    <a id="docId-remove" title="Eliminar Imagen"><i class="fas fa-trash-alt"></i></a>
+                    <input type="hidden" id="docId-value" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <img id="new-docIdR" src="@Url.Content("~/images/visits/carnet-reverso.png")" />
+                <div class="actionbar">
+                    <a id="docIdR-gallery" title="Buscar de Galer&iacute;a"><i class="fas fa-images"></i></a>
+                    <a id="docIdR-remove" title="Eliminar Imagen"><i class="fas fa-trash-alt"></i></a>
+                    <input type="hidden" id="docIdR-value" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-2">
+                <button id="save-visitor" class="btn btn-primary">Guardar Visitante</button>
+            </div>
+        </div>
+    </form>
+</script>
+<div id="newVisitor"></div>
+<div class="d-none">
+    <div id="camera">
+        <div id="my_camera"></div>
+        <div class="text-center">
+            <button type="button" id="TakePicture" onclick="takingPhoto()" class="btn btn-primary">Tomar Foto</button>
+            <input type="hidden" id="picture-type" />
+            @*@Html.Kendo().Button().Name("TakePicture").Content("Tomar Foto").HtmlAttributes(new { @class = "k-primary" }).Events(e => e.Click("onTakingPhoto"))*@
+        </div>
+    </div>
+</div>
+<input id="gallery" type="file" class="d-none">
+<input id="gallery-data" type="hidden" />
+<link href="~/css/areas/visits/visits/index.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+	var urlFilter = "@Url.Action("Filter", "Visits")",
+		urlClients = "@Url.Action("GetClients", "Visits")",
+		urlStaff = "@Url.Action("GetStaff", "Visits")",
+		urlVisitors = "@Url.Action("GetVisitors", "VisitsReception")",
+		urlEdit = "@Url.Action("Edit", "Visits")",
+		urlFinish = "@Url.Action("FinishVisit", "Visits")",
+		urlAddVisitor = "@Url.Action("AddVisitor", "Visits")",
+		urlGetImages = "@Url.Action("GetPersonImages", "Visits")",
+		urlSaveImage = "@Url.Action("SaveImageBase64", "Visits")",
+		urlSaveImagePerson = "@Url.Action("SaveImageBase64ToPerson", "Visits")",
+		urlNoPhoto = "@Url.Content("~/images/no-photo.jpg")",
+		urlNoCI = "@Url.Content("~/images/visits/carnet-anverso.png")",
+		urlNoCIR = "@Url.Content("~/images/visits/carnet-reverso.png")",
+		urImages = "@Url.Content("~/images/person/")";
+    </script>
+    <script src="~/lib/webcamjs/webcam.min.js"></script>    
+    <environment include="Development">
+        <script src="~/js/areas/visits/visits.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/visits/visits.min.js" asp-append-version="true"></script>
+    </environment>
+}

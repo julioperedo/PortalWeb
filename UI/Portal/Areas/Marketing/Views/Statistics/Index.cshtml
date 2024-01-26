@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Estadísticas Alcancía Ganadora";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="" href="#" id="action-config"><i class="fas fa-cogs"></i></a>
+    </div>
+</div>
+<div class="custom-tab">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Pivot</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Gr&aacute;ficos</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active show" id="tab1" role="tabpanel">
+            <table id="pivot" style="width:100%;height:100%;"></table>
+            <div class="footer-note">Para modificar como se muestran los datos en la tabla pivot hay que presionar en <i class="fas fa-cogs"></i> en el menú superior.</div>
+        </div>
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <div id="chartPerCity"></div>
+            <div id="timeDistribution"></div>
+        </div>
+    </div>
+</div>
+@section Styles {
+    <link href="~/lib/easyui/easyui.css" rel="stylesheet" />
+    <environment include="Development">
+        <link href="~/css/areas/marketing/piggybank-statistics.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/marketing/piggybank-statistics.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter")",
+            urlExport = "@Url.Action("Export")";
+    </script>
+    <script src="~/lib/easyui/jquery.easyui.min.js"></script>
+    <script src="~/lib/easyui/jquery.easyui.pivotgrid.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/marketing/piggybank-statistics.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/marketing/piggybank-statistics.min.js" asp-append-version="true"></script>
+    </environment>
+}

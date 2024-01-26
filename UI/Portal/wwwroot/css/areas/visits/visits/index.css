@@ -1,0 +1,76 @@
+﻿.k-window-content .notifications .row img {
+	height: auto;
+}
+
+.k-window-content .row img {
+	max-width: 100%;
+	height: 250px;
+}
+
+.finish-visit {
+	cursor: pointer;
+	color: #333;
+}
+
+	.finish-visit:hover {
+		text-decoration: none;
+		background-color: #F00;
+		color: #FFF !important;
+	}
+
+.k-state-selected .finish-visit.k-button {
+	color: #333;
+}
+
+.actionbar {
+	padding: 8px;
+	background-color: #636363;
+	/*color: #FFF;*/
+}
+
+	.actionbar a {
+		color: #FFF;
+		padding: 5px 7px;
+		cursor: pointer;
+	}
+
+		.actionbar a:hover {
+			background-color: #ccc;
+			color: #333;
+		}
+
+.form-horizontal img {
+	max-height: 200px;
+	max-width: 300px;
+}
+
+#my_camera {
+	border: 3px solid #AAA;
+	margin-bottom: 8px;
+}
+
+.visitor-image {
+	position: relative;
+}
+
+	.visitor-image img {
+		z-index: 100;
+	}
+
+	.visitor-image .take-picture {
+		font-size: 2.5em;
+		color: #FFF;
+		background-color: #333;
+		padding: 4px 8px;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		z-index: 101;
+		opacity: 0.7;
+		cursor: pointer;
+		display: none;
+	}
+
+	.visitor-image.selected:hover .take-picture {
+		display: inline;
+	}

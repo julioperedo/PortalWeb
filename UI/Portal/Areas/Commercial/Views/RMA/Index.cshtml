@@ -1,0 +1,383 @@
+﻿@{
+    ViewData["Title"] = "RMA";
+}
+<input type="hidden" id="local-user" value="Y" />
+<input type="hidden" id="user-code" value="@ViewBag.UserCode" />
+<input type="hidden" id="permission" value="@ViewBag.Permission" />
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" href="#" role="button" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary d-none" title="Enviar Correo" role="button" href="#" id="action-email">Enviar correo <i class="fab fa-telegram-plane"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilId" class="col-2 col-sm-1 text-nowrap">C&oacute;digo</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <input id="FilId" type="number" class="w-100 form-control" />
+                </div>
+                <label for="FilSince" class="col-2 col-sm-1 text-nowrap">Desde</label>
+                <div class="col-10 col-sm-5 col-lg-2">
+                    <input id="FilSince" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilUntil" class="col-2 col-sm-1 text-nowrap">Hasta</label>
+                <div class="col-10 col-sm-5 col-lg-2">
+                    <input id="FilUntil" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilClient" class="col-2 col-sm-1 text-nowrap">Cliente</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <input id="FilClient" class="w-100" />
+                </div>
+                <label for="FilTechnician" class="col-2 col-sm-1 text-nowrap">T&eacute;cnico</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <input id="FilTechnician" class="w-100" />
+                </div>
+                <label for="FilState" class="col-2 col-sm-1 text-nowrap">Estado</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <select id="FilState" class="w-100" multiple="multiple"></select>
+                </div>
+                <label for="FilBrand" class="col-2 col-sm-1 text-nowrap">Marca</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <select id="FilBrand" class="w-100" multiple="multiple"></select>
+                </div>
+                <label for="FilLine" class="col-2 col-sm-1 text-nowrap">L&iacute;nea</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <select id="FilLine" class="w-100" multiple="multiple"></select>
+                </div>
+                <label for="FilProductManager" class="col-2 col-sm-1 text-nowrap">G. Producto</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <input id="FilProductManager" class="w-100" />
+                </div>
+                <label for="FilSerial" class="col-2 col-sm-1 text-nowrap">Serial</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <input id="FilSerial" type="text" class="w-100 form-control" />
+                </div>
+                <label for="FilProduct" class="col-2 col-sm-1 text-nowrap">Producto</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <input id="FilProduct" type="text" class="w-100 form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="detail"></div>
+<div id="Report">
+    <div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;"></div>
+</div>
+<div id="detailCamera">
+    <div id="camera" class="text-center">
+        <div id="my_camera"></div>
+        <div class="text-center">
+            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="...">
+                    <a id="take-photo-ok" href="javascript:;" class="btn btn-outline-secondary"><span><i class="fa fa-check"></i><span> Tomar foto</span></span></a>
+                    <a id="take-photo-cancel" href="javascript:;" class="btn btn-outline-secondary"><span><i class="fas fa-times"></i><span> Cancelar</span></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="template-service-call-edit" type="text/x-kendo-template">
+    <form id="form-sc-#=code#">
+        <div class="detail-rma">
+            <input type="hidden" id="data-#=code#" value="#:JSON.stringify(data)#">
+            <input type="hidden" class="card-code" value="#=clientCode#">
+            <h5>Datos del RMA</h5>
+            <div class="row">
+                <div class="col-6 col-md-2"><span class="font-weight-bold" style="position: absolute; bottom: 2px;">No. de RMA:</span></div><div class="col-6 col-md"><span class="id">#=code#</span></div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-md-2"><label for="create-date-#=code#" class="font-weight-bold">Fecha Creaci&oacute;n:</label></div><div class="col-6 col-md-4"><input type="datetime" id="create-date-#=code#" required disabled></div>
+                <div class="col-6 col-md-2"><label for="close-date-#=code#" class="font-weight-bold">Fecha Cierre:</label></div><div class="col-6 col-md-4"><input type="datetime" id="close-date-#=code#" disabled></div>
+            </div>
+            <div class="row">
+                <div class="col col-md-2"><label for="status-#=code#" class="font-weight-bold">Estado:</label></div><div class="col-12 col-md-4"><input id="status-#=code#" value="#=statusCode#" class="w-100" required></div>
+                <div class="col col-md-2"><label for="open-days-#=code#" class="font-weight-bold">Días Abierto:</label></div><div class="col-12 col-md-4"><input id="open-days-#=code#" value="#=openDays#" class="form-control" disabled></div>
+            </div>
+            <div class="row">
+                <div class="col col-md-2"><label for="received-by-#=code#" class="font-weight-bold">Recibido por:</label></div><div class="col-12 col-md-4"><input id="received-by-#=code#" class="form-control" value="# if(receivedBy) {# #=receivedBy# #} #"></div>
+                <div class="col col-md-2"><label for="technician-#=code#" class="font-weight-bold">T&eacute;cnico Asignado:</label></div><div class="col-12 col-md-4"><input id="technician-#=code#" value="#=technicianCode#" class="w-100" required></div>
+            </div>
+            <div class="row">
+                <div class="col col-md-2"><label for="call-type-#=code#" class="font-weight-bold">Tipo de llamada:</label></div><div class="col-12 col-md-4"><input id="call-type-#=code#" class="w-100" value="#=callType#" required></div>
+                <div class="col col-md-2"><label for="priority-#=code#" class="font-weight-bold">Prioridad:</label></div><div class="col-12 col-md-4"><input id="priority-#=code#" value="#=priority#" class="w-100" required></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="custom-tab mt-3">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="\\#tabGeneral_#:code#" role="tab" aria-selected="true">Datos generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabComments_#:code#" role="tab">Comentarios</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabActivities_#:code#" role="tab">Actividades</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabRepair_#:code#" role="tab">Reparaci&oacute;n</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabCosts_#:code#" role="tab">Costos</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabResolution_#:code#" role="tab">Resoluci&oacute;n</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabHistory_#:code#" role="tab">Historial</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabProgrammed_#:code#" role="tab">Programaci&oacute;n</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="\\#tabAttached_#:code#" role="tab">Anexos</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tabGeneral_#:code#" class="tab-pane active show pt-3" role="tabpanel">
+                                <section>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="serial-number-#=code#" class="font-weight-bold">Serial:</label></div><div class="col-12 col-md-4"><div class="input-group product-card-search"><input id="serial-number-#=code#" value="#=serialNumber#" class="form-control" data-code="#=code#" required><div class="input-group-append"><button class="btn btn-outline-secondary product-card" type="button" style="border: 1px solid #ced4da;" title="Buscar datos del serial" data-code="#=code#"><i class="fas fa-search"></i></button><button class="btn btn-outline-secondary other-serial-number" type="button" style="border: 1px solid \\#ced4da;" data-code="#=code#" title="Buscar otros casos del serial"><i class="fas fa-arrow-right"></i></button></div></div></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="item-code-#=code#" class="font-weight-bold">C&oacute;digo Producto:</label></div><div class="col-12 col-md-4"><input id="item-code-#=code#" value="#=itemCode#" class="form-control" required></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="item-name-#=code#" class="font-weight-bold">Producto:</label></div><div class="col-12 col-md-4"><input id="item-name-#=code#" value="#=itemName#" class="form-control" required></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="brand-#=code#" class="font-weight-bold">Marca:</label></div><div class="col-12 col-md-4"><input id="brand-#=code#" value="#=$.trim(brand)#" class="form-control"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="ref-nv-#=code#" class="font-weight-bold text-nowrap">Prueba de compra:</label></div><div class="col-12 col-md-4"><input id="ref-nv-#=code#" value="#=$.trim(refNV)#" class="form-control" requied></div>
+                                        <div class="col-6 col-md-2"><label for="purchase-date-#=code#" class="font-weight-bold">Fecha de compra:</label></div><div class="col-6 col-md-4"><input type="datetime" id="purchase-date-#=code#"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="warranty-#=code#" class="font-weight-bold">Garant&iacute;a:</label></div><div class="col-12 col-md-4"><input id="warranty-#=code#" value="#=$.trim(warranty)#" class="form-control"></div>
+                                        <div class="col col-md-2"><label for="reported-by-#=code#" class="font-weight-bold">Reportado por:</label></div><div class="col-12 col-md-4"><input id="reported-by-#=code#" value="#=$.trim(reportedBy)#" class="form-control" required></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="client-#=code#" class="font-weight-bold">Cliente:</label></div><div class="col-12 col-md-4"><input id="client-#=code#" value="#=clientCode#" class="w-100" required></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="city-#=code#" class="font-weight-bold">Ciudad:</label></div><div class="col-12 col-md"><input id="city-#=code#" value="#=cityCode#" class="w-100" required></div>
+                                        <div class="col col-md-2"><label for="external-service-address-#=code#" class="font-weight-bold">Ag. o Dir. Servicio:</label></div><div class="col-12 col-md"><input id="external-service-address-#=code#" value="#=$.trim(externalServiceAddress)#" class="form-control"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="final-user-#=code#" class="font-weight-bold">Usuario Final:</label></div><div class="col-12 col-md-4"><input id="final-user-#=code#" value="#=$.trim(finalUser)#" class="form-control" required></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="final-user-phone-#=code#" class="font-weight-bold">Tel&eacute;fono Usuario Final:</label></div><div class="col-12 col-md"><input id="final-user-phone-#=code#" class="form-control" value="#=$.trim(finalUserPhone)#"></div>
+                                        <div class="col col-md-2"><label for="final-user-email-#=code#" class="font-weight-bold">E-Mail Usuario Final:</label></div><div class="col-12 col-md"><input id="final-user-email-#=code#" class="form-control" value="#=$.trim(finalUserEMail)#"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="problem-type-#=code#" class="font-weight-bold">Tipo de Problema:</label></div><div class="col-12 col-md"><input id="problem-type-#=code#" class="w-100" value="#=problemTypeCode#"></div>
+                                        <div class="col col-md-2"><label for="origin-#=code#" class="font-weight-bold">Origen:</label></div><div class="col-12 col-md"><input id="origin-#=code#" class="w-100" value="#=originCode#"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="subject-#=code#" class="font-weight-bold text-nowrap">Problema reportado:</label></div><div class="col-12 col-md"><input id="subject-#=code#" value="#=subject#" class="form-control" required></div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="external-service-#=code#" class="font-weight-bold">Servicio Externo:</label></div><div class="col-12 col-md-4"><input id="external-service-#=code#" value="#=$.trim(externalService)#" class="form-control"></div>
+                                        <div class="col col-md-2"><label for="external-service-number-#=code#" class="font-weight-bold">Boleta Servicio Externo:</label></div><div class="col-12 col-md-4"><input id="external-service-number-#=code#" value="#=$.trim(externalServiceNumber)#" class="form-control"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="external-service-technician-#=code#" class="font-weight-bold">T&eacute;cnico Externo:</label></div><div class="col-12 col-md-4"><input id="external-service-technician-#=code#" value="#=$.trim(externalServiceTechnician)#" class="form-control"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 col-md-2"><label for="counted-pieces-#=code#" class="font-weight-bold">Piezas contadas:</label></div><div class="col-6 col-md-4"><input id="counted-pieces-#=code#" type="number" value="#=countedPieces#" class="form-control"></div>
+                                        <div class="col-6 col-md-2"><label for="prior-counted-pieces-#=code#" class="font-weight-bold">Piezas contadas Ant.:</label></div><div class="col-6 col-md-4"><input id="prior-counted-pieces-#=code#" type="number" value="#=priorCountedPieces#" class="form-control" disabled></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 col-md-2"><label for="diff-counted-pieces-#=code#" class="font-weight-bold">Piezas contadas (Diff.):</label></div><div class="col-6 col-md-4"><input id="diff-counted-pieces-#=code#" type="number" value="#=diffCountedPieces#" class="form-control" disabled></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 col-md-2"><label for="delivery-date-#=code#" class="font-weight-bold">Fecha de Entrega:</label></div><div class="col-6 col-md-4"><input type="datetime" id="delivery-date-#=code#"></div>
+                                        <div class="col col-md-2"><label for="delivered-by-#=code#" class="font-weight-bold">Entregado por:</label></div><div class="col-12 col-md-4"><input id="delivered-by-#=code#" value="#=$.trim(deliveredBy)#" class="form-control"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-2"><label for="guide-number-#=code#" class="font-weight-bold">No. de Gu&iacute;a:</label></div><div class="col-12 col-md-4"><input id="guide-number-#=code#" value="#=$.trim(guideNumber)#" class="form-control"></div>
+                                        <div class="col col-md-2"><label for="transport-#=code#" class="font-weight-bold">Transporte:</label></div><div class="col-12 col-md-4"><input id="transport-#=code#" value="#=$.trim(transport)#" class="form-control"></div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div id="tabComments_#:code#" class="tab-pane pt-3" role="tabpanel">
+                                <section>
+                                    <textarea id="comments-#=code#" class="form-control" rows="7" style="width: 98%"># if(comments) {# #=comments# #} #</textarea>
+                                </section>
+                            </div>
+                            <div id="tabActivities_#:code#" class="tab-pane" role="tabpanel">
+                                <section>
+                                    <div id="activitiesList_#:code#"></div>
+                                </section>
+                            </div>
+                            <div id="tabRepair_#:code#" class="tab-pane" role="tabpanel">
+                                <section>
+                                    <div id="repairList_#:code#"></div>
+                                </section>
+                            </div>
+                            <div id="tabCosts_#:code#" class="tab-pane" role="tabpanel">
+                                <section>
+                                    <div id="costsList_#:code#"></div>
+                                </section>
+                            </div>
+                            <div id="tabResolution_#:code#" class="tab-pane" role="tabpanel">
+                                <section>
+                                    <textarea id="resolution-#=code#" class="form-control" rows="7" style="width: 98%"># if(resolution) {# #=resolution# #} #</textarea>
+                                </section>
+                            </div>
+                            <div id="tabHistory_#:code#" class="tab-pane" role="tabpanel">
+                                <section>
+                                    <div id="historyList_#:code#"></div>
+                                </section>
+                            </div>
+                            <div id="tabProgrammed_#:code#" class="tab-pane pt-3" role="tabpanel">
+                                <section>
+                                    <div class="row">
+                                        <div class="col col-md-1"><label for="country-#=code#" class="font-weight-bold">Pa&iacute;s:</label></div><div class="col-12 col-md"><input id="country-#=code#" class="w-100" value="#=countryCode#"></div>
+                                        <div class="col col-md-1"><label for="state-#=code#" class="font-weight-bold">Departamento:</label></div><div class="col-12 col-md"><input id="state-#=code#" class="w-100" value="#=stateCode#"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-1"><label for="city2-#=code#" class="font-weight-bold">Ciudad:</label></div><div class="col-12 col-md"><input id="city2-#=code#" class="form-control" value="#=$.trim(city2)#"></div>
+                                        <div class="col col-md-1"><label for="location-#=code#" class="font-weight-bold">Localidad:</label></div><div class="col-12 col-md"><input id="location-#=code#" class="w-100" value="#=locationCode#"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-md-1"><label for="street-#=code#" class="font-weight-bold">Calle:</label></div><div class="col-12 col-md"><input id="street-#=code#" class="form-control" value="#=$.trim(street)#"></div>
+                                        <div class="col col-md-1"><label for="room-#=code#" class="font-weight-bold">Sala:</label></div><div class="col-12 col-md"><input id="room-#=code#" class="form-control" value="#=$.trim(room)#"></div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div id="tabAttached_#:code#" class="tab-pane pt-3" role="tabpanel">
+                                <section>
+                                # if (fileName.length > 0) { #
+                                    # for (var i = 0; i < fileName.length; i++) { #
+                                    <p><a class="action action-link attach-file" data-url="#=filePath#">#=fileName[i]#</a></p>
+                                    # } #
+                                # } else { #
+                                <span>No existen archivos adjuntos.</span>
+                                # } #
+                                # var attachment = "", temp = [], fileName, line = 1; #
+                                # if (listServiceCallFiles && listServiceCallFiles.length >= 0) { #
+                                    # listServiceCallFiles.forEach(x => { #
+                                        # temp.push(getFileButton(true, code, x.fileName, urlFiles + x.fileName, line, true)); #
+                                        # line += 1; #
+                                    # }); #
+                                    # attachment = temp.join("&nbsp;&nbsp;&nbsp;"); #
+                                # } #
+                                    <div id="files-content-#:code#" class="files-content mb-2">#=attachment#</div>
+                                    <button type="button" class="btn btn-secondary photo-gallery" title="Escoger un archivo" data-id="#=code#">
+                                    <i class="fa fa-image"></i> Escoger un Archivo
+                                    </button>
+                                    <input id="gallery-#:code#" type="file" class="d-none gallery" data-id="#:code#"><input type="hidden" id="data-files-#:code#" value="" />
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"><div class="col text-right mt-2"><button class="btn btn-primary save-call-service" data-code="#=code#" id="save-button-#=code#">Guardar Orden de Servicio</button></div></div>
+        </div>
+     </form>
+</script>
+@section Styles {
+
+<style type="text/css">
+    .k-grid-footer {
+        display: none;
+    }
+
+    #id, .id {
+        font-size: 1.3em;
+        font-weight: 600;
+    }
+
+    .tab-pane {
+        font-size: 0.9em;
+    }
+
+    .text-truncate {
+        overflow: hidden;
+        white-space: nowrap;
+        /*display: block;
+                height: 16.3px;*/
+    }
+
+    .bg-data {
+        background-color: #ebebeb;
+    }
+
+    .content-data {
+        padding: 0 20px 0 8px;
+    }
+
+        .content-data .row {
+            margin-bottom: 1px;
+        }
+
+            .content-data .row > div {
+                padding: 5px 8px 1px;
+            }
+
+            .content-data .row label {
+                margin: 0;
+            }
+
+    .label-edit {
+        line-height: 29px;
+    }
+
+    .canceled {
+        background-color: #ccc;
+        color: #aaa;
+    }
+
+    .k-notification-content {
+        white-space: normal
+    }
+
+    .btn-file {
+        margin-bottom: 6px;
+    }
+</style>
+}
+@section Scripts {
+<script type="text/javascript">
+    var urlTechnicians = "@Url.Action("GetTechnicians")",
+        urlStatuses = "@Url.Action("GetStatuses")",
+        urlClients = "@Url.Action("GetClients", "Orders")",
+        urlFilter = "@Url.Action("Filter")",
+        urlHistory = "@Url.Action("GetHistory")",
+        urlDetail = "@Url.Action("Detail")",
+        urlDownloadFile = "@Url.Action("DownloadFile")",
+        urlBrands = "@Url.Action("GetBrands")",
+        urlLines = "@Url.Action("GetLines")",
+        urlCountries = "@Url.Action("GetCountries")",
+        urlStates = "@Url.Action("GetStates")",
+        urlCities = "@Url.Action("GetCities")",
+        urlLocations = "@Url.Action("GetLocations")",
+        urlCallTypes = "@Url.Action("GetCallTypes")",
+        urlOrigins = "@Url.Action("GetOrigins")",
+        urlProblemTypes = "@Url.Action("GetProblemTypes")",
+        urlPManagers = "@Url.Action("GetProductManagers")",
+        urlOtherRMAs = "@Url.Action("GetRMAFromSerial")",
+        urlGetUsers = "@Url.Action("GetUsers")",
+        urlGetContacts = "@Url.Action("GetContacts")",
+        urlGetSubjects = "@Url.Action("GetSubjects")",
+        urlGetSolutionStatuses = "@Url.Action("GetSolutionStatuses")",
+        urlSaveServiceCall = "@Url.Action("Save")",
+        urlDeleteServiceCall = "@Url.Action("Delete")",
+        urlGetProductCard = "@Url.Action("GetProductCard")",
+        urlSaveFile = "@Url.Action("SaveFileBase64")",
+        urlFiles = "@Url.Content("~/files/rma/")",
+        urlService = "@Url.Content("~/api/reports/")";
+</script>
+<script src="~/lib/kendo-ui/js/jszip.min.js"></script>
+<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+<script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+<script src="~/lib/webcamjs/webcam.js"></script>
+<environment include="Development">
+    <script src="~/js/areas/commercial/rma.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/areas/commercial/rma.min.js" asp-append-version="true"></script>
+</environment>
+}

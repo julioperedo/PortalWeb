@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Correos Rebotados";
+}
+<div class="row">
+    <div class="col-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-5 text-right">
+        <a class="btn btn-secondary d-none" title="Enviar Correo" role="button" href="#" id="action-email">Enviar correo <i class="fab fa-telegram-plane"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilClients" class="col-2 col-sm-1 text-nowrap">Cliente</label>
+                <div class="col-10 col-sm-5 col-md-3 col-lg-2">
+                    <select id="FilClients" style="width: 100%;"></select>
+                </div>
+                <label for="FilEMail" class="col-2 col-sm-1 text-nowrap">Correo</label>
+                <div class="col-10 col-sm-5 col-md-3 col-lg-2">
+                    <input id="FilEMail" type="text" class="form-control" />
+                </div>
+                <label for="FilSince" class="col-2 col-sm-1 text-nowrap">Desde</label>
+                <div class="col-10 col-sm-5 col-lg-2">
+                    <input id="FilSince" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilUntil" class="col-2 col-sm-1 text-nowrap">Hasta</label>
+                <div class="col-10 col-sm-5 col-lg-2">
+                    <input id="FilUntil" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilReported" class="col-2 col-md-1">Enviado</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-2">
+                    <input id="FilReported" class="w-100" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="detail">
+    <form>
+        <div class="row">
+            <label for="Email" class="col-2 text-nowrap">Correo</label>
+            <div class="col-10">
+                <div class="input-group">
+                    <input id="Email" type="email" class="form-control" required />
+                    <div class="input-group-append"><button class="btn btn-outline-secondary" type="button" id="search-mail"><i class="fas fa-search"></i></button></div>
+                </div>                
+            </div>
+        </div>
+        <div class="row">
+            <label for="ClientCode" class="col-2 text-nowrap">Cliente</label>
+            <div class="col-10">
+                <span id="ClientCode"></span> - <span id="ClientName"></span>
+            </div>
+        </div>
+        <div class="row">
+            <label for="Seller" class="col-2 text-nowrap">Vendedor</label>
+            <div class="col-10">
+                <span id="Seller"></span>
+            </div>
+        </div>
+        <div class="row">
+            <label for="Reason" class="col-2 text-nowrap">Motivo</label>
+            <div class="col-10">
+                <input id="Reason" class="w-100" required />
+            </div>
+        </div>
+        <div class="row">
+            <label for="RejectionDate" class="col-2 text-nowrap">Fecha</label>
+            <div class="col-10">
+                <input id="RejectionDate" type="datetime" required />
+            </div>
+        </div>
+        <div class="row">
+            <label for="Comments" class="col-2 text-nowrap">Comentarios</label>
+            <div class="col-10">
+                <textarea id="Comments" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right mt-2">
+                <button id="save" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Styles {
+<style type="text/css">
+    form .row {
+        margin-bottom: 6px;
+    }
+    .row label.custom-control-label {
+        margin-top: 0;
+        margin-left: 8px;
+    }
+</style>
+}
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter")",
+			urlEdit = "@Url.Action("Edit")",
+            urlClients = "@Url.Action("GetClients")",
+            urlReasons = "@Url.Action("GetReasons")",
+            urlVerifyEmail = "@Url.Action("VerifyEmail")",
+            urlReportEmails = "@Url.Action("ReportEmails")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/rejected-mails.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/rejected-mails.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Portal.Areas.Commercial.Models.Transport>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-12 col-sm-6">
+            <div class="jumbotron custom">
+                <div class="row">
+                    <label class="control-label col-md-2 text-nowrap">No. de Gu&iacute;a:</label>
+                    <div class="col-md-4 control-item">
+                        @item.DocNumber
+                        <input type="hidden" class="transport-id" value="@item.Id" />
+                    </div>
+                    <label class="control-label col-md-2">Fecha:</label>
+                    <div class="col-md-4 control-item">
+                        @item.Date
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-md-2">Origen:</label>
+                    <div class="col-md-4 control-item">
+                        @item.Source
+                    </div>
+                    <label class="control-label col-md-2">Destino:</label>
+                    <div class="col-md-4 control-item">
+                        @item.Destination
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-md-2">Transporte:</label>
+                    <div class="col-md-4 control-item">
+                        @item.Transporter
+                    </div>
+                    <label class="control-label col-md-2 text-nowrap">Entregar a:</label>
+                    <div class="col-md-4 control-item">
+                        @item.DeliveryTo
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-md-2">Observaciones:</label>
+                    <div class="col-md-10 control-item">
+                        @item.Observations
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-md-2">Peso(Kg):</label>
+                    <div class="col-md-4 control-item">
+                        @item.Weight
+                    </div>
+                    <label class="control-label col-md-2 text-nowrap">Cant. Piezas:</label>
+                    <div class="col-md-4 control-item">
+                        @item.QuantityPieces
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-md-2">Pago Entrega (Bs):</label>
+                    <div class="col-md-4 control-item">
+                        @item.RemainingAmount
+                    </div>
+                </div><br />
+                <div class="row">
+                    @foreach (var si in item.Clients)
+                    {
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                @if (item.TypeId == 149)
+                                {
+                                    <div class="panel-heading">( @si.Code ) @si.Name</div>
+                                    <div class="panel-body">
+                                        <p><strong>Ordenes:</strong><br />@si.Codes</p>
+                                        <p>
+                                            <strong>Destinatarios:</strong><br />
+                                            @foreach (var x in si.Contacts)
+                                            {
+                                                @x.Name <span class="text-nowrap"> ( @x.EMail )</span><br />
+                                            }
+                                        </p>
+                                        <p>
+                                            <strong>Ejecutivo:</strong><br />
+                                            @foreach (var x in si.Sellers)
+                                            {
+                                                @x.Name <span class="text-nowrap"> ( @x.EMail )</span><br />
+                                            }
+                                        </p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="panel-heading">Destinatarios</div>
+                                    <div class="panel-body">
+                                        @foreach (var x in si.Contacts)
+                                        {
+                                            @x.Name <span class="text-nowrap"> ( @x.EMail )</span><br />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="col text-right">
+        <button type="button" class="btn btn-outline-secondary per-update action-cancel">Cancelar</button>
+        <button type="button" class="btn btn-primary per-update action-send">Enviar por Correo</button>
+    </div>
+</div>

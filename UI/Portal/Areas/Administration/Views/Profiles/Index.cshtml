@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Perfiles";
+}
+<div class="row">
+    <div class="col-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="filter" class="col-2 col-sm-1 text-nowrap">Filtro</label>
+                <div class="col-10 col-sm-7 col-md-6 col-lg-8">
+                    <input type="text" id="filter" class="form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Detail" visible="false" title="Perfiles" modal="true" draggable="true" width="950" on-refresh="onRefreshWindow" on-close="onCloseWindow">
+    <content><div style='text-align: center;'>Cargando ...</div></content>
+</kendo-window>
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter", "Profiles")",
+            urlEdit = "@Url.Action("Edit", "Profiles")",
+            urlDelete = "@Url.Action("Delete", "Profiles")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/profiles.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/profiles.min.js" asp-append-version="true"></script>
+    </environment>
+}

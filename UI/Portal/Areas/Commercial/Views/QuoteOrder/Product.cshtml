@@ -1,0 +1,85 @@
+﻿@model Portal.Areas.Commercial.Models.QuoteDetail
+@{
+    string strImg = Url.Content("~/images/no-image.jpg"), strName = "Detail-" + Model.Id + "-" + DateTime.Now.Ticks.ToString();
+    if (Model.ProductImageURL != null && Model.ProductImageURL.Trim() != "")
+    {
+        strImg = Url.Content("~/images/products/" + Model.ProductImageURL.Trim());
+    }
+}
+<div class="row quote-product">
+    <input type="hidden" asp-for="IdProduct" />
+    <div class="image">
+        <img src="@strImg" />
+    </div>
+    <div class="desc">
+        @if (Model.ProductLink != null && Model.ProductLink.Trim() != "")
+        {
+            <a href="@Model.ProductLink" target="_blank"><span class="code">@Html.DisplayFor(model => model.ProductCode)</span></a>
+        }
+        else
+        {
+            <span class="code">@Html.DisplayFor(model => model.ProductCode)</span>
+        }
+        <br />
+        <span class="name">@Html.DisplayFor(model => model.ProductName)</span><br />
+        @Html.Kendo().Editor().Name(strName).Tag("div").Value(Model.ProductDescription).Tools(t => t.Clear().ForeColor().BackColor().FontSize().Bold().Italic().Underline().JustifyLeft().JustifyCenter().JustifyRight().JustifyFull().Indent().InsertOrderedList().InsertUnorderedList())
+    </div>
+    <div class="prices">
+        @foreach (var price in Model.Prices)
+        {
+            string name = Model.IdProduct + "-" + price.IdSubsidiary + "-" + DateTime.Now.Ticks.ToString();
+            <div class="price">
+                <div class="custom-control custom-switch">
+                    @if (price.Selected)
+                    {
+                        <input type="checkbox" class="selected-price custom-control-input" value="@price.IdSubsidiary" id="Selected-@name" checked="checked" />
+                    }
+                    else
+                    {
+                        <input type="checkbox" class="selected-price custom-control-input" value="@price.IdSubsidiary" id="Selected-@name" />
+                    }
+                    <label class="custom-control-label subsidiary" for="Selected-@name">@price.Subsidiary</label>
+                </div>
+                <p class="regular">
+                    US$ <input type="number" id="Price-@name" value="@price.Price" class="k-textbox w-75" required />
+                </p>
+                <p class="regular">
+                    <input type="number" id="Quantity-@name" value="@price.Quantity" class="k-textbox w-50" required />	Unidades
+                </p>
+                <p class="observations">@price.Observations</p>
+            </div>
+        }
+        @if (Model.Volume != null && Model.Volume.Count > 0)
+        {
+            <div class="volume">
+                <span><strong>Precios por Volumen</strong> (No se incluirá en el correo)</span>
+                @foreach (var price in Model.Volume)
+                {
+                    <p>
+                        @price.Subsidiary - @price.Quantity unidades - US$ @price.Price.ToString("N2")
+                        @if (price.Observations != null && price.Observations.Trim() != "")
+                        {
+                            <br />@price.Observations
+                        }
+                    </p>
+                }
+            </div>
+        }
+        @if (Model.Stock != null && Model.Stock.Count > 0)
+        {
+            <div class="stock">
+                <span><strong>Stock</strong> (No se incluirá en el correo)</span>
+                @foreach (var item in Model.Stock)
+                {
+                    <br /><span>@item.Warehouse : @item.Available &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    if (item.InTransit > 0)
+                    {
+                        <span>En Tr&aacute;nsito : @item.InTransit</span>
+                    }
+                }
+            </div>
+        }
+    </div>
+    <span class="fas fa-sync-alt refresh-product"></span>
+    <i class="fas fa-times remove-product"></i>
+</div>

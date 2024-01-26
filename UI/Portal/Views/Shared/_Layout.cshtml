@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Portal DMC</title>
+
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.bootstrap-main.min.css" />
+    <link href="~/lib/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+    <link href="~/lib/multiple-select/multiple-select.min.css" rel="stylesheet" />
+    <link href="~/lib/multiple-select/themes/bootstrap.min.css" rel="stylesheet" />
+    <environment include="Development">
+        <link href="~/css/sidebar.css" rel="stylesheet" />
+        <link href="~/css/sidebar-themes.css" rel="stylesheet" />
+        <link href="~/css/fonts.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <script type="text/javascript">
+        var urlLogOut = "@Url.Action("Logout", "Account", new { area = "" })",
+            urlRequireLogOff = "@Url.Action("RequireLogOff", "Home", new { area = "" })",
+            urlNotifications = "@Url.Action("GetNotifications", "Notification", new { area = "Marketing" })",
+            urlAllNotifications = "@Url.Action("GetAllNotifications", "Notification", new { area = "Marketing" })";
+    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+    <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
+    <script src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/lib/kendo-ui/js/cultures/kendo.culture.es-BO.min.js"></script>
+    <script src="~/lib/kendo-ui/js/messages/kendo.messages.es-BO.min.js"></script>
+    <script src="~/lib/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/lib/linq.js/linq.min.js"></script>
+    <script src="~/lib/kendo-ui/js/jszip.min.js"></script>
+    <script src="~/lib/multiple-select/multiple-select.min.js"></script>
+    <environment include="Development">
+        <script src="~/js/sidebar.js"></script>
+        <script src="~/js/site.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>    
+    @RenderSection("Styles", required: false)
+    <meta name="description" content="Portal DMC" />
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+</head>
+<body id="page-top">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {   
+                ValidateUser();
+                Notifications();                
+            });
+        </script>
+    }
+    <div class="page-wrapper default-theme sidebar-bg bg1 toggled boder-radius-on">
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <!-- sidebar-brand  -->
+                <div class="sidebar-item sidebar-brand">
+                    <a asp-action="Index" asp-controller="Home" asp-area="" class="m-brand__logo-wrapper"><img src="~/images/logo.png" alt="Portal DMC" /></a>
+                    <a id="toggle-sidebar" class="btn btn-secondary" href="#"><i class="fas"></i></a>
+                </div>
+                <!-- sidebar-header  -->
+                @{
+                    string strName = User?.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? "",
+                    cardCode = User?.FindFirst("CardCode")?.Value ?? "",
+                    cardName = User?.FindFirst("CardName")?.Value ?? "",
+                    strLogin = User?.FindFirst("Login")?.Value ?? "",
+                    strPic = Context?.Session?.Get<string>("Picture"),
+                    profileCode = User?.FindFirst("ProfileCode")?.Value ?? "",
+                    strProfile = "";
+                    if (strPic == null)
+                    {
+                        BComponents.Security.User bcUser = new BComponents.Security.User();
+                        var user = bcUser.Search(strLogin);
+                        strPic = user.Picture ?? "";
+                        Context.Session.Set("Picture", strPic);
+                    }
+                    strPic = strPic == "" ? "user.jpg" : $"userdata/{strPic}";
+                    strPic = Url.Content($"~/images/{strPic}");
+                    if (!string.IsNullOrWhiteSpace(profileCode))
+                    {
+                        BComponents.Security.Profile bcProfile = new BComponents.Security.Profile();
+                        var profile = bcProfile.Search(long.Parse(profileCode));
+                        strProfile = profile?.Name ?? "";
+                    }
+                }
+                <div class="sidebar-item sidebar-header d-flex flex-nowrap">
+                    <div class="user-pic">
+                        <img src="@strPic" class="img-responsive img-rounded" alt="User picture" />
+                        <input id="UserCardCode" type="hidden" value="@cardCode" />
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">
+                            @strName
+                        </span>
+                        @*<span class="user-status">
+                        @strLogin
+                        </span>*@
+                        <span class="user-role">@strProfile</span>
+                        <span class="user-name">
+                            <strong>@cardName</strong>
+                        </span>
+                    </div>
+                </div>
+                <!-- sidebar-search  -->
+                @*<div class="sidebar-item sidebar-search">
+                <div>
+                <div class="input-group">
+                <input type="text" class="form-control search-menu" placeholder="Buscar..." id="search-menu">
+                <div class="input-group-append">
+                <span class="input-group-text" id="search-menu-button">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                </div>
+                </div>
+                </div>
+                </div>*@
+                <!-- sidebar-menu  -->
+                <div class=" sidebar-item sidebar-menu">
+                    <ul>
+                        <partial name="_Menu" />
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-footer  -->
+            <div class="sidebar-footer">
+                <div>
+                    <environment include="Development">
+                        <a asp-action="Index" asp-controller="OnlineOrders" asp-area="Commercial" title="Carrito de Compras"><i class="fa fa-shopping-cart"></i></a>
+                    </environment>
+                    <environment exclude="Development">
+                        <a asp-action="Index" asp-controller="TempOrders" asp-area="Commercial" title="Carrito de Compras"><i class="fa fa-shopping-cart"></i></a>
+                    </environment>
+                </div>
+                <div>
+                    <a href="#" id="m-notifications" title="Comunicados"><i class="fa fa-envelope"></i></a>
+                </div>
+                <div>
+                    <a asp-action="Index" asp-controller="PersonalData" asp-area="Administration" title="Configuraciones personales"><i class="fa fa-cog"></i></a>
+                </div>
+                <div>
+                    <a href="#" id="m-logout" title="Cerrar Sesi&oacute;n"><i class="fa fa-power-off"></i></a>
+                </div>
+                <div class="pinned-footer">
+                    <a href="#"><i class="fas fa-ellipsis-h"></i></a>
+                </div>
+            </div>
+        </nav>
+        <!-- page-content  -->
+        <main class="page-content pt-2 h-100">
+            <div id="overlay" class="overlay"></div>
+            <div class="container-fluid py-2">
+                <partial name="_CookieConsentPartial" />
+                <div class="card">
+                    <div class="card-body">
+                        @RenderBody()
+                        <div id="notifications"></div>
+                        <div id="shoppingcart"></div>
+                        <div id="tempsale"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- page-content" -->
+    </div>
+    <!-- page-wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded action" id="button-pageup" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    @RenderSection("Scripts", required: false)
+    <span id="notification-message"></span>
+</body>
+</html>

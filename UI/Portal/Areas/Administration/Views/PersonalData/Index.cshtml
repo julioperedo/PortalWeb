@@ -1,0 +1,55 @@
+﻿@model BEntities.Security.User
+@{
+    ViewData["Title"] = "Datos Personales";
+    string strPic = string.IsNullOrWhiteSpace(Model.Picture) ? "no-photo.jpg" : $"userdata/{Model.Picture}";
+    strPic = Url.Content($"~/images/{strPic}");
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">Datos Personales</h3>
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Datos Generales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Contrase&ntilde;a</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab3" role="tab">Otros datos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab4" role="tab">Fotograf&iacute;a</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active show" id="tab1" role="tabpanel">
+                    <partial name="GeneralData" />
+                </div>
+                <div class="tab-pane" id="tab2" role="tabpanel">
+                    <partial name="ChangePassword" model="Model.Password" />
+                </div>
+                <div class="tab-pane" id="tab3" role="tabpanel">
+                    <partial name="OtherData" model="Model.ListUserDatas?.FirstOrDefault()" />
+                </div>
+                <div class="tab-pane" id="tab4" role="tabpanel">
+                    <partial name="Photo" model="Model.Picture" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        var urlNoPhoto = "@Url.Content("~/images/no-photo.jpg")",
+            urlSavePhoto = "@Url.Action("SavePhotoBase64", "PersonalData")",
+            urlUsersSAP = "@Url.Action("GetSAPUsers")";
+    </script>
+    <script src="~/lib/webcamjs/webcam.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/personaldata.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/personaldata.min.js" asp-append-version="true"></script>
+    </environment>
+}

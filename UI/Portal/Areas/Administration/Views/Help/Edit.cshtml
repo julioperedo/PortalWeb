@@ -1,0 +1,24 @@
+﻿@model Portal.Areas.Administration.Models.UserHelp
+<form>
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-3">
+            <div class="row">
+                <label asp-for="Title" class="col-12 text-nowrap">Nombre</label>
+                <div class="col-12">
+                    <input type="text" asp-for="Title" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <textarea asp-for="Value" class="form-control" style="height: 580px;"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="text-right pt-2">
+                <button type="button" class="save-item btn btn-primary per-update">Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>

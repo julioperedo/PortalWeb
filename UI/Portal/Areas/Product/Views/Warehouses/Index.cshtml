@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Portal.Areas.Product.Models.Subsidiary>
+@{
+    ViewData["Title"] = "Almacenes";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    @foreach (var suc in Model)
+    {
+        <div class="col-sm-6 col-md-4">
+            <div class="card shadow">
+                <div class="card-header">@suc.Name</div>
+                <div class="card-body">
+                    <table style="width: 100%;" data-name="@suc.Name">
+                        <tr>
+                            <td></td>
+                            <td>DMC</td>
+                            <td>Cliente</td>
+                        </tr>
+                        @foreach (var alm in suc.Warehouses)
+                        {
+                            string chkSelected = alm.Selected ? @"checked=""checked""" : "", chkClient = alm.ClientVisible ? @"checked=""checked""" : "", enabledClient = alm.Selected ? "" : "disabled", name = $"{suc.Name}_{alm.Code}";
+                            <tr data-name="@alm.Name" data-code="@alm.Code" data-id="@alm.Id">
+                                <td><span title="@alm.Code - @alm.Name">@alm.Name</span></td>
+                                <td class="text-center">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input selected" @chkSelected id="sel_@name" />
+                                        <label class="custom-control-label" for="sel_@name"></label>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input client" @chkClient @enabledClient id="cli_@name" />
+                                        <label class="custom-control-label" for="cli_@name"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col mt-4 text-right">
+        <button id="save-warehouses" class="btn btn-primary per-update">Guardar</button>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+		var urlEdit = "@Url.Action("Edit", "Warehouses")",
+			permission = "@ViewData["Permission"]";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/warehouses.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/warehouses.min.js" asp-append-version="true"></script>
+    </environment>
+}

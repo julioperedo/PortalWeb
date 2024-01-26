@@ -1,0 +1,940 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/sidebar.css",
+      "wwwroot/css/sidebar-themes.css",
+      "wwwroot/css/fonts.css",
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/sidebar.js",
+      "wwwroot/js/site.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/pricelist.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/pricelist.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/arrival.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/arrival.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/product/pricelist.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/pricelist.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/pricelist-category-line.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/pricelist-category-line.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/product/pricelist-category-line.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/pricelist-category-line.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/updown-prices.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/updown-prices.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/document.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/document.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/product/document.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/document.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/document-client.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/document-client.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/related.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/related.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/orders.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/orders.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/commercial/onlineorders.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/commercial/onlineorders.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/onlineorders.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/onlineorders.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/temporders.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/temporders.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/temporders-client.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/temporders-client.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/clientconfig.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/clientconfig.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/users.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/users.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/usersclient.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/usersclient.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/home.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/home.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/home.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/home.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/homeClient.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/homeClient.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/kbytes.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/kbytes.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/commercial/kbytes.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/commercial/kbytes.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/kbytesclient.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/kbytesclient.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/product/pricelist.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/pricelist.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/reports/unattendedproducts.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/reports/unattendedproducts.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/payments.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/payments.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/stateaccount.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/stateaccount.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/reports/pivotsales.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/reports/pivotsales.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/stateaccounthistory.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/stateaccounthistory.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/inventory.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/inventory.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/serials.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/serials.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/serials-client.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/serials-client.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/openbox.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/openbox.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/warehouses.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/warehouses.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/product.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/product.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/product2.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/product2.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/microsoft-product.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/microsoft-product.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/lines.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/lines.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/linesnotallowed.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/linesnotallowed.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/product/request.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/request.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/salesprojection.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/salesprojection.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/sellersquota.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/sellersquota.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/quoteorder.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/quoteorder.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/providerorders.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/providerorders.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/providerstateaccount.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/providerstateaccount.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/customerdetail.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/customerdetail.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/transport.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/transport.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/configoffersmail.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/configoffersmail.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/piggybank-claimprizes.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/piggybank-claimprizes.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/piggybank-prizes.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/piggybank-prizes.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/piggybank-config.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/piggybank-config.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/piggybank-pushnotification.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/piggybank-pushnotification.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/piggybank-statistics.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/piggybank-statistics.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/piggybank-statistics-2.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/piggybank-statistics-2.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/marketing/piggybank-statistics.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/marketing/piggybank-statistics.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/events/admin.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/events/admin.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/events/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/events/index.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/notification.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/notification.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/marketing/offersbanner.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/marketing/offersbanner.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/marketing/offersbanner.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/marketing/offersbanner.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/classifiers.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/classifiers.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/profiles.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/profiles.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/auditlogs.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/auditlogs.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/blacklist.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/blacklist.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/userrequest.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/userrequest.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/administration/userrequest.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/administration/userrequest.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/personaldata.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/personaldata.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/mobileapp/notification.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/mobileapp/notification.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/visits/visitsreception.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/visits/visitsreception.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/visits/visits.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/visits/visits.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/visits/guardsroute.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/visits/guardsroute.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/reports/lessactiveusers.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/reports/lessactiveusers.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/reports/realcostinventory.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/reports/realcostinventory.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/reports/pivotstock.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/reports/pivotstock.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/misc/replacement.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/misc/replacement.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/misc/staff.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/misc/staff.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/misc/userhelp.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/misc/userhelp.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/misc/userhelp.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/misc/userhelp.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/help.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/help.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/product/productdetail.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/productdetail.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/product/serial-client.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/serial-client.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/rma.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/rma.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/administration/rejected-mails.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/administration/rejected-mails.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/cisesd.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/cisesd.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/commercial/cisesd-client.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/commercial/cisesd-client.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/website/mails.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/website/mails.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/commercial/temporder.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/commercial/temporder.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/human-resources/department.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/human-resources/department.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/human-resources/employee.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/human-resources/employee.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/human-resources/employee-home.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/human-resources/employee-home.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/human-resources/employee-home.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/human-resources/employee-home.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/human-resources/admin.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/human-resources/admin.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/areas/human-resources/admin.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/human-resources/admin.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  }
+]

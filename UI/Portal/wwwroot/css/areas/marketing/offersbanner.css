@@ -1,0 +1,113 @@
+﻿body {
+}
+
+#Listado {
+    box-shadow: none;
+}
+
+.k-listview-content {
+    overflow-x: hidden;
+}
+
+    /*.k-listview-content > div:nth-child(even) {
+        background-color: #ddd;
+    }
+
+    .k-listview-content img {
+        margin: 5px;
+        max-height: 90px;
+        max-width: 90px;
+    }*/
+
+    .k-listview-content::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .k-listview-content::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        border-radius: 100px;
+    }
+
+    .k-listview-content::-webkit-scrollbar-thumb {
+        background-color: #d0d6dc;
+        border-radius: 100px;
+    }
+
+.line-group {
+    background-color: #f3faff;
+    margin-bottom: 4px;
+    margin-right: 5px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #daeffe;
+}
+
+    .line-group .selector {
+        float: right;
+        font-size: 0.9em;
+        cursor: pointer;
+    }
+
+        .line-group .selector:hover {
+            color: #428bca;
+        }
+
+    .line-group .line-title {
+        font-size: 1.2rem;
+        color: #428bca;
+        font-weight: 500;
+    }
+
+    .line-group .products-list {
+        min-width: 80%;
+    }
+
+    .line-group .product-item {
+        margin-bottom: 5px;
+    }
+
+        .line-group .product-item.selected {
+            background-color: #428bca;
+            color: #fff;
+        }
+
+            .line-group .product-item.selected i:before {
+                content: "\f00c";
+            }
+
+        .line-group .product-item .item-code {
+            font-weight: 600;
+        }
+
+        .line-group .product-item .price {
+            margin-right: 30px;
+            color: #428bca;
+            font-weight: 500;
+        }
+
+        .line-group .product-item.selected .price {
+            color: #fff;
+        }
+
+        .line-group .product-item i {
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+            float: right;
+            font-size: 1.5em;
+            color: #fff;
+            margin-right: 12px;
+        }
+
+        .line-group .product-item img {
+            max-height: 70px;
+            max-width: 100px;
+        }
+
+        .line-group .product-item td {
+            padding: 4px;
+        }

@@ -1,0 +1,27 @@
+﻿@{
+	ViewData["Title"] = "Cancelar subscripción de suma de puntos de Dahua";
+}
+<h4>Eliminar correo electr&oacute;nico del programa de suma de puntos</h4>
+<div class="input-group mb-3">
+	<input type="email" class="form-control" placeholder="Correo electrónico" aria-label="Correo electrónico" id="email">
+	<div class="input-group-append">
+		<button class="btn btn-outline-primary" type="button" id="unsubscribe">Eliminar Correo</button>
+	</div>
+</div>
+<h4 id="message" class="font-weight-bold text-center w-100"></h4>
+@section Scripts {
+	<script type="text/javascript">
+		$("#unsubscribe").click(function (e) {
+			var urlDelete = "@Url.Action("Delete")", email = $("#email").val();
+			$.post(urlDelete, { eMail: email }, function (d) {
+				var m = $("#message");
+				m.removeClass("text-info").removeClass("text-danger");
+				if (d.message === "") {
+					m.addClass("text-info").text(`Se ha eliminado con éxito la subscripción del correo ${email}`);
+				} else {
+					m.addClass("text-danger").text(d.message);
+				}
+			});
+		});
+	</script>
+}

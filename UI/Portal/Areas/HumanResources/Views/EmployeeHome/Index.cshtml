@@ -1,0 +1,197 @@
+﻿<div class="row d-none" id="employee-data">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 col-sm-5 col-md-6">
+                <div class="panel master">
+                    <div class="row">
+                        <div class="col-12">
+                            <span class="label-name">Nombre</span><span class="name" id="name">NOMBRE PERSONA</span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <span class="label-start-date">Fecha ingreso</span><span class="start-date" id="start-date">FECHA</span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <a class="years"><span id="years" class="no-break"></span></a><span class="label-years no-break">años</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4 col-md-3">
+                <div class="panel detail-1">
+                    <a class="action total-days"><span id="total-days"></span></a><span class="label-total-days">Total d&iacute;as vacaciones</span>
+                    <a class="remaining-days"><span id="remaining-days"></span></a><span class="label-total-days">D&iacute;as disponibles</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-3 col-md-3">
+                <div class="panel detail-2">
+                    <a class="action days-taken"><span id="days-taken">DIAS</span></a><span class="label-days-taken">D&iacute;as tomados</span>
+                    <a class="rejected-days action"><span class="no-break" id="rejected-days"></span></a>&nbsp;&nbsp;<span class="no-break">d&iacute;as rechazados</span>
+                    <div class="text-center pt-3">
+                        <button class="btn btn-success add-request">Hacer solicitud</button>
+                    </div>
+                    <div class="text-center pb-1">
+                        <a class="action action-link see-requests">Ver todas las solicitudes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col grid-details">
+                <div id="resume-years" class="d-none grid-wrap">
+                    <label class="label-grid ml-2">Detalle d&iacute;as de vacaciones</label>
+                    <div class="grid"></div>
+                </div>
+                <div id="resume-days-taken" class="d-none grid-wrap">
+                    <label class="label-grid ml-2">Detalle de d&iacute;s de vacaciones tomadas</label>
+                    <div class="grid"></div>
+                </div>
+                <div id="detail-requests" class="grid-wrap">
+                    <label class="label-grid ml-2">Detalle de Solicitudes realizadas</label>
+                    <div class="grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="employee-no-data">
+    <div class="col">
+        <div class="no-employee">
+            Primero debe configurar su empleado.
+        </div>
+    </div>
+</div>
+<div id="form-detail-request">
+    <form id="form-request">
+        <div class="row">
+            <div class="col pt-0">
+                <label>Tipo de Solicitud</label>
+                <input id="idType" name="idType" class="w-100" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col py-2">
+                <span class="label">Estado</span><span class="form-data" id="state-label">Estado Abierto</span>
+            </div>
+            <div class="col py-2">
+                <span class="label">Cod. SAP</span><span class="form-data" id="externalCode-label" name="externalCode-label"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span class="reject-comments"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="fromDate" class="mr-1">Desde</label>
+                    <input id="fromDate" name="fromDate" type="date" style="width: 130px" />
+                    <select id="fromDatePeriod" name="fromDatePeriod" style="width: 70px">
+                        <option>AM</option>
+                        <option>PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="toDate" class="mr-1">Hasta</label>
+                    <input id="toDate" name="toDate" type="date" style="width: 130px" />
+                    <select id="toDatePeriod" name="toDatePeriod" style="width: 70px">
+                        <option>AM</option>
+                        <option selected="selected">PM</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col selected-days">
+                <span>1</span> d&iacute;as
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"><label>Fecha y per&iacute;odo de tiempo</label></div>
+            <div class="col"><input id="date" name="date" type="date" /></div>
+            <div class="col"><input id="initialTime" name="initialTime" type="time" /></div>
+            <div class="col"><input id="finalTime" name="finalTime" type="time" /></div>
+        </div>
+        <div class="row">
+            <div class="col pb-2">
+                <label>Motivo</label>
+                <input id="idReason" name="idReason" class="w-100" />
+                <textarea id="reasonDescription" name="reasonDescription" class="form-control pt-2" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pb-2">
+                <label>Destino</label>
+                <input id="destiny" name="destiny" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="replacements"></div>
+                <div id="replacement-detail" class="bg-edit"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>Comentarios</label>
+                <textarea id="comments" name="comments" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 pt-3">
+                <button class="btn btn-danger" id="delete-request">Eliminar</button>
+            </div>
+            <div class="col text-right pr-3 pt-3">
+                <input type="hidden" name="Send" value="false" />
+                <label class="switch">
+                    <input type="checkbox" id="Send" name="Send" checked="checked" />
+                    <span class="slider round"></span>
+                </label>
+                <label for="Send" class="action">Guardar y enviar</label>
+                <button class="btn btn-outline-secondary mr-2 ml-3" id="cancel-request">Cancelar</button>
+                <button class="btn btn-primary" id="save-request">Guardar Solicitud</button>
+
+                <div class="d-none">
+                    <input id="id" name="id" type="hidden" />
+                    <input id="idDetail" name="idDetail" type="hidden" />
+                    <input id="idEmployee" name="idEmployee" type="hidden" />
+                    <input id="requestDate" name="requestDate" type="hidden" />
+                    <input id="idState" name="idState" type="hidden" />
+                    <input id="externalCode" name="externalCode" type="hidden" />
+                    <input id="days" name="days" type="hidden" />
+                    <input id="holidays" type="hidden" />
+                </div>                
+            </div>
+        </div>
+    </form>
+</div>
+<div id="custom-message"></div>
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/human-resources/employee-home.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/human-resources/employee-home.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section Scripts {
+    <script type="text/javascript">
+        var urlEmployee = "@Url.Action("GetEmployeeData")",
+            urlResumeYears = "@Url.Action("GetResumeYears")",
+            urlResumeDaysTaken = "@Url.Action("GetResumeDaysTaken")",
+            urlGetRequests = "@Url.Action("GetRequests")",
+            urlEmployees = "@Url.Action("GetAvailableEmployees")",
+            urlHolidays = "@Url.Action("GetHolidays")",
+            urlChangeState = "@Url.Action("ChangeState")",
+            urlDelete = "@Url.Action("DeleteRequest")",
+            urlEdit = "@Url.Action("Edit")",
+            urlLicenseReason = "@Url.Action("GetLicenseReasons")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/human-resources/employee-home.js"></script>
+        <script src="~/lib/form-data-json/form-data-json.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/human-resources/employee-home.min.js" asp-append-version="true"></script>
+        <script src="~/lib/form-data-json/form-data-json.min.js"></script>
+    </environment>
+    <script src="~/lib/lodash.js/lodash.min.js"></script>
+}

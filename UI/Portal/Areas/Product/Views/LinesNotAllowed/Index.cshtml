@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Líneas Bloqueadas";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Clients" class="col-sm-3 col-lg-2 col-xl-1">Clientes</label>
+                <div class="col-sm-9 col-lg-4 col-xl-5">
+                    <kendo-dropdownlist name="Clients" option-label="Seleccione un Cliente..." datatextfield="cardName" datavaluefield="cardCode" filter="FilterType.Contains" style="width: 100%;">
+                        <datasource>
+                            <transport>
+                                <read url="@Url.Action("GetFilteredClients")" />
+                            </transport>
+                        </datasource>
+                        <virtual enabled="true" item-height="26" value-mapper="clientMapper" />
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input selected" checked="checked" id="AllClients" />
+                        <label class="custom-control-label" for="AllClients"> Todos los clientes</label>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mt-2">
+    <div class="card-header">L&iacute;neas Deshabilitadas</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col" id="lines-data">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right">
+                <button type="button" class="btn btn-primary mr-2 d-none" id="action-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .line {
+        width: 240px;
+        padding: 3px 0 1px 35px;
+        float: left;
+        border-radius: 3px;
+    }
+
+        .line:hover {
+            background-color: #a7e0fa;
+        }
+
+        .line label {
+            width: 100%;
+        }
+</style>
+<script type="text/x-kendo-tmpl" id="lineTemplate">
+    <div class="line custom-control custom-switch">
+        # if (selected) { #
+        <input id="chk_#:idLine#" name="chk_#:idLine#" type="checkbox" value="#:idLine#" class="linecheck custom-control-input selected" checked="checked" />
+        # } else { #
+        <input id="chk_#:idLine#" name="chk_#:idLine#" type="checkbox" value="#:idLine#" class="linecheck custom-control-input selected" />
+        # } #
+        <label for="chk_#:idLine#" class="custom-control-label">#:lineName#</label>
+    </div>
+</script>
+@section Scripts {
+    <script type="text/javascript">
+         var urlEdit = "@Url.Action("Edit", "LinesNotAllowed")",
+        urlDetail = "@Url.Action("Detail", "LinesNotAllowed")",
+        urlClients = "@Url.Action("GetFilteredClients", "LinesNotAllowed")",
+        permission = "@ViewData["Permission"]";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/linesnotallowed.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/linesnotallowed.min.js" asp-append-version="true"></script>
+    </environment>
+}

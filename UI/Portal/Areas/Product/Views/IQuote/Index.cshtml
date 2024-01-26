@@ -1,0 +1,47 @@
+﻿@model Portal.Areas.Product.Models.CustomerData
+@{
+	ViewData["Title"] = "iQuote V2";	
+}
+<form target="_blank" action="@ViewBag.GateKeeperUrl" method="post">
+	<input type="hidden" asp-for="host" />
+	<input type="hidden" asp-for="token" />
+	<input type="hidden" asp-for="clearSession" />
+	<input type="hidden" asp-for="mfr" />
+	<input type="hidden" asp-for="uEmail" />
+	<input type="hidden" asp-for="uName" />
+	<input type="hidden" asp-for="uTel" />
+	<input type="hidden" asp-for="CName" />
+	<input type="hidden" asp-for="cPCode" />
+	<input type="hidden" asp-for="cAccountNum" />
+	<input type="hidden" asp-for="reff" id="ref" name="ref" />
+	<input type="hidden" asp-for="BasketURL" />
+	<input type="hidden" asp-for="OrderEntry" />
+	<input type="hidden" asp-for="SessionID" />
+	<img src="~/images/iQuote-1.png" class="iquote" />
+	<div class="jumbotron">
+		<p>iQuote es un servicio de <b>DMC</b> en la nube para la configuraci&oacute;n de servidores, storage y networking de <b>Hewlett Packard</b> Enterprise, para que nuestros canales de venta puedan f&aacute;cilmente configurar los equipos de acuerdo a sus necesidades, y al mismo tiempo ver los mejores precios y la disponibilidad en Bolivia de cada servidor.</p>
+		<p>Este servicio est&aacute; dise&ntilde;ado espec&iacute;ficamente para simplificar el proceso de venta de los productos de <b>Hewlett Packard</b> Enterprise y maximizar los ingresos y el margen de sus ventas. DMC no garantiza la disponibilidad de alg&uacute;n producto que haya sido configurado en esta herramienta en el momento de poner la orden de compra, ya que el inventario es rotativo.</p>
+		<p>Al hacer click en el bot&oacute;n <b class="u">“Ir a HP iQuote”</b>, acepta estos t&eacute;rminos y condiciones y los del Portal (ver T&eacute;rminos y Condiciones al ingreso de nuestro Portal), y la p&aacute;gina se direccionar&aacute; a las herramientas de este servicio.</p>
+		<p>Para poder utilizar el servicio es necesario que hubiese registrado su Correo Electr&oacute;nico, su Tel&eacute;fono y NIT (Este &uacute;ltimo en el SAP).</p>
+		@if (Model.Valid) {
+			<input Type="submit" value="Ir a HP iQuote" class="btn btn-primary">
+		} else {
+			<a asp-area="Administration" asp-controller="PersonalData" asp-action="Index" class="l">Registrar Datos Faltantes</a>
+		}
+		<br />
+		<p class="text-right">Gu&iacute;a de configuraci&oacute;n HPE ProLiant &amp; Storage <a href="http://www.dmc.bo/Guia_Configuracion_Proliant_2Q16_cp.pdf" target="_blank" class="btn btn-warning">Ir a la Gu&iacute;a</a></p>
+	</div>
+</form>
+<style type="text/css">
+	img.iquote {
+		margin: 12px;
+	}
+
+	b.u {
+		text-decoration: underline;
+	}
+
+	a.l {
+		font-size: 1.5em;
+	}
+</style>

@@ -1,0 +1,31 @@
+﻿@model BEntities.Staff.Replace
+<form>
+	<div class="form-horizontal">
+		<input type="hidden" asp-for="Id" />
+		<div class="row">
+			<label for="SellerCode" class="control-label col-3 col-sm-2">Ejecutivo</label>
+			<div class="col-md-4">
+				<input asp-for="SellerCode" class="w-100" />
+			</div>
+			<label for="ReplaceCode" class="control-label col-3 col-sm-2">Remplazo</label>
+			<div class="col-md-4">
+				<input asp-for="ReplaceCode" class="w-100" />
+			</div>
+		</div>
+		<div class="row">
+			<label for="InitialDate" class="control-label col-3 col-sm-2">Desde</label>
+			<div class="col-md-4">
+				<input type="date" asp-for="InitialDate" style="width: 105px;" />
+			</div>
+			<label for="FinalDate" class="control-label col-3 col-sm-2">Hasta</label>
+			<div class="col-md-4">
+				<input type="date" asp-for="FinalDate" style="width: 105px;" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right">
+				<button id="save-item" class="btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Ordenes a Proveedores";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="subsidiary" class="col-3 col-sm-2 col-lg-1 text-nowrap">Sucursal</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <select id="subsidiary" multiple="multiple"></select>
+                </div>
+                <label for="warehouse" class="col-3 col-sm-2 col-lg-1 text-nowrap">Almac&eacute;n</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5 col-xl-5">
+                    <select id="warehouse" multiple="multiple"></select>
+                </div>
+                <label for="order-number" class="col-3 col-sm-2 col-lg-1 text-nowrap">Num. Orden</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <input id="order-number" type="number" class="form-control" />
+                </div>
+                <label for="provider" class="col-3 col-sm-2 col-lg-1 text-nowrap">Proveedor</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <select id="provider" multiple="multiple"></select>
+                </div>
+                <label for="initial-date" class="col-3 col-sm-2 col-lg-1 text-nowrap">Fecha Inicial</label>
+                <div class="col-9 col-sm-4 col-lg-2">
+                    <kendo-datepicker name="initial-date" class="initial-date" on-change="onSinceChange" style="width: 110px;" />
+                </div>
+                <label for="final-date" class="col-3 col-sm-2 col-lg-1 text-nowrap">Fecha Final</label>
+                <div class="col-9 col-sm-4 col-lg-2">
+                    <kendo-datepicker name="final-date" class="final-date" on-change="onUntilChange" style="width: 110px;" />
+                </div>
+                <label for="product" class="col-3 col-sm-2 col-lg-1 text-nowrap">Producto</label>
+                <div class="col-9 col-sm-10 col-lg-5">
+                    <input id="product" type="text" class="form-control" />
+                </div>
+                <div class="col-6 col-sm-3 col-lg-3">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input chk-state" id="ord-open" checked="checked">
+                        <label class="custom-control-label" for="ord-open">Abiertas</label>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-9 col-lg-3">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input chk-state" id="ord-close">
+                        <label class="custom-control-label" for="ord-close">Cerradas</label>
+                    </div>
+                </div>
+                <label for="line" class="col-3 col-sm-2 col-lg-1 text-nowrap">L&iacute;nea</label>
+                <div class="col-9 col-sm-10 col-lg-5">
+                    <select id="line" style="width: 100%;"></select>
+                </div>
+                <label for="category" class="col-3 col-sm-2 col-lg-1 text-nowrap">Categor&iacute;a</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <select id="category" style="width: 100%;" class="category"></select>
+                </div>
+                <label for="subcategory" class="col-3 col-sm-2 col-lg-1 text-nowrap">Subcategor&iacute;a</label>
+                <div class="col-9 col-sm-10 col-md-4 col-lg-5">
+                    <select id="subcategory" style="width: 100%;"></select>
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Detail" visible="false" title="Comentarios" modal="true" draggable="true" width="650" on-refresh="onRefreshWindow" on-close="onCloseWindow">
+    <content><div style='text-align: center;'>Cargando ...</div></content>
+</kendo-window>
+<kendo-window name="Report" visible="false" title="Producto" modal="true" draggable="true" width="1150">
+    <content>
+        <div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;">
+        </div>
+    </content>
+</kendo-window>
+
+@section Scripts {
+    <script type="text/javascript">
+		var urlClients = "@Url.Action("GetClients", "ProviderOrders")",
+			urlFilter = "@Url.Action("Filter", "ProviderOrders")",
+			urlExcel = "@Url.Action("ExportExcel", "ProviderOrders")",
+			urlSubsidiaries = "@Url.Action("GetSubsidiaries", "ProviderOrders")",
+			urlWarehouses = "@Url.Action("GetWarehouses", "ProviderOrders")",
+			urlLines = "@Url.Action("GetLines", "ProviderOrders")",
+			urlCategories = "@Url.Action("GetCategories", "ProviderOrders")",
+			urlSubcategories = "@Url.Action("GetSubcategories", "ProviderOrders")",
+			urlProviders = "@Url.Action("GetProviders", "ProviderOrders")",
+			urlDetail = "@Url.Action("Detail", "ProviderOrders")",
+			urlGetStock = "@Url.Action("GetStockDetail", "Orders")",
+            urlDownloadFile = "@Url.Action("DownloadFile")",
+			urlService = "@Url.Content("~/api/reports/")";
+    </script>
+    <script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+    <script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/providerorders.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/providerorders.min.js" asp-append-version="true"></script>
+    </environment>
+}

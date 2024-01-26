@@ -1,0 +1,203 @@
+﻿#Listado, #Documents, #fileList {
+    box-shadow: none;
+}
+
+#all-receivers {
+    float: right;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+h4 {
+    color: #b90c0c;
+}
+
+.line {
+    margin-bottom: 20px;
+}
+
+.product {
+    padding: 8px;
+    background-color: #f5f5f5;
+    margin-bottom: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+    .product.selected {
+        background-color: #428bca;
+        color: #fff;
+    }
+
+    .product .item-code {
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+
+.doc-type {
+    padding: 6px;
+    border-radius: 6px;
+    background-color: #FAFAFA;
+    margin-bottom: 8px;
+}
+
+    .doc-type h5 {
+        margin: 6px 0 8px 6px;
+        font-size: 1.25em;
+        color: #b90c0c;
+    }
+
+    .doc-type table {
+        width: 95%;
+        margin-left: 10px;
+    }
+
+        .doc-type table td {
+            padding: 6px 0 6px 0;
+        }
+
+#file-wrapper {
+    padding: 8px 0;
+}
+
+form .row {
+    padding-bottom: 3px;
+}
+
+table.no-format {
+    width: auto;
+}
+
+    table.no-format td:first-child {
+        font-weight: 600;
+    }
+
+    table.no-format td {
+        border-style: none;
+        border-width: 0;
+        padding: 0 8px 0 0;
+    }
+
+.k-grid a.action {
+    margin: 0 3px;
+}
+
+.list-item {
+    padding: 8px 10px;
+    background-color: #EEEEEE;
+    margin-bottom: 1px;
+    border-radius: 3px;
+}
+
+    .list-item.selected {
+        background-color: #428bca;
+        color: #fff;
+    }
+
+    .list-item i {
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        -webkit-font-smoothing: antialiased;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        line-height: 1;
+        float: right;
+        font-size: 1.5em;
+        color: #fff;
+    }
+
+    .list-item.selected i:before {
+        content: "\f00c";
+    }
+
+.client-group {
+    background-color: #f3faff;
+    margin-bottom: 4px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #daeffe;
+}
+
+    .client-group .selector {
+        float: right;
+        font-size: 0.9em;  
+        cursor: pointer;
+    }
+
+        .client-group .selector:hover {
+            color: #428bca;
+        }
+
+        .client-group .client-title {
+            font-size: 1.2rem;
+            color: #428bca;
+            font-weight: 500;
+        }
+
+    .client-group .client-item {
+        padding: 8px 10px;
+        margin-bottom: 1px;
+        border-radius: 3px;        
+    }
+
+        .client-group .client-item i {
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            -webkit-font-smoothing: antialiased;
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+            float: right;
+            font-size: 1.5em;
+            color: #fff;
+        }
+
+        .client-group .client-item.selected {
+            background-color: #428bca;
+            color: #fff;
+        }
+
+        .client-group .client-item.selected i:before {
+            content: "\f00c";
+        }
+
+            .form-x {
+                margin: 15px 3px;
+                padding: 10px;
+                border: 4px solid #aaa;
+                border-radius: 10px;
+                background-color: #efefef;
+            }
+
+    .form-x .form-group label {
+        padding: 0;
+    }
+
+#fileList {
+    display: table;    
+}
+
+    #fileList .k-listview-content {
+        display: table-row-group;
+    }
+
+.file-row {
+    display: table-row;
+    background-color: #f5f5f5;
+    
+}
+
+    .file-row > div {
+        display: table-cell;
+        padding: 8px;
+        line-height: 1.42857143;
+        border-bottom: 1px solid #fff;
+    }
+
+.file-options a {
+    margin-left: 15px;
+}

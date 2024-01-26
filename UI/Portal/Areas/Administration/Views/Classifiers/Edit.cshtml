@@ -1,0 +1,77 @@
+﻿@model BEntities.Base.ClassifierType
+@{
+    string items = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ListClassifiers.Select(x => new { id = x.Id, name = x.Name, description = x.Description, x.isBase, value = x.Value, statusType = x.StatusType }));
+}
+<div class="row">
+    <div class="col-12 col-sm-5">
+        <form asp-action="Edit" id="form-classifier">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <label asp-for="Name">Nombre</label>
+                <input asp-for="Name" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Descripci&oacute;n</label>
+                <textarea asp-for="Description" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" asp-for="isBase" />
+                    <input name="isBase" type="hidden" value="false" />
+                    <label class="custom-control-label" asp-for="isBase">del Sistema</label>
+                </div>
+            </div>
+            <input type="hidden" id="items" value="@items" />
+        </form>
+    </div>
+    <div class="col-12 col-sm-7">
+        <div class="row">
+            <div id="ListItems"></div>
+        </div>
+        <div class="row">
+            <div class="col pt-4 pb-2">
+                <form id="detail-form">
+                    <div id="detail-classifier" class="card d-none">
+                        <div class="card-header">Detalle Item</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <input type="hidden" id="detail-id" />
+                                <label for="detail-name" class="col-12">Nombre</label>
+                                <div class="col-12">
+                                    <input type="text" id="detail-name" name="detail-name" class="form-control" required />
+                                </div>
+                                <label for="detail-description" class="col-12">Descripci&oacute;n</label>
+                                <div class="col-12">
+                                    <textarea id="detail-description" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-6">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="detail-isbase" />
+                                        <label class="custom-control-label" for="detail-isbase">del Sistema</label>
+                                    </div>
+                                </div>
+                                <label for="detail-value" class="col-2">Valor</label>
+                                <div class="col-4 pt-1">
+                                    <input type="text" id="detail-value" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-right pt-3">
+                                    <button type="button" id="action-cancel-item" class="btn btn-outline-secondary">Cancelar</button>
+                                    <button type="button" id="action-save-item" class="btn btn-outline-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col text-right pt-2">
+        <button type="button" id="action-cancel" class="btn btn-outline-secondary">Cancelar</button>
+        <button type="button" id="action-save" class="btn btn-primary">Guardar</button>
+    </div>
+</div>

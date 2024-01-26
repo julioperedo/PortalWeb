@@ -1,0 +1,97 @@
+﻿@model BEntities.Security.UserData
+<form asp-area="Administration" asp-controller="PersonalData" asp-action="UpdateOtherData" class="">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="IdUser" type="hidden" />
+    <div class="form-group row">
+        <div class="col">
+            <label asp-for="SellerCode" class="">C&oacute;digo asignado en el SAP</label>
+            <input asp-for="SellerCode" class="form-control" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col">
+            <label asp-for="SAPUserId">Usuario SAP</label>
+            <kendo-dropdownlist for="SAPUserId" datatextfield="name" datavaluefield="id" filter="FilterType.Contains" option-label="Seleccione un Usuario" on-change="onUserChange">
+                <datasource>
+                    <transport>
+                        <read url="@Url.Action("GetSAPUsers")" />
+                    </transport>
+                </datasource>
+            </kendo-dropdownlist>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label asp-for="SAPUser" class="">Usuario SAP</label>
+            <input asp-for="SAPUser" class="form-control" readonly />
+        </div>
+        <div class="col">
+            <label asp-for="SAPPassword" class="">Contrase&ntilde;a SAP</label>
+            <input asp-for="SAPPassword" type="password" class="form-control" value="@Model.SAPPassword" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col">
+            <label asp-for="IdEmployee">Nombre empleado SAP</label>
+            <kendo-dropdownlist for="IdEmployee" datatextfield="name" datavaluefield="id" filter="FilterType.Contains" option-label="Seleccione un Empleado">
+                <datasource>
+                    <transport>
+                        <read url="@Url.Action("GetEmployees")" />
+                    </transport>
+                </datasource>
+            </kendo-dropdownlist>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label asp-for="Signature" class="">Firma utilizada para enviar correos desde el Portal</label>
+            <kendo-editor for="Signature" style="height: 350px;">
+                <tools>
+                    <tool name="bold" />
+                    <tool name="italic" />
+                    <tool name="underline" />
+                    <tool name="strikethrough" />
+                    <tool name="fontSize" />
+                    <tool name="foreColor" />
+                    <tool name="backColor" />
+                    <tool name="justifyLeft" />
+                    <tool name="justifyCenter" />
+                    <tool name="justifyRight" />
+                    <tool name="justifyFull" />
+                    <tool name="insertUnorderedList" />
+                    <tool name="insertOrderedList" />
+                    <tool name="indent" />
+                    <tool name="outden" />
+                    <tool name="createLink" />
+                    <tool name="unlink" />
+                    <tool name="insertImage" />
+                    <tool name="tableWizard" />
+                    <tool name="createTable" />
+                    <tool name="addRowAbove" />
+                    <tool name="addRowBelow" />
+                    <tool name="addColumnLeft" />
+                    <tool name="addColumnRight" />
+                    <tool name="deleteRow" />
+                    <tool name="deleteColumn" />
+                    <tool name="viewHtml" />
+                    <tool name="formatting" />
+                    <tool name="cleanFormatting" />
+                </tools>
+                <image-browser file-types="*.png,*.gif,*.jpg,*.jpeg" path="userdata/">
+                    <image-browser-transport image-url="@Url.Content("~/images/userdata/{0}")" upload-url="@Url.Action("Upload", "ImageBrowser", new { area = "" })">
+                        <read url="@Url.Action("Read", "ImageBrowser", new { area = "" })" />
+                        <create url="@Url.Action("Create", "ImageBrowser", new { area = "" })" />
+                        <destroy url="@Url.Action("Destroy", "ImageBrowser", new { area = "" })" />
+                    </image-browser-transport>
+                </image-browser>
+            </kendo-editor>
+        </div>
+    </div>
+    <div class="">
+        <div class="row">
+            <div class="col">
+                <input id="updateOtherData" type="button" value="Guardar" class="btn btn-focus btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>

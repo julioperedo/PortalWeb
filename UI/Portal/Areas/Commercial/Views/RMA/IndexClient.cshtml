@@ -1,0 +1,145 @@
+﻿@{
+    ViewData["Title"] = "RMA";
+}
+<input type="hidden" id="FilClient" value="@ViewBag.CardCode" />
+<input type="hidden" id="local-user" value="N" />
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Enviar Correo" role="button" href="#" id="action-email">Enviar correo <i class="fab fa-telegram-plane"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilSince" class="col-2 col-sm-1 text-nowrap">Desde</label>
+                <div class="col-10 col-sm-5 col-lg-2">
+                    <input id="FilSince" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilUntil" class="col-2 col-sm-1 text-nowrap">Hasta</label>
+                <div class="col-10 col-sm-5 col-lg-2">
+                    <input id="FilUntil" type="date" style="width: 120px;" />
+                </div>                
+                <label for="FilState" class="col-2 col-sm-1 text-nowrap">Estado</label>
+                <div class="col-10 col-sm-5 col-lg-5">
+                    <select id="FilState" class="w-100" multiple="multiple"></select>
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="detail-item">
+    <section class="rma-data">
+        <h5>Datos del RMA</h5>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">No. de RMA:</span></div>
+            <div class="col"><span id="id"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Fecha Creaci&oacute;n:</span></div>
+            <div class="col-4"><span id="date"></span></div>
+            <div class="col-2"><span class="font-weight-bold">Fecha Cierre:</span></div>
+            <div class="col-4"><span id="close-date"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Estado:</span></div>
+            <div class="col-4"><span id="state"></span></div>
+            <div class="col-2"><span class="font-weight-bold">Días Abierto:</span></div>
+            <div class="col-4"><span id="open-days"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Recibido por:</span></div>
+            <div class="col-4"><span id="received-by"></span></div>
+            <div class="col-2"><span class="font-weight-bold">T&eacute;cnico Asignado:</span></div>
+            <div class="col-4"><span id="technician"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Usuario Final:</span></div>
+            <div class="col-4"><span id="final-user"></span></div>
+            <div class="col-2"><span class="font-weight-bold">Reportado por:</span></div>
+            <div class="col-4"><span id="reported-by"></span></div>
+        </div>
+    </section>
+    <section class="product-data">
+        <h5>Datos del Producto</h5>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Marca:</span></div>
+            <div class="col-4"><span id="brand"></span></div>
+            <div class="col-2"><span class="font-weight-bold">Garant&iacute;a:</span></div>
+            <div class="col-4"><span id="warranty"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Producto:</span></div>
+            <div class="col"><span id="item-name"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">C&oacute;digo Producto:</span></div>
+            <div class="col-4"><span id="item-code"></span></div>
+            <div class="col-2"><span class="font-weight-bold">Serial:</span></div>
+            <div class="col-4"><span id="serial-number"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold">Fecha compra:</span></div>
+            <div class="col-4"><span id="purchase-date"></span></div>
+
+        </div>
+        <div class="row">
+            <div class="col-2"><span class="font-weight-bold text-nowrap">Problema reportado:</span></div>
+            <div class="col"><span id="detail-problem"></span></div>
+        </div>
+    </section>
+</div>
+@section Styles {
+    <style type="text/css">
+        .k-grid-footer {
+            display: none;
+        }
+
+        section {
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .rma-data {
+            background-color: #eee;
+            color: #444;
+            margin-bottom: 5px;
+            margin-top: -10px;
+        }
+
+        .product-data {
+            background-color: #d2edf2;
+            color: #333c87;
+        }
+    </style>
+}
+@section Scripts {
+    <script type="text/javascript">
+        var urlTechnicians = "@Url.Action("GetTechnicians", "RMA")",
+            urlStates = "@Url.Action("GetStates", "RMA")",
+            urlTechnicians = "@Url.Action("GetTechnicians", "RMA")",
+            urlClients = "@Url.Action("GetClients", "Orders")",
+            urlFilter = "@Url.Action("Filter", "RMA")",
+            urlHistory = "@Url.Action("GetHistory", "RMA")",
+            urlService = "@Url.Content("~/api/reports/")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/rma.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/rma.min.js" asp-append-version="true"></script>
+    </environment>
+}

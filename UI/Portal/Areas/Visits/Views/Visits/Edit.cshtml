@@ -1,0 +1,78 @@
+﻿@model BEntities.Visits.Visit
+@{
+	string photo = string.IsNullOrWhiteSpace(Model.ClientPhoto) ? Url.Content("~/images/no-photo.jpg") : Url.Content("~/images/person/" + Model.ClientPhoto);
+	string imageClass = Model.Id == 0 ? "" : "selected";
+	string myClass = Model.CardCode == "CVAR-001" ? "" : " d-none";
+	string strCI = string.IsNullOrWhiteSpace(Model.ClientDocId) ? Url.Content("~/images/visits/carnet-anverso.png") : Url.Content("~/images/person/" + Model.ClientDocId);
+	string strCIR = string.IsNullOrWhiteSpace(Model.ClientDocIdRev) ? Url.Content("~/images/visits/carnet-reverso.png") : Url.Content("~/images/person/" + Model.ClientDocIdRev);
+}
+<form>
+	<div class="form-horizontal">
+		<div class="row">
+			<input type="hidden" asp-for="Id" />
+			<div class="col-4">
+				<div class="visitor-image @imageClass">
+					<img id="photo" src="@photo" />
+					<a class="take-picture"><i class="fas fa-camera"></i></a>
+				</div>
+			</div>
+			<div class="col-8">
+				<div class="row">
+					<label for="CardCode" class="col-sm-2">Cliente:</label>
+					<div class="col-sm-10">
+						<input asp-for="CardCode" style="width: 100%;" required />
+					</div>
+					<label for="ClientDescription" class="col-sm-2 @myClass">Aclaraci&oacute;n:</label>
+					<div class="col-sm-10 col-md-10 @myClass">
+						<input type="text" asp-for="ClientDescription" class="form-control" />
+					</div>
+					<label for="VisitorId" class="col-sm-2">Visitante:</label>
+					<div class="col-sm-10 col-md-10">
+						<input asp-for="VisitorId" style="width: 100%;" />
+					</div>
+					<label for="LicencePlate" class="col-sm-2">Placa:</label>
+					<div class="col-sm-10 col-md-10">
+						<input type="text" asp-for="LicencePlate" class="form-control" />
+					</div>
+					<label for="InitialDate" class="col-sm-2">Ingreso:</label>
+					<div class="col-sm-10 col-md-4">
+						<input type="datetime" asp-for="InitialDate" />
+					</div>
+					<label for="FinalDate" class="col-sm-2">Salida:</label>
+					<div class="col-sm-10 col-md-4">
+						<input type="datetime" asp-for="FinalDate" />
+					</div>
+					<label for="StaffId" class="col-sm-2">Visitado:</label>
+					<div class="col-sm-10 col-md-10">
+						<input asp-for="StaffId" style="width: 100%;" />
+					</div>
+					<label for="ReasonVisit" class="col-sm-2 text-nowrap">Motivo Visita:</label>
+					<div class="col-sm-10 col-md-10">
+						<input asp-for="ReasonVisit" type="text" class="form-control" required />
+					</div>
+					<label for="Commentaries" class="col-sm-2">Comentarios:</label>
+					<div class="col-sm-10 col-md-10">
+						<textarea asp-for="Commentaries" rows="2" class="form-control"></textarea>
+					</div>
+				</div>				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-sm-6">
+				<span>
+					<img id="clientDocId" src="@strCI" class="image-zoom" />
+				</span>
+			</div>
+			<div class="col-12 col-sm-6">
+				<span>
+					<img id="clientDocIdRev" src="@strCIR" class="image-zoom" />
+				</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right pt-2">
+				<button type="button" class="save-visit btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
+</form>

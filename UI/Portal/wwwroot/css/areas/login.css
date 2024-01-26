@@ -1,0 +1,130 @@
+﻿body {
+	font-family: 'Poppins';
+	font-size: 12px;
+	margin: 0;
+	background-color: #FFF;
+}
+
+.terms {
+	background-color: #4e4a4a;
+	height: 100%;
+	padding: 3rem 2.5rem;
+	color: #FDFDFD;
+	margin-left: -1.5rem;
+	margin-right: -1.5rem;
+}
+
+@media (min-width: 768px) {
+	.terms {
+		padding: 15rem 7rem;
+	}
+}
+
+.terms-header {
+	margin-bottom: 1rem;
+	font-size: 2em;
+}
+
+.terms-msg {
+	font-size: 1.2em;
+	font-weight: 300;
+}
+
+.form-container {
+	padding: 3rem 1rem;
+}
+
+	.form-container .logo {
+		text-align: center;
+		padding-bottom: 1rem;
+	}
+
+	.form-container h3 {
+		font-size: 1.5em;
+		text-align: center;
+	}
+
+@media (min-width: 768px) {
+	.form-container {
+		padding: 6rem 7rem;
+	}
+}
+
+.form-container.s-login .login-form {
+	display: block;
+}
+
+.form-container.s-login .recovery-password-form {
+	display: none;
+}
+
+.form-container.s-login .request-user-form {
+	display: none;
+}
+
+.form-container.s-recovery-password .login-form {
+	display: none;
+}
+
+.form-container.s-recovery-password .recovery-password-form {
+	display: block;
+}
+
+.form-container.s-recovery-password .request-user-form {
+	display: none;
+}
+
+.form-container.s-recovery-password.step-1 .step-1 {
+	display: block;
+}
+
+.form-container.s-recovery-password.step-1 .step-2 {
+	display: none;
+}
+
+.form-container.s-recovery-password.step-2 .step-1 {
+	display: none;
+}
+
+.form-container.s-recovery-password.step-2 .step-2 {
+	display: block;
+}
+
+.form-container.s-request-user .login-form {
+	display: none;
+}
+
+.form-container.s-request-user .recovery-password-form {
+	display: none;
+}
+
+.form-container.s-request-user .request-user-form {
+	display: block;
+}
+
+.login-form {
+}
+
+	.login-form .forget {
+		padding-bottom: 1.5rem;
+		text-align: center;
+	}
+
+.recovery-password-form {
+}
+
+	.recovery-password-form .desc {
+		padding-bottom: 1.5rem;
+	}
+
+.request-user-form {
+}
+
+	.request-user-form desc {
+		padding-bottom: 1.5rem;
+	}
+
+.link-user-request {
+	padding-top: 1.5rem;
+	text-align: center;
+}

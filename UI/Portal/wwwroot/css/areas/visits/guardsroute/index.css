@@ -1,0 +1,66 @@
+﻿body {
+	overflow: hidden;
+}
+
+.body-content {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.search-bar {
+	background-color: #464646;
+}
+
+	.search-bar > * {
+		margin: 5px 15px 0 10px;
+	}
+
+	.search-bar label {
+		color: #ffffff;
+	}
+
+.map {
+	padding: 0 !important;
+}
+
+.labels {
+	color: white !important;
+	/*background-color: #FF6600;*/
+	font-family: "Lucida Grande", "Arial", sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	text-align: center !important; /*border: 2px solid black;*/
+	white-space: nowrap;
+	width: 17px !important;
+}
+
+.cluster {
+	color: #FFFFFF;
+	text-align: center;
+	font-family: 'Arial, Helvetica';
+	font-size: 11px;
+	font-weight: bold;
+	z-index: 90000;
+}
+
+.cluster-1 {
+	background-image: url(../../../../Content/Map/m1.png);
+	line-height: 53px;
+	width: 53px;
+	height: 52px;
+}
+
+.cluster-2 {
+	background-image: url(../../../../Content/Map/m2.png);
+	line-height: 53px;
+	width: 56px;
+	height: 55px;
+	color: #000;
+}
+
+.cluster-3 {
+	background-image: url(../../../../Content/Map/m3.png);
+	line-height: 66px;
+	width: 66px;
+	height: 65px;
+}

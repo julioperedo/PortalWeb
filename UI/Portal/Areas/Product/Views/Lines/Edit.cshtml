@@ -1,0 +1,127 @@
+﻿@model Portal.Areas.Product.Models.Line
+@{
+    string data = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+}
+<form asp-action="Edit" asp-controller="Lines" asp-area="Product">
+    <div class="form-horizontal">
+        <input type="hidden" id="item-data" value="@data" />
+        <input asp-for="Id" type="hidden" />
+        <div class="row">
+            <div class="col pt-2">
+                <div class="custom-tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Datos Generales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Imagen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab3" role="tab">L&iacute;neas de SAP Asociadas</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content main-tab">
+                        <div class="tab-pane active show" id="tab1" role="tabpanel">
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <label asp-for="Name" class="col-sm-2">Nombre</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Name" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="Description" class="col-sm-2">Descripci&oacute;n</label>
+                                    <div class="col-sm-10">
+                                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="custom-control custom-switch col-sm-4 offset-sm-1">
+                                        <input type="checkbox" class="custom-control-input selected" asp-for="HasExternalPrice" />
+                                        <input name="HasExternalPrice" type="hidden" value="false" />
+                                        <label class="custom-control-label" asp-for="HasExternalPrice"> Precio Externo</label>
+                                    </div>
+                                    <label asp-for="ExternalSiteName" class="col-sm-2">Sitio Externo</label>
+                                    <div class="col-sm-5">
+                                        <input asp-for="ExternalSiteName" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="Header" class="col-sm-2">Cabecera</label>
+                                    <div class="col-sm-10">
+                                        <textarea asp-for="Header" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="Footer" class="col-sm-2">Pie</label>
+                                    <div class="col-sm-10">
+                                        <textarea asp-for="Footer" class="form-control" style="height: 180px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="FilterType" class="col-sm-2">Tipo de Filtro</label>
+                                    <div class="col-sm-10">
+                                        <select asp-for="FilterType" class="w-100">
+                                            <option value="AllBut">Todos menos los seleccionados</option>
+                                            <option value="NoneBut">Ninguno menos seleccionados</option>
+                                        </select>
+                                        <script type="text/javascript">
+                                            $(() => $("#FilterType").kendoDropDownList({ optionLabel: "Seleccione un Valor ..." }));
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label asp-for="IdManager" class="col-sm-2">Gerente</label>
+                                    <div class="col-sm-10">
+                                        <kendo-dropdownlist for="IdManager" class="w-100" datatextfield="name" datavaluefield="id" ignore-case="true" filter="FilterType.Contains" option-label="Seleccione un Gerente...">
+                                            <datasource>
+                                                <transport>
+                                                    <read url="@Url.Action("GetStaff")" />
+                                                </transport>
+                                            </datasource>
+                                        </kendo-dropdownlist>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="custom-control custom-switch offset-sm-2">
+                                            <input type="checkbox" class="custom-control-input selected" asp-for="WhenFilteredShowInfo" />
+                                            <input name="WhenFilteredShowInfo" type="hidden" value="false" />
+                                            <label class="custom-control-label" asp-for="WhenFilteredShowInfo"> Mostrar informaci&oacute;n cuando sea filtrado</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab2" role="tabpanel">
+                            <div class="pt-5">
+                                <input asp-for="ImageURL" type="hidden" />
+                                <input asp-for="NewImageURL" type="hidden" />
+                                <img id="Photo" src="@Url.Content(string.IsNullOrWhiteSpace(Model.ImageURL) ? "~/images/no-image.jpg" : $"~/images/lines/{Model.ImageURL.Trim()}")" style="max-height: 140px; max-width: 140px; height: auto; width: auto; margin-left: 10px;" /><br /><br />
+                                <div>
+                                    @if (!string.IsNullOrWhiteSpace(Model.ImageURL))
+                                    {
+                                        <button id="DeletePhoto" class="btn btn-sm btn-light mt-1 ml-2" type="button"><i class="fas fa-trash"></i> Eliminar Imagen</button>
+                                    }
+                                    <kendo-upload name="files" multiple="false" on-success="onUploadSucceded" on-select="onSelect">
+                                        <async save-url="@Url.Action("UploadImage", "Lines")" remove-url="@Url.Action("DeleteImage", "Lines")" auto-upload="true" />
+                                    </kendo-upload>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab3" role="tabpanel">
+                            <div class="pt-2">
+                                <input asp-for="SAPLines" class="w-100" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-3 pb-5 pb-sm-1">
+                <button class="btn btn-primary action-save">Guardar L&iacute;nea</button>
+            </div>
+        </div>
+    </div>
+</form>

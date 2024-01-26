@@ -1,0 +1,54 @@
+﻿body {
+}
+
+/*.wrapper {
+    padding: 10px 8px;*/
+    /*background-color: #abcfe0;
+    
+    border-radius: 8px;
+    height: 500px;
+    overflow: scroll;*/
+/*}
+
+
+.client-list {
+    background-color: #cdf0fc;
+    height: 800px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}*/
+/*
+.clients .client-list {
+    height: 800px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}*/
+
+/*.list-item {
+    list-style-type: none;
+    min-width: 180px;
+    margin: 5px;
+    padding: 6px;
+    background-color: #47a3cc;
+    color: #141313;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+    .list-item:hover {
+        background-color: #33708b;
+    }
+
+#available-days .list-item {
+    background-color: #66cc66;
+    color: #000000;
+}
+
+    #available-days .list-item:hover {
+        background-color: #448944;
+    }
+
+#placeholder.list-item {
+    background-color: #faf8b2;
+    color: #777;
+}*/

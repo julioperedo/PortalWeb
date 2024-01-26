@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Despachos de Mercadería";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Enviar Correo" role="button" href="#" id="action-email">Enviar correo <i class="fab fa-telegram-plane"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilSince" class="col-2 col-md-1">Desde</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-2">
+                    <input id="FilSince" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilUntil" class="col-2 col-md-1">Hasta</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-2">
+                    <input id="FilUntil" type="date" style="width: 120px;" />
+                </div>
+                <label for="FilTransporter" class="col-2 col-md-1">Transporte</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-5">
+                    <input id="FilTransporter" class="w-100" />
+                </div>
+                <label for="FilSent" class="col-2 col-md-1">Enviado</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-2">
+                    <input id="FilSent" class="w-100" />
+                </div>
+                <label for="FilSource" class="col-2 col-md-1">Origen</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-2">
+                    <input id="FilSource" class="w-100" />
+                </div>
+                <label for="FilDestiny" class="col-2 col-md-1">Destino</label>
+                <div class="col-10 col-sm-4 col-md-2 col-lg-5">
+                    <input id="FilDestiny" class="w-100" />
+                </div>
+                <label for="FilName" class="col-2 col-md-1">Nombre</label>
+                <div class="col-10 col-sm-6 col-md-3 col-lg-5">
+                    <input type="text" id="FilName" class="form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail"></div>
+<link href="~/lib/magicsuggest/magicsuggest-min.css" rel="stylesheet" />
+<link href="~/lib/handsontable/handsontable.full.min.css" rel="stylesheet" />
+<style type="text/css">
+    .row label.custom-control-label {
+        margin-top: 0;
+        margin-left: 8px;
+    }
+
+    .form-horizontal label {
+        text-align: right;
+        font-weight: 600;
+    }
+</style>
+<link href="~/lib/magicsuggest/magicsuggest-min.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+		var urlDelete = "@Url.Action("Delete", "Transport")",
+			urlEdit = "@Url.Action("Edit", "Transport")",
+			urlFilter = "@Url.Action("Filter", "Transport")",
+			urlTransporters = "@Url.Action("GetTransporter", "Transport")",
+			urlSources = "@Url.Action("GetSource", "Transport")",
+			urlDestines = "@Url.Action("GetDestiny", "Transport")",
+			urlSendMail = "@Url.Action("SendMail", "Transport")",
+			urlOpenPreview = "@Url.Action("OpenPreview", "Transport")",
+			Permission = "@ViewData["Permission"]";
+    </script>
+    <script src="~/lib/magicsuggest/magicsuggest-min.js"></script>
+    <script src="~/lib/handsontable/handsontable.full.min.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/transport.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/transport.min.js" asp-append-version="true"></script>
+    </environment>
+}

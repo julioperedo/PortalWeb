@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Configuración del Manual de Usuario";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail"></div>
+@*<span id="notification" style="display:none;"></span>
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="connection-error">
+        <i class="far fa-times-circle"></i>
+        <h4>#= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="connection-success">
+        <i class="far fa-check-circle"></i>
+        <h4>#= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>*@
+<style type="text/css">
+    .connection-error, .connection-success {
+        min-width: 300px;
+        padding: 8px;
+    }
+
+        .connection-error i, .connection-success i {
+            font-size: 2.8em;
+            margin-top: 5px;
+            margin-left: 10px;
+            float: left;
+        }
+
+        .connection-error h4, .connection-success h4 {
+            margin-left: 50px;
+            margin-top: 15px;
+            font-size: 1.2em;
+        }
+
+        .connection-error p, .connection-success p {
+            margin-left: 50px;
+        }
+</style>
+@section Scripts {
+    <script type="text/javascript">
+	var urlFilter = "@Url.Action("Filter", "Help")",
+		urlEdit = "@Url.Action("Edit", "Help")",
+		urlDelete = "@Url.Action("Delete", "Help")",
+		urlImage = "@Url.Content("~/images/help/{0}")",
+		urlImageUpload = "@Url.Action("Upload", "ImageBrowser", new { area = "" })",
+		urlImageRead = "@Url.Action("Read", "ImageBrowser", new { area = "" })",
+		urlImageCreate = "@Url.Action("Create", "ImageBrowser", new { area = "" })",
+		urlImageDestroy = "@Url.Action("Destroy", "ImageBrowser", new { area = "" })",
+        _Permission = "@ViewData["Permission"]",
+        urlNoPhoto = "@Url.Content("~/images/no-image.jpg")",        
+		urlFolderPhotos = "@Url.Content("~/images/help/")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/help.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/help.min.js" asp-append-version="true"></script>
+    </environment>
+}

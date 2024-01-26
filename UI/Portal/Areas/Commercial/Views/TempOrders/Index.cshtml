@@ -1,0 +1,92 @@
+﻿@model Portal.Models.OnlineSale
+@{
+    string attrDisabled = Model.Details?.Count > 0 ? "" : "disabled";
+    int itemsCount = Model.Details?.Count ?? 0;
+}
+<input id="tempsale-id" type="hidden" value="@Model.Id" />
+<div class="tempsale form-horizontal" role="form">
+    <div class="toolbar">
+        <a class="save-tempsale @attrDisabled" title="Guardar Cambios"><span class="fas fa-save"></span>&nbsp; Guardar Cambios</a>
+        <a class="send-tempsale @attrDisabled" title="Guardar y Enviar Carrito"><span class="fas fa-paper-plane"></span>&nbsp; Guardar y Enviar</a>
+        <a class="delete-tempsale @attrDisabled" title="Limpiar Carrito"><span class="fas fa-trash-alt"></span>&nbsp; Eliminar Todo</a>
+        <input type="hidden" class="items-count" value="@itemsCount" />
+    </div>
+    @if (Model.Details?.Count > 0)
+    {
+        decimal subtotal, total = 0;
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr class="active">
+                    <th>C&oacute;digo</th>
+                    <th>Nombre</th>
+                    <th>Sucursal</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th class="text-right">Stock</th>
+                    <th class="text-right">Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detail in Model.Details)
+                {
+                    subtotal = detail.Quantity * detail.Price;
+                    total += subtotal;
+                    <tr>
+                        <td>
+                            <span class="item-code">@detail.Product.ItemCode</span>
+                            <input type="hidden" class="product-id" value="@detail.IdProduct" />
+                            <input type="hidden" class="detail-id" value="@detail.Id" />
+                            <input type="hidden" class="detail-data" value="@Newtonsoft.Json.JsonConvert.SerializeObject(detail.DataExtra)" />
+                        </td>
+                        <td>@detail.Product.Name</td>
+                        <td>
+                            <kendo-dropdownlist id="subsidiaries_@detail.Id" class="w-100" datatextfield="name" datavaluefield="id" ignore-case="true" filter="FilterType.Contains" option-label="Seleccione una Sucursal..." value="@detail.IdSubsidiary" on-change="onSubsidiaryChange" required>
+                                <datasource>
+                                    <transport>
+                                        <read url="@Url.Action("GetSubsidiariesByProduct")" data="{ ProductId: @detail.IdProduct }" />
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </td>
+                        <td><input class="k-textbox price" type="number" value="@detail.Price" step="0.1" min="0" style="width: 80px;" lang="en-us" /></td>
+                        <td><input class="k-textbox item-quantity" type="number" value="@detail.Quantity" min="1" style="width: 80px;" /></td>
+                        <td class="text-right"><span class="text-right stock">@detail.Stock</span> </td>
+                        <td class="text-right"><span class="subtotal">@subtotal.ToString("N2")</span></td>
+                        <td class="text-center"><span class="fas fa-trash-alt delete-item action action-link" title="Quitar Producto"></span></td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="active text-right"><span class="total">@total.ToString("N2")</span></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="alert alert-warning d-none no-items">No hay ning&uacute;n item en el carrito.</div>
+    }
+    else
+    {
+        <div class="alert alert-warning no-items">No hay ning&uacute;n item en el carrito.</div>
+    }
+</div>
+@section Scripts {
+<script type="text/javascript">
+    var urlEdit = "@Url.Action("Edit", "TempSale", new { area = "" })",
+        urlSend = "@Url.Action("SendTempSale", "TempSale", new { area = "" })",
+        urlDelete = "@Url.Action("Delete", "TempSale", new { area = "" })";
+</script>
+<environment include="Development">
+    <script src="~/js/areas/commercial/temporders.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/areas/commercial/temporders.min.js" asp-append-version="true"></script>
+</environment>
+}

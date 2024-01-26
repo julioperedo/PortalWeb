@@ -1,0 +1,44 @@
+﻿@model List<BEntities.Base.UserHelp>
+@{
+    ViewBag.Title = "Manual de Usuario";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+    </div>
+</div>
+@for (int i = 0; i < Model.Count(); i++)
+{
+    <p>
+        <a class="btn1 btn-primary1 action-link title" data-toggle="collapse" href="#qa_@Model[i].Id" role="button" aria-expanded="false" aria-controls="qa_@Model[i].Id">@Model[i].Title</a>
+    </p>
+    <div class="row">
+        <div class="col">
+            <div class="collapse multi-collapse" id="qa_@Model[i].Id">
+                <div class="card1 card-body1">
+                    <formatted-data asp-for="@Model[i].Value"></formatted-data>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+}
+@section Styles {
+    <style type="text/css">
+        .title {
+            font-size: 1.3em;
+        }
+    </style>
+}
+@section Scripts {
+    <script type="text/javascript">
+        $(() => {
+            $("#accordion").on("hide.bs.collapse show.bs.collapse", e => {
+                $(e.target).prev().find("i:last-child").toggleClass("fa-angle-up fa-angle-down");
+            });
+            $("#accordion").on("shown.bs.collapse", e => $(".page-content").animate({ scrollTop: $(e.target).parent().offset().top }, 400));
+        });
+    </script>
+}

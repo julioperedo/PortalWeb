@@ -1,0 +1,57 @@
+﻿@model BEntities.Product.OpenBox
+<form>
+	<div class="form-horizontal">
+		<input type="hidden" asp-for="Id" />
+		<div class="row">
+			<label asp-for="IdProduct" class="col-2">Producto</label>
+			<div class="col-md-10">
+				<input asp-for="IdProduct" class="w-100" />
+			</div>
+		</div>
+
+		<div class="row">
+			<label asp-for="IdSubsidiary" class="col-2">Sucursal</label>
+			<div class="col-md-4">
+				<input asp-for="IdSubsidiary" class="w-100" />
+			</div>
+			<label asp-for="Warehouse" class="col-2">Almac&eacute;n</label>
+			<div class="col-md-4">
+				<input asp-for="Warehouse" class="w-100" />
+			</div>
+		</div>
+
+		<div class="row">
+			<label asp-for="Comments" class="col-2">Comentarios</label>
+			<div class="col-md-10">
+				<textarea asp-for="Comments" class="form-control"></textarea>
+			</div>
+		</div>
+
+		<div class="row">
+			<label asp-for="Quantity" class="col-2">Cantidad</label>
+			<div class="col-md-4">
+				<input type="number" asp-for="Quantity" class="form-control" />
+			</div>
+			<label asp-for="Price" class="col-2">Precio</label>
+			<div class="col-md-4">
+				<input type="number" asp-for="Price" class="form-control" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<div class="custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input" asp-for="Enabled">
+					<label class="custom-control-label" for="Enabled">Habilitado</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col text-right">
+				<button type="button" class="btn btn-outline-secondary" id="action-cancel">Cancelar</button>
+				<button type="button" class="btn btn-primary" id="action-save">Guardar</button>
+			</div>
+		</div>
+	</div>
+</form>

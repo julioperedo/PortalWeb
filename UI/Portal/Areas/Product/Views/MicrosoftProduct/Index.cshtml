@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Configuración de Productos Microsoft";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="detail" class="custom-form">
+    <form>
+        <div class="row">
+            <div class="col"><span class="item-label">SKU</span><span id="sku"></span></div>
+            <div class="col"><span class="item-label">Cod. DMC</span><span id="item-code"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-12"><span class="item-label">Nombre</span></div>
+            <div class="col-12"><span id="name"></span></div>
+        </div>
+        <div class="row">
+            <div class="col-12"><span class="item-label">Descripci&oacute;n</span></div>
+            <div class="col-12"><span id="description"></span></div>
+        </div>
+        <div class="row">
+            <div class="col"><span class="item-label">Retornable</span><span id="return-type"></span></div>
+            <div class="col"><span class="item-label">Tipo</span><span id="fulfillment-type"></span></div>
+        </div>
+        <div class="row">
+            <div class="col mt-2">
+                <div class="custom-tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#tab-prices" role="tab" aria-selected="true">Precios</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-costs" role="tab">Costos de Microsoft</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-prices" class="tab-pane active show pt-3" role="tabpanel">
+                            <div class="row mt-4">
+                                <div class="col-2"><label for="regular">Precio Regular</label></div>
+                                <div class="col-4"><input id="regular" name="regular" type="number" min="0" class="form-control" /></div>
+                                <div class="col-2"><label for="offer">Precio Oferta</label></div>
+                                <div class="col-4"><input id="offer" name="offer" type="number" class="form-control" /></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><label for="offerDescription">Descripci&oacute;n Oferta</label></div>
+                                <div class="col-10"><textarea id="offerDescription" name="offerDescription" class="form-control" rows="2"></textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><label for="observations">Observaciones</label></div>
+                                <div class="col-10"><textarea id="observations" name="observations" class="form-control" rows="2"></textarea></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><label for="commentaries">Comentarios Internos</label></div>
+                                <div class="col-10"><textarea id="commentaries" name="commentaries" class="form-control" rows="2"></textarea></div>
+                            </div>
+                        </div>
+                        <div id="tab-costs" class="tab-pane pt-3" role="tabpanel">
+                            <div class="row">
+                                <div class="col">
+                                    <div id="prices"></div>
+                                </div>
+                            </div>
+                            <section id="section-edit-price-esd" class="d-none bg-light mt-1 p-2">
+                                <div class="row">
+                                    <label class="col-2" for="price-esd">Precio ESD</label>
+                                    <div class="col-4"><input id="price-esd" name="regular" type="number" min="1" class="form-control" /></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-right pt-1">
+                                        <button id="cancel-price-esd" class="btn btn-outline-secondary">Cancelar</button>
+                                        <button id="save-price-esd" data-id="0" class="btn btn-outline-primary">Guardar</button>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-2 text-right">
+                <input type="hidden" id="id" name="id" />
+                <input type="hidden" id="idProduct" name="idProduct" />
+                <input type="hidden" id="idSudsidiary" name="idSudsidiary" />
+                <input type="hidden" id="clientSuggested" name="clientSuggested" />
+                <button id="save-product" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<style type="text/css">
+    .k-grid i.action {
+        margin-left: 4px;
+        margin-right: 4px;
+    }
+
+    .item-label {
+        margin-right: 10px;
+        font-weight: 700;
+    }
+
+    .custom-form {
+        padding: 12px 20px;
+    }
+
+        .custom-form .row {
+            margin-bottom: 4px;
+        }
+
+    .subtitle {
+        font-size: 1.1em;
+        font-weight: 600;
+    }
+</style>
+@section Scripts {
+<script type="text/javascript">
+    var urlFilter = "@Url.Action("Filter")",
+        urlPrices = "@Url.Action("GetPrices")",
+        urlEdit = "@Url.Action("Edit")";
+</script>
+<environment include="Development">
+    <script src="~/js/areas/product/microsoft-product.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/areas/product/microsoft-product.min.js" asp-append-version="true"></script>
+</environment>
+}

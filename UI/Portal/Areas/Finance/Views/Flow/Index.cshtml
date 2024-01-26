@@ -1,0 +1,551 @@
+﻿@model Portal.Areas.Finance.Models.Flow
+@{
+    ViewData["Title"] = "Flujo";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div id="sheet-container" style="height: 850px;">
+    @(
+        Html.Kendo().Spreadsheet()
+            .Name("sheet")
+            //.Sheetsbar(false)
+            //.Toolbar(false)
+            .HtmlAttributes(new { style = "width: 100%; height: 100%" })
+            .Sheets(s =>
+            {
+                s.Add().Name("Bancos")
+                .ShowGridLines(false)
+                .FrozenRows(1)
+                .Rows(r =>
+                {
+                    r.Add().Cells(c =>
+                {
+                    c.Add().Value("CUENTA").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("SAP USD").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("SAP Bs").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("SAP CLP").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("EXTRACTO USD").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("EXTRACTO Bs").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("EXTRACTO CLP").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("CHEQUES").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value(" ");
+                    c.Add().Value("DIF").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("DEP NO ID").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("DIF FINAL").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                });
+                    foreach (var item in Model.Banks)
+                    {
+                        r.Add().Cells(c =>
+                    {
+                        int index = Model.Banks.ToList().IndexOf(item) + 2;
+                        var strColor = "#F2F2F2";
+                        if (item.Subsidiary == "DMC_IQQ") { strColor = "#F8CBAD"; }
+                        if (item.Subsidiary == "DMC_LA") { strColor = "#C6E0B4"; }
+                        c.Add().Value(item.Account).Background(strColor);
+                        c.Add().Value(item.SAPUsd).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(item.SAPBs).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(item.SAPCLP).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(item.ExtractUsd).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(item.ExtractBs).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(item.ExtractCLP).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(item.Checks).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add();
+                        c.Add().Formula($"=F{index}-C{index}+H{index}").Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Value(0).Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                        c.Add().Formula($"=J{index}-K{index}").Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background(strColor);
+                    });
+                    }
+                    r.Add();
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("BOLIVIANOS").TextAlign(SpreadsheetTextAlign.Right);
+                        for (int i = 0; i < 8; i++) c.Add();
+                        c.Add().Value("IMPUESTOS").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add().Value("UNION");
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("DOLARES").TextAlign(SpreadsheetTextAlign.Right);
+                        for (int i = 0; i < 8; i++) c.Add();
+                        c.Add().Value("AFP").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add().Value("BISA");
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("TDC").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add();
+                        c.Add().Value("LIMITE IQQ").TextAlign(SpreadsheetTextAlign.Right);
+                        for (int i = 0; i < 5; i++) c.Add();
+                        c.Add().Value("CPS & SUB").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add().Value("UNION");
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        for (int i = 0; i < 9; i++) c.Add();
+                        c.Add().Value("SUELDOS").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add().Value("BCP");
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        for (int i = 0; i < 4; i++) c.Add();
+                        c.Add().Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").Background("#F2F2F2").BorderBottom(b => b.Size("2px")).BorderRight(b => b.Size("2px")).BorderLeft(b => b.Size("2px")).BorderTop(b => b.Size("2px"));
+                        for (int i = 0; i < 4; i++) c.Add();
+                        c.Add().Value("SUELDOS").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add().Value("BISA");
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("BNB USD").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add();
+                        c.Add(); 
+                        c.Add().Background("#F8CBAD").Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").BorderBottom(b => b.Size("2px")).BorderRight(b => b.Size("2px")).BorderLeft(b => b.Size("2px"));
+                        for (int i = 0; i < 4; i++) c.Add();
+                        c.Add().Value("SUELDOS").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add().Value("CHEQUE");
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("BCP USD").TextAlign(SpreadsheetTextAlign.Right);
+                        c.Add();
+                        c.Add();
+                        c.Add(); 
+                        c.Add().Background("#C6E0B4").Format("_(* #,##0.00_);_(* (#,##0.00);_(* \" - \"_);_(@_)").BorderBottom(b => b.Size("2px")).BorderRight(b => b.Size("2px")).BorderLeft(b => b.Size("2px"));
+                        for (int i = 0; i < 4; i++) c.Add();
+                        c.Add().Value("TOTAL").TextAlign(SpreadsheetTextAlign.Right);
+                    });
+                    r.Add().Cells(c =>
+       {
+                        c.Add().Value("MER USD").TextAlign(SpreadsheetTextAlign.Right);
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("BISA USD").TextAlign(SpreadsheetTextAlign.Right);
+                    });
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("GANA USD").TextAlign(SpreadsheetTextAlign.Right);
+                    });
+                })
+                .Columns(c =>
+                {
+                    c.Add().Width(250);
+                    c.Add().Width(120);
+                    c.Add().Width(120);
+                    c.Add().Width(120);
+                    c.Add().Width(120);
+                    c.Add().Width(120);
+                    c.Add().Width(120);
+                    c.Add().Width(120);
+                    c.Add().Width(10);
+                    c.Add().Width(100);
+                    c.Add().Width(100);
+                    c.Add().Width(100);
+                });
+
+                s.Add().Name("DMC SA")
+                .ShowGridLines(false)
+                .FrozenRows(1)
+                .Filter(fil => fil.Ref("A1:S" + (Model.BalanceSA.Clients.Count() > Model.BalanceSA.Providers.Count() ? (Model.BalanceSA.Clients.Count() + 2) : (Model.BalanceSA.Providers.Count() + 2))))
+                .Rows(r =>
+                {
+                    r.Add().Cells(c =>
+                    {
+                        c.Add().Value("PROVEEDOR").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("TIPO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("NO.").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("FECHA").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("TERM").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("VENCE").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("DIAS").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("BALANCE").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("SEMANA").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("");
+                        c.Add().Value("CODIGO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("RAZON SOCIAL").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("TIPO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("NO DOC").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("FECHA").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("TERM").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("VENCE").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("DIAS").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("BALANCE").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                        c.Add().Value("SEMANA").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    });
+                    int intTotal = Model.BalanceSA.Providers.Count() > Model.BalanceSA.Clients.Count() ? Model.BalanceSA.Providers.Count() : Model.BalanceSA.Clients.Count();
+                    System.Globalization.DateTimeFormatInfo dfi = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+                    System.Globalization.Calendar cal = dfi.Calendar;
+
+                    for (int i = 0; i < intTotal; i++)
+                    {
+                        string strProvider = "", strProviderType = "", strProviderTerm = "", strClientCode = "", strClient = "", strClientType = "", strClientTerm = "", strProviderNumber = "", strClientNumber = "";
+                        DateTime? datProviderDate = null, datProviderExpires = null, datClientDate = null, datClientExpires = null;
+                        int? intProviderDays = null, intWeek = null, intClientDays = null;
+                        decimal? decProviderBalance = null, decClientBalance = null;
+                        if (i < Model.BalanceSA.Providers.Count())
+                        {
+                            var beTemp = Model.BalanceSA.Providers.ElementAt(i);
+                            strProvider = beTemp.Name;
+                            strProviderType = beTemp.Type;
+                            strProviderNumber = beTemp.Number;
+                            datProviderDate = beTemp.Date;
+                            strProviderTerm = beTemp.Term;
+                            datProviderExpires = beTemp.Expires;
+                            intProviderDays = beTemp.Days;
+                            decProviderBalance = beTemp.Balance;
+                            intWeek = cal.GetWeekOfYear(beTemp.Expires, dfi.CalendarWeekRule, new DateTime(beTemp.Expires.Year, 1, 1).DayOfWeek);
+                        }
+                        if (i < Model.BalanceSA.Clients.Count())
+                        {
+                            var beTemp = Model.BalanceSA.Clients.ElementAt(i);
+                            strClientCode = beTemp.Code;
+                            strClient = beTemp.Name;
+                            strClientType = beTemp.Type;
+                            strClientNumber = beTemp.Number;
+                            datClientDate = beTemp.Date;
+                            strClientTerm = beTemp.Term;
+                            datClientExpires = beTemp.Expires;
+                            intClientDays = beTemp.Days;
+                            decClientBalance = beTemp.Balance;
+                        }
+
+                        r.Add().Cells(c =>
+                        {
+                            if (strProvider.ToLower().Contains("banco") | strProvider.ToLower().Contains("bank"))
+                            {
+                                c.Add().Value(strProvider).Background("Pink").Color("#9C0006");
+                            }
+                            else
+                            {
+                                c.Add().Value(strProvider);
+                            }
+                            c.Add().Value(strProviderType);
+                            c.Add().Value(strProviderNumber);
+                            c.Add().Value(datProviderDate).Format("MM/dd/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                            c.Add().Value(strProviderTerm);
+                            c.Add().Value(datProviderExpires).Format("MM/dd/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                            c.Add().Value(intProviderDays).Format("_(* #,##0_);_(* (#,##0);_(* \" - \"_);_(@_)");
+                            c.Add().Value(decProviderBalance).Format("#,##0.00;[Red]-#,##0.00");
+                            if(datProviderExpires.HasValue){
+                                c.Add().Formula($"=WEEKNUM(F{i + 2},1)");
+                            } else {
+                                c.Add();
+                            }
+                            c.Add().Value("");
+                            c.Add().Value(strClientCode);
+                            c.Add().Value(strClient);
+                            c.Add().Value(strClientType);
+                            c.Add().Value(strClientNumber);
+                            c.Add().Value(datClientDate).Format("dd/MM/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                            c.Add().Value(strClientTerm);
+                            c.Add().Value(datClientExpires).Format("dd/MM/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                            c.Add().Value(intClientDays).Format("_(* #,##0_);_(* (#,##0);_(* \" - \"_);_(@_)");
+                            c.Add().Value(decClientBalance).Format("#,##0.00;[Red]-#,##0.00");
+                            c.Add().Formula($"=WEEKNUM(Q{i + 2},1)");
+                        });
+                    }
+
+                    for (int i = 0; i < 20; i++)
+                    {
+                        r.Add();
+                    }
+                    r.Add().Cells(c => {
+                        for (int i = 0; i < 18; i++)
+                        {
+                            c.Add();
+                        }
+                        c.Add().Formula($"=SUM(S2:S{intTotal + 5})").Format("#,##0.00;[Red]-#,##0.00");
+                    });
+                    r.Add().Cells(c => {
+                        for (int i = 0; i < 18; i++)
+                        {
+                            c.Add();
+                        }
+                        c.Add().Formula($"=S{intTotal + 22}*6.96").Format("#,##0.00;[Red]-#,##0.00");
+                    });
+                    r.Add().Cells(c => {
+                        for (int i = 0; i < 18; i++)
+                        {
+                            c.Add();
+                        }
+                        c.Add().Formula($"=S{intTotal + 23}/10").Format("#,##0.00;[Red]-#,##0.00");
+                    });
+                    r.Add().Cells(c => {
+                        for (int i = 0; i < 18; i++)
+                        {
+                            c.Add();
+                        }
+                        c.Add().Formula($"=S{intTotal + 24}-S{intTotal + 22}").Format("#,##0.00;[Red]-#,##0.00");
+                    });
+            })
+            .Columns(c =>
+            {
+                c.Add().Width(250);
+                c.Add().Width(60);
+                c.Add().Width(100);
+                c.Add().Width(90);
+                c.Add().Width(80);
+                c.Add().Width(100);
+                c.Add().Width(60);
+                c.Add().Width(120);
+                c.Add().Width(60);
+                c.Add().Width(50);
+                c.Add().Width(70);
+                c.Add().Width(250);
+                c.Add().Width(60);
+                c.Add().Width(100);
+                c.Add().Width(90);
+                c.Add().Width(80);
+                c.Add().Width(100);
+                c.Add().Width(100);
+                c.Add().Width(140);
+            });
+
+            s.Add().Name("DMC IQQ")
+            .ShowGridLines(false)
+            .FrozenRows(1)
+            .Filter(fil => fil.Ref("A1:S" + (Model.BalanceIQ.Clients.Count() > Model.BalanceIQ.Providers.Count() ? (Model.BalanceIQ.Clients.Count() + 1) : (Model.BalanceIQ.Providers.Count() + 1))))
+            .Rows(r =>
+            {
+                r.Add().Cells(c =>
+            {
+                c.Add().Value("PROVEEDOR").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("TIPO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("NO.").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("FECHA").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("TERM").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("VENCE").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("DIAS").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("BALANCE").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("SEMANA").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("");
+                c.Add().Value("CODIGO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("RAZON SOCIAL").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("TIPO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("NO DOC").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("FECHA").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("TERM").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("VENCE").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("DIAS").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                c.Add().Value("BALANCE").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+            });
+                int intTotal = Model.BalanceIQ.Providers.Count() > Model.BalanceIQ.Clients.Count() ? Model.BalanceIQ.Providers.Count() : Model.BalanceIQ.Clients.Count();
+                System.Globalization.DateTimeFormatInfo dfi = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+                System.Globalization.Calendar cal = dfi.Calendar;
+
+                for (int i = 0; i < intTotal; i++)
+                {
+                    string strProvider = "", strProviderType = "", strProviderTerm = "", strClientCode = "", strClient = "", strClientType = "", strClientTerm = "", strProviderNumber = "", strClientNumber = "";
+                    DateTime? datProviderDate = null, datProviderExpires = null, datClientDate = null, datClientExpires = null;
+                    int? intProviderDays = null, intWeek = null, intClientDays = null;
+                    decimal? decProviderBalance = null, decClientBalance = null;
+
+                    if (i < Model.BalanceIQ.Providers.Count())
+                    {
+                        var beTemp = Model.BalanceIQ.Providers.ElementAt(i);
+                        strProvider = beTemp.Name;
+                        strProviderType = beTemp.Type;
+                        strProviderNumber = beTemp.Number;
+                        datProviderDate = beTemp.Date;
+                        strProviderTerm = beTemp.Term;
+                        datProviderExpires = beTemp.Expires;
+                        intProviderDays = beTemp.Days;
+                        decProviderBalance = beTemp.Balance;
+                        intWeek = cal.GetWeekOfYear(beTemp.Expires, dfi.CalendarWeekRule, new DateTime(beTemp.Expires.Year, 1, 1).DayOfWeek);
+                    }
+                    if (i < Model.BalanceIQ.Clients.Count())
+                    {
+                        var beTemp = Model.BalanceIQ.Clients.ElementAt(i);
+                        strClientCode = beTemp.Code;
+                        strClient = beTemp.Name;
+                        strClientType = beTemp.Type;
+                        strClientNumber = beTemp.Number;
+                        datClientDate = beTemp.Date;
+                        strClientTerm = beTemp.Term;
+                        datClientExpires = beTemp.Expires;
+                        intClientDays = beTemp.Days;
+                        decClientBalance = beTemp.Balance;
+                    }
+
+                    r.Add().Cells(c =>
+                {
+                    if (strProvider.ToLower().Contains("banco") | strProvider.ToLower().Contains("bank"))
+                    {
+                        c.Add().Value(strProvider).Background("Pink").Color("#9C0006");
+                    }
+                    else
+                    {
+                        c.Add().Value(strProvider);
+                    }
+                    c.Add().Value(strProviderType);
+                    c.Add().Value(strProviderNumber);
+                    c.Add().Value(datProviderDate).Format("MM/dd/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                    c.Add().Value(strProviderTerm);
+                    c.Add().Value(datProviderExpires).Format("MM/dd/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                    c.Add().Value(intProviderDays).Format("_(* #,##0_);_(* (#,##0);_(* \" - \"_);_(@_)");
+                    c.Add().Value(decProviderBalance).Format("#,##0.00;[Red]-#,##0.00");
+                    c.Add().Value(intWeek);
+                    c.Add().Value("");
+                    c.Add().Value(strClientCode);
+                    c.Add().Value(strClient);
+                    c.Add().Value(strClientType);
+                    c.Add().Value(strClientNumber);
+                    c.Add().Value(datClientDate).Format("dd/MM/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                    c.Add().Value(strClientTerm);
+                    c.Add().Value(datClientExpires).Format("dd/MM/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                    c.Add().Value(intClientDays).Format("_(* #,##0_);_(* (#,##0);_(* \" - \"_);_(@_)");
+                    c.Add().Value(decClientBalance).Format("#,##0.00;[Red]-#,##0.00");
+                });
+                }
+            })
+            .Columns(c =>
+            {
+                c.Add().Width(250);
+                c.Add().Width(60);
+                c.Add().Width(100);
+                c.Add().Width(90);
+                c.Add().Width(80);
+                c.Add().Width(100);
+                c.Add().Width(60);
+                c.Add().Width(120);
+                c.Add().Width(60);
+                c.Add().Width(50);
+                c.Add().Width(70);
+                c.Add().Width(250);
+                c.Add().Width(60);
+                c.Add().Width(100);
+                c.Add().Width(90);
+                c.Add().Width(80);
+                c.Add().Width(100);
+            });
+
+            s.Add().Name("DMC LA")
+            .ShowGridLines(false)
+            .FrozenRows(1)
+            .Filter(fil => fil.Ref("A1:S" + (Model.BalanceLA.Clients.Count() > Model.BalanceLA.Providers.Count() ? (Model.BalanceLA.Clients.Count() + 1) : (Model.BalanceLA.Providers.Count() + 1))))
+            .Rows(r =>
+            {
+                r.Add().Cells(c =>
+                {
+                    c.Add().Value("PROVEEDOR").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("TIPO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("NO.").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("FECHA").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("TERM").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("VENCE").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("DIAS").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("BALANCE").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("SEMANA").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("");
+                    c.Add().Value("CODIGO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("RAZON SOCIAL").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("TIPO").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("NO DOC").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("FECHA").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("TERM").Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("VENCE").TextAlign(SpreadsheetTextAlign.Center).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("DIAS").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                    c.Add().Value("BALANCE").TextAlign(SpreadsheetTextAlign.Right).Background("#5B9BD5").Bold(true).Color("#FFFFFF");
+                });
+                int intTotal = Model.BalanceLA.Providers.Count() > Model.BalanceLA.Clients.Count() ? Model.BalanceLA.Providers.Count() : Model.BalanceLA.Clients.Count();
+                System.Globalization.DateTimeFormatInfo dfi = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+                System.Globalization.Calendar cal = dfi.Calendar;
+
+                for (int i = 0; i < intTotal; i++)
+                {
+                    string strProvider = "", strProviderType = "", strProviderTerm = "", strClientCode = "", strClient = "", strClientType = "", strClientTerm = "", strProviderNumber = "", strClientNumber = "";
+                    DateTime? datProviderDate = null, datProviderExpires = null, datClientDate = null, datClientExpires = null;
+                    int? intProviderDays = null, intWeek = null, intClientDays = null;
+                    decimal? decProviderBalance = null, decClientBalance = null;
+
+                    if (i < Model.BalanceLA.Providers.Count())
+                    {
+                        var beTemp = Model.BalanceLA.Providers.ElementAt(i);
+                        strProvider = beTemp.Name;
+                        strProviderType = beTemp.Type;
+                        strProviderNumber = beTemp.Number;
+                        datProviderDate = beTemp.Date;
+                        strProviderTerm = beTemp.Term;
+                        datProviderExpires = beTemp.Expires;
+                        intProviderDays = beTemp.Days;
+                        decProviderBalance = beTemp.Balance;
+                        intWeek = cal.GetWeekOfYear(beTemp.Expires, dfi.CalendarWeekRule, new DateTime(beTemp.Expires.Year, 1, 1).DayOfWeek);
+                    }
+                    if (i < Model.BalanceLA.Clients.Count())
+                    {
+                        var beTemp = Model.BalanceLA.Clients.ElementAt(i);
+                        strClientCode = beTemp.Code;
+                        strClient = beTemp.Name;
+                        strClientType = beTemp.Type;
+                        strClientNumber = beTemp.Number;
+                        datClientDate = beTemp.Date;
+                        strClientTerm = beTemp.Term;
+                        datClientExpires = beTemp.Expires;
+                        intClientDays = beTemp.Days;
+                        decClientBalance = beTemp.Balance;
+                    }
+
+                    r.Add().Cells(c =>
+                    {
+                        if (strProvider.ToLower().Contains("banco") | strProvider.ToLower().Contains("bank"))
+                        {
+                            c.Add().Value(strProvider).Background("Pink").Color("#9C0006");
+                        }
+                        else
+                        {
+                            c.Add().Value(strProvider);
+                        }
+                        c.Add().Value(strProviderType);
+                        c.Add().Value(strProviderNumber);
+                        c.Add().Value(datProviderDate).Format("MM/dd/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                        c.Add().Value(strProviderTerm);
+                        c.Add().Value(datProviderExpires).Format("MM/dd/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                        c.Add().Value(intProviderDays).Format("_(* #,##0_);_(* (#,##0);_(* \" - \"_);_(@_)");
+                        c.Add().Value(decProviderBalance).Format("#,##0.00;[Red]-#,##0.00");
+                        c.Add().Value(intWeek);
+                        c.Add().Value("");
+                        c.Add().Value(strClientCode);
+                        c.Add().Value(strClient);
+                        c.Add().Value(strClientType);
+                        c.Add().Value(strClientNumber);
+                        c.Add().Value(datClientDate).Format("dd/MM/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                        c.Add().Value(strClientTerm);
+                        c.Add().Value(datClientExpires).Format("dd/MM/yyyy").TextAlign(SpreadsheetTextAlign.Center);
+                        c.Add().Value(intClientDays).Format("_(* #,##0_);_(* (#,##0);_(* \" - \"_);_(@_)");
+                        c.Add().Value(decClientBalance).Format("#,##0.00;[Red]-#,##0.00");
+                    });
+                }
+            })
+            .Columns(c =>
+            {
+                c.Add().Width(250);
+                c.Add().Width(60);
+                c.Add().Width(100);
+                c.Add().Width(90);
+                c.Add().Width(80);
+                c.Add().Width(100);
+                c.Add().Width(60);
+                c.Add().Width(120);
+                c.Add().Width(60);
+                c.Add().Width(50);
+                c.Add().Width(70);
+                c.Add().Width(250);
+                c.Add().Width(60);
+                c.Add().Width(100);
+                c.Add().Width(90);
+                c.Add().Width(80);
+                c.Add().Width(100);
+            });
+        })
+        )
+</div>

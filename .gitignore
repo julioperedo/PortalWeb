@@ -361,3 +361,23 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+/UI/Portal/.local-chromium
+/Deploy
+/UI/Portal/wwwroot/images/events
+/UI/Portal/wwwroot/images/help
+/UI/Portal/wwwroot/images/humanresources
+/UI/Portal/wwwroot/images/notification/push
+/UI/Portal/wwwroot/images/piggybank
+/UI/Portal/wwwroot/images/add-cart.png
+/UI/Portal/wwwroot/images/productdocs
+/UI/Portal/wwwroot/images/products
+/UI/Portal/wwwroot/images/promobanner
+/UI/Portal/wwwroot/images/banner1.svg
+/UI/Portal/wwwroot/images/userdata
+/UI/Portal/wwwroot/files/product-docs
+/UI/Portal/wwwroot/files/rma
+/UI/Portal/wwwroot/reportsCache/PortalV311
+/_UpgradeWizard_Files
+/IncrementFileVersion.exe
+/UpgradeWizardLog.xml

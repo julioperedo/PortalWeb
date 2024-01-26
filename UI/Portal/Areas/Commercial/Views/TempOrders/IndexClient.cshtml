@@ -1,0 +1,159 @@
+﻿@model Portal.Models.ShoppingCart
+@{
+    decimal total = 0;
+    string sellerName = Model.SellerName != null && Model.SellerName != "DMC" ? Model.SellerName : "NO tiene asignado ninguno", disSave, disSend, disDelete, dropShip;
+    disSave = Model.Details?.Count > 0 ? "" : "disabled";
+    disSend = Model.Details?.Count > 0 && (!string.IsNullOrEmpty(Model.SellerName) && Model.SellerName != "DMC") ? "" : "disabled";
+    disDelete = Model.Details?.Count > 0 ? "" : "disabled";
+    dropShip = Model.WithDropShip ? "checked" : "";
+    Newtonsoft.Json.Serialization.DefaultContractResolver contractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver { NamingStrategy = new Newtonsoft.Json.Serialization.CamelCaseNamingStrategy() };
+}
+<input id="shopping-cart-id" type="hidden" value="@Model.Id" />
+<div class="row">
+    <div id="col-items" class="col">
+        <div class="shoppingcart form-horizontal" role="form">
+            <div class="toolbar">
+                @*<a class="save-cart btn btn-secondary @disSave" @disSave><i class="fas fa-save"></i>&nbsp; Guardar</a>*@
+                <a class="send-cart btn btn-secondary @disSend" @disSend title="Enviar Carrito"><i class="fas fa-paper-plane"></i>&nbsp; Enviar</a>
+                <a class="delete-cart btn btn-danger @disDelete" @disDelete title="Limpiar Carrito"><i class="fas fa-trash-alt"></i>&nbsp; Eliminar</a>
+            </div>
+            <div class="header">
+                <input type="hidden" id="sellerCode" value="@Model.SellerCode" />
+                <span>Ejecutivo de Cuenta: @sellerName</span>
+            </div>
+            <div class="header2">
+                <span>Los descuentos por volumen de compra ser&aacute;n confirmados por su Ejecutivo de Cuenta al procesar la orden.</span>
+            </div>
+            <div id="tabshoppingcart" class="custom-tab mt-3">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#tab-items-@Model.Id" role="tab" aria-selected="true">Items</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-delivery-@Model.Id" role="tab">Datos de Entrega</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-items-@Model.Id" class="tab-pane active show pt-3" role="tabpanel">
+                        @if (Model.Details != null && Model.Details.Count > 0)
+                            {
+                                <form>
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr class="active">
+                                            <th scope="col">C&oacute;digo</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Sucursal</th>
+                                            <th scope="col" class="text-right">Precio</th>
+                                            <th scope="col">Cantidad</th>
+                                            <th scope="col" class="text-right">Subtotal</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var detail in Model.Details)
+                                        {
+                                            decimal subtotal = detail.Quantity * detail.Price;
+                                            total += subtotal;
+                                            <tr>
+                                                <td class="pt-4">
+                                                    <span class="item-code">@detail.Product.ItemCode</span>
+                                                    <input type="hidden" class="product-id" value="@detail.IdProduct" />
+                                                    <input type="hidden" class="detail-id" value="@detail.Id" />
+                                                    <input type="hidden" class="detail-data" value="@Newtonsoft.Json.JsonConvert.SerializeObject(detail.DataExtra, new Newtonsoft.Json.JsonSerializerSettings { ContractResolver = contractResolver })" />
+                                                </td>
+                                                <td class="pt-4"><span class="item-name">@detail.Product.Name</span></td>
+                                                <td style="width: 95px;">
+                                                    <kendo-dropdownlist id="subsidiaries-@detail.Id" class="w-100" datatextfield="name" datavaluefield="id" ignore-case="true" filter="FilterType.Contains" option-label="Seleccione una Sucursal..." value="@detail.IdSubsidiary" on-change="onSubsidiaryChange" required>
+                                                        <datasource>
+                                                            <transport>
+                                                                <read url="@Url.Action("GetSubsidiariesByProduct")" data="{ ProductId: @detail.IdProduct }" />
+                                                            </transport>
+                                                        </datasource>
+                                                    </kendo-dropdownlist>
+                                                </td>
+                                                <td class="text-right pt-4"><span class="price">@detail.Price.ToString("N2")</span></td>
+                                                <td>
+                                                    <input id="item-quantity-@detail.Id" name="item-quantity-@detail.Id" class="k-textbox item-quantity" type="number" value="@detail.Quantity" min="1" style="width: 80px;" required />
+                                                    <span class="k-invalid-msg" data-for="item-quantity-@detail.Id"></span>
+                                                </td>
+                                                <td class="text-right pt-4"><span class="subtotal">@subtotal.ToString("N2")</span></td>
+                                                <td class="text-center pt-4"><a class="delete-item action action-link" title="Quitar Producto"><i class="fas fa-trash-alt"></i></a></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">TOTAL:</td>
+                                            <td class="active text-right font-weight-bold h4"><span class="total">@total.ToString("N2")</span></td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </form>
+                            <div class="alert alert-warning d-none no-items">No hay ning&uacute;n item en el carrito.</div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">No hay ning&uacute;n item en el carrito.</div>
+                        }
+                    </div>
+                    <div id="tab-delivery-@Model.Id" class="tab-pane pt-3" role="tabpanel">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <label for="shoppingcart-name">Nombre:</label>
+                                <input id="shoppingcart-name" type="text" class="form-control" value="@Model.Name" />
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="shoppingcart-clientsalenote">Orden Compra Cliente:</label>
+                                <input id="shoppingcart-clientsalenote" type="text" class="form-control" value="@Model.ClientSaleNote" />
+                            </div>
+                            <div class="col-12">
+                                <label for="shoppingcart-address">Direcci&oacute;n:</label>
+                                <textarea id="shoppingcart-address" class="form-control">@Model.Address</textarea>
+                            </div>
+                            <div class="col-12">
+                                <label for="shoppingcart-comments">Comentarios:</label>
+                                <textarea id="shoppingcart-comments" class="form-control">@Model.Commentaries</textarea>
+                            </div>
+                            <div class="col-12 form-group d-none">
+                                <label for="shoppingcart-dropship">Con DropShip:</label>
+                                <input id="shoppingcart-dropship" type="checkbox" class="checkbox-inline" @dropShip />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="col-promos" class="d-none"></div>
+        </div>
+    </div>
+    <div id="col-related" class="col-2 d-none"></div>
+</div>
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/commercial/temporder.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/commercial/temporder.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+@section Scripts {
+    <script type="text/javascript">
+        var urlEditShoppingCart = "@Url.Action("Edit")",
+            urlSendShoppingCart = "@Url.Action("Send")",
+            urlDeleteShoppingCart = "@Url.Action("Delete")",
+            urlDeleteItem = "@Url.Action("DeleteItem")",
+            urlAddItem = "@Url.Action("AddItem")",
+            urlGetRelatedProducts = "@Url.Action("GetRelatedProducts")",
+            urlGetBanner = "@Url.Action("GetBanner")",
+            urlGetSubsidiariesByProduct = "@Url.Action("GetSubsidiariesByProduct")",
+            urlImages = "@Url.Content("~/images/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/temporders-client.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/temporders-client.min.js" asp-append-version="true"></script>
+    </environment>
+}

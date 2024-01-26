@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Próximos Arribos";
+}
+<div class="row">
+    <div class="col-8">
+        <h3 class="title" id="page-title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Volver a la lista" role="button" href="#" id="back-list"><i class="fas fa-arrow-left"></i></a>
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box" id="toggle-filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="filter-product" class="col-12 col-sm-1">Filtro</label>
+                <div class="col-12 col-sm-8 col-xl-5">
+                    <input id="filter-product" type="text" class="form-control" />
+                </div>
+                <div class="col-12 col-sm-3 text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        const urlFilter = "@Url.Action("Filter")",
+            urlImages = "@Url.Content("~/images/products/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")",
+            _isLocal = "@ViewBag.IsLocal" === "Y";
+
+    </script>
+    <script src="~/lib/magicsuggest/magicsuggest-min.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/product/arrival.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/arrival.min.js" asp-append-version="true"></script>
+    </environment>
+}

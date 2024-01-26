@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Documentación de Productos";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-md-3 pt-3">
+        <div id="Listado"></div>
+    </div>
+    <div class="col col-md-9 pt-3">
+        <h4><span id="product-name"></span></h4>
+        <div id="Documents"></div>
+    </div>
+</div>
+@section Styles{
+<environment include="Development">
+    <link href="~/css/areas/product/document.css" rel="stylesheet" />
+</environment>
+<environment exclude="Development">
+    <link href="~/css/areas/product/document.min.css" rel="stylesheet" asp-append-version="true" />
+</environment>
+}
+@section Scripts {
+<script type="text/javascript">
+    var urlFilter = "@Url.Action("GetDocuments")",
+        urlGetAvailableProducts = "@Url.Action("GetAvailableProducts")",
+        urlDownloadFiles = "@Url.Action("DownloadFiles")",
+        _Permission = "@ViewData["Permission"]";
+</script>
+<environment include="Development">
+    <script src="~/js/areas/product/document-client.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/areas/product/document-client.min.js" asp-append-version="true"></script>
+</environment>
+}

@@ -1,0 +1,217 @@
+﻿@model Portal.Areas.Product.Models.Product
+@{
+    ViewData["Title"] = "Detalle de Producto";
+    string imageUrl = Url.Content("~/images/no-image.jpg");
+    if (!string.IsNullOrWhiteSpace(Model.ImageURL))
+    {
+        imageUrl = Url.Content("~/images/products/" + Model.ImageURL);
+    }
+}
+@if (Model.Id == 0)
+{
+    <div class="not-found">
+        <img src="~/images/logo3.png" /><br />
+        No se ha podido encotrar el producto que desea ver.
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="product">
+                <div class="row">
+                    <div class="col">
+                        <span class="item-code title">( @Model.ItemCode )</span>&nbsp;&nbsp;&nbsp;<span class="item-name">@Model.Name</span>
+                        <input type="hidden" id="local-user" value="@ViewBag.LocalUser" />
+                        <input type="hidden" id="see-stock" value="@ViewBag.SeeStock" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-xl-5">
+                        <div class="product-image">
+                            <img src="@imageUrl" />
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 col-xl-7">
+                        <div class="product-prices">
+                            @foreach (var price in Model.Prices)
+                            {
+                                var dataPrice = (price.Regular > 0 || price.Offer > 0 || !string.IsNullOrEmpty(price.OfferDescription)) ? "Y" : "N";
+                                <div class="@price.Subsidiary.ToLower().Replace(" ", "-")">
+                                    <span class="price-title" data="@price.Subsidiary.ToLower().Replace(" ", "-")">@price.Subsidiary</span>
+                                    <div class="price" data-subsidiary="@price.Subsidiary" data-price="@dataPrice">
+                                        @if (price.Offer.HasValue && price.Offer.Value > 0)
+                                        {
+                                            <div class="offer">Oferta: <span>@price.Offer.Value.ToString("N2") $Us</span></div>
+                                            if (!string.IsNullOrEmpty(price.OfferDescription))
+                                            {
+                                                <div class="offer-desc">@price.OfferDescription</div>
+                                            }
+                                        }
+                                        @if (price.Regular > 0)
+                                        {
+                                            if (price.Offer.HasValue && price.Offer.Value > 0)
+                                            {
+                                                <div class="regular with-offer">@price.Regular.ToString("#,###.00") $Us</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="regular">@price.Regular.ToString("#,###.00") $Us</div>
+                                            }
+                                        }
+                                        @if (price.LocalUser & (price.Volumen != null && price.Volumen.Count > 0))
+                                        {
+                                            foreach (var item in (from p in price.Volumen where p.Quantity > 0 & p.Price > 0 orderby p.Quantity select p).ToList())
+                                            {
+                                                <div class="volume-price">
+                                                    <p>
+                                                        @item.Quantity items: @item.Price $Us
+                                                        @if (item.Observations != null && item.Observations.Trim() != "")
+                                                        {
+                                                            <br />@item.Observations
+                                                        }
+                                                    </p>
+                                                </div>
+                                            }
+                                        }
+                                        @if (price.LocalUser & (price.ClientSuggested.HasValue && price.ClientSuggested.Value > 0))
+                                        {
+                                            <div class="suggested">Precio Sugerido: <span>@price.ClientSuggested.Value.ToString("N2") $Us</span></div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(price.Observations))
+                                        {
+                                            <div class="observations">@price.Observations</div>
+                                        }
+                                        @if (price.LocalUser)
+                                        {
+                                            if (price.Commentaries != null && price.Commentaries.Trim() != "")
+                                            {
+                                                <div class="commentaries"><span>Comentario Interno:</span> @price.Commentaries.Trim()</div>
+                                            }
+                                        }
+                                        <div class="stock"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="product-desc">
+                            <div><formatted-data asp-for="Description"></formatted-data></div>
+                            @if (!string.IsNullOrWhiteSpace(Model.Commentaries))
+                            {
+                                <div class="comments"><formatted-data asp-for="Commentaries"></formatted-data></div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.Consumables))
+                            {
+                                <div class="product-consumables">Consumibles: <formatted-data asp-for="Consumables"></formatted-data> </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.Warranty))
+                            {
+                                <div class="product-warranty">Garant&iacute;a: @Model.Warranty</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="ccs-feature-icons"></div>
+    <div id="ccs-logos"></div>
+    <div id="external-content"></div>
+    <script type="text/javascript">
+        var urlGetStock = "@Url.Action("GetStock", "PriceList")", itemCode = "@Model.ItemCode";
+        $(() => {
+            $.get(urlGetStock, { ItemCodes: `'${itemCode}'` }, data => {
+                if (data.message === "") {
+                    var item = data.items.find(x => x.itemCode === itemCode);
+                    var localUser = $("#local-user").val() === "Y", seeStock = $("#see-stock").val() === "Y";
+
+                    $(".product-prices .price").each(function () {
+                        var ids = this.dataset;
+                        if (item && item.subsidiaries && item.subsidiaries.length > 0) {
+                            var subsidiary = item.subsidiaries.find(e => e.name === ids.subsidiary);
+                            if (subsidiary) {
+                                var classStock = subsidiary.name === "Iquique" ? "primary" : "", classAvailable = subsidiary.name !== "Iquique" ? "primary" : "", stockTotal = 0;
+                                if (subsidiary.items && subsidiary.items.length > 0) {
+                                    //if (subsidiary.name === "Iquique") {
+                                        stockTotal = Enumerable.From(subsidiary.items).Select("$.stock").Sum();
+                                    //} else {
+                                    //    stockTotal = Enumerable.From(subsidiary.items).Select("$.available").Sum();
+                                    //}
+                                    var stockContent = $(this).find(".stock");
+                                    if (stockTotal < 1) {
+                                        $(this).find(".offer, .offer-desc").remove();
+                                        $(this).find(".regular").removeClass("with-offer");
+                                    }
+                                    //stockContent.append(`<div class="stock-detail d-sm-none"><span>Stock: ${stockTotal}</span></div>`);
+                                    var stockDetail = "";
+                                    subsidiary.items.forEach(warehouse => {
+                                        if (localUser || seeStock) {
+                                            var reservedClass = warehouse.reserved > 0 ? "detail-reserve action" : "";
+                                            stockDetail += `<tr><td>${warehouse.warehouse}</td><td class="text-right ${classStock}">${warehouse.stock}</td><td class="text-right ${reservedClass}">${warehouse.reserved}</td><td class="text-right ${classAvailable}">${warehouse.available2}</td><td class="text-right">${warehouse.requested}</td></tr>`;
+                                        } else {
+                                            var percentage = warehouse.percentage ? kendo.toString(warehouse.percentage, "N0") + " %" : "n/a";
+                                            stockDetail += `<tr><td>${warehouse.warehouse}</td><td class="text-right">${percentage}</td></tr>`;
+                                        }
+                                    });
+                                    if (localUser || seeStock) {
+                                        stockContent.append(`<div class="stock-detail"><table style="width: 100%;"><tr><td></td><td class="text-right ${classStock}">Stock</td><td class="text-right">Reserva</td><td class="text-right ${classAvailable}">Disponible</td><td class="text-right">Pedido</td></tr>${stockDetail}</table></div>`);
+                                    } else {
+                                        stockContent.append(`<div class="stock-detail"><table style="width: 100%;"><tr><td></td><td class="text-right">Stock</td></tr>${stockDetail}</table></div>`);
+                                    }
+                                } else {
+                                    $(this).find(".offer, .offer-desc").remove()
+                                    $(this).find(".regular").removeClass("with-offer");
+                                    if (ids.price === "N") {
+                                        $(this).parent().remove();
+                                    }
+                                }
+                            } else {
+                                $(this).find(".offer, .offer-desc").remove();
+                                $(this).find(".regular").removeClass("with-offer");
+                                if (ids.price === "N") {
+                                    $(this).parent().remove();
+                                }
+                            }
+                        } else {
+                            if (ids.price === "N") {
+                                $(this).parent().remove();
+                            } else {
+                                $(this).find(".offer, .offer-desc").remove();
+                                $(this).find(".regular").removeClass("with-offer");
+                            }
+                        }
+                    });
+                } else {
+                    showError(`Se ha producido un error al traer los datos del servidor: <br /> ${data.message}`);
+                }
+            });
+        });
+    </script>
+    <script type='text/javascript'>
+        var ccs_cc_args = ccs_cc_args || [];
+
+        ccs_cc_args.push(['mf', '@Model.Brand']);
+        ccs_cc_args.push(['pn', '@Model.FactoryCode']);
+        ccs_cc_args.push(['lang', 'es']);
+        ccs_cc_args.push(['market', 'BO']);
+
+        (function () {
+            var o = ccs_cc_args; o.push(['_SKey', '81c27fe3']); o.push(['_ZoneId', '7b0cc16d88']);
+            var sc = document.createElement('script'); sc.type = 'text/javascript'; sc.async = true;
+            sc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.cs.1worldsync.com/jsc/h1ws.js';
+            var n = document.getElementsByTagName('script')[0]; n.parentNode.insertBefore(sc, n);
+        })();
+    </script>
+}
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/product/productdetail.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/product/productdetail.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}

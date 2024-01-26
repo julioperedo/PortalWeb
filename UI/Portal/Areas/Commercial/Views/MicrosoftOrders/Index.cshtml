@@ -1,0 +1,178 @@
+﻿@{
+	ViewData["Title"] = "Microsoft ESD";
+}
+<div class="row">
+	<div class="col">
+		<h3 class="title">@ViewBag.Title</h3>
+		<input type="hidden" id="ProductExitPermission" value="@ViewBag.ProductExitPermission" />
+	</div>
+	<div class="col text-right">
+		<a class="btn btn-secondary d-none" title="Exportar a Excel" href="#" role="button" id="action-excel"><i class="far fa-file-excel"></i></a>
+		<a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div id="filter-box" class="bg-light px-2 py-3 collapse show">
+			<div class="row">
+				<label for="fil-code" class="col-2 col-sm-1 text-nowrap">C&oacute;digo</label>
+				<div class="col-10 col-sm-5 col-lg-5">
+					<input id="fil-code" type="number" class="w-100 form-control" />
+				</div>
+				<label for="fil-type" class="col-2 col-sm-1 text-nowrap">Tipo</label>
+				<div class="col-10 col-sm-5 col-lg-5">
+					<select id="fil-type" class="w-50">
+						<option value="SO">Orden de Venta</option>
+						<option value="PE">Baja de Producto</option>
+						<option value="B" selected="selected">Ambas</option>
+					</select>
+				</div>
+				<label for="fil-since" class="col-2 col-sm-1 text-nowrap">Desde</label>
+				<div class="col-10 col-sm-5 col-lg-2">
+					<input id="fil-since" type="date" style="width: 120px;" />
+				</div>
+				<label for="fil-until" class="col-2 col-sm-1 text-nowrap">Hasta</label>
+				<div class="col-10 col-sm-5 col-lg-2">
+					<input id="fil-until" type="date" style="width: 120px;" />
+				</div>
+				<label for="fil-client" class="col-2 col-sm-1 text-nowrap">Cliente</label>
+				<div class="col-10 col-sm-5 col-lg-5">
+					<input id="fil-client" class="w-100" />
+				</div>
+				@*<label for="fil-type" class="col-2 col-sm-1 text-nowrap">Tipo</label>
+				<div class="col-10 col-sm-5 col-lg-5">
+				<select id="fil-type" class="w-50">
+				<option value="R">Retornable</option>
+				<option value="N">No Retornable</option>
+				<option value="B" selected="selected">Ambas</option>
+				</select>
+				</div>*@
+				<label for="fil-product" class="col-2 col-sm-1 text-nowrap">Producto</label>
+				<div class="col-10 col-sm-5 col-lg-5">
+					<input id="fil-product" type="text" class="w-100 form-control" />
+				</div>
+				<div class="col text-right pt-2">
+					<button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+					<button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col pt-3">
+		<div id="Listado"></div>
+	</div>
+</div>
+<div id="detail">
+	<form id="form-purchase">
+		<div class="alert alert-info">
+			Se deja expresa constancia que en la presente venta de Software, El Cliente declara tener pleno conocimiento y acepta que la descarga y uso se realiza On line, por lo que se entiende por entregado, utilizado y consumido (el software adquirido), en el preciso instante en que se ingresa el c&oacute;digo o clave de descarga y acceso proporcionado a El Cliente, ya que desde ese instante el software entra en uso, no existiendo la posibilidad de devoluci&oacute;n del mismo, naciendo la obligaci&oacute;n de pago de acuerdo a contratos vigente y factura respectiva.
+		</div>
+		<div class="row">
+			<div class="col-2"><label for="client">Cliente</label></div>
+			<div class="col-10"><input id="client" class="w-100" required /></div>
+		</div>
+		<div class="row mt-1">
+			<div class="col-2"><label for="product">Producto</label></div>
+			<div class="col-10"><input id="product" class="w-100" required /></div>
+		</div>
+		<div class="row mt-1">
+			<div class="col-2"><label for="quantity">Cantidad</label></div>
+			<div class="col-10"><input id="quantity" type="number" class="form-control" required value="1" min="1" /></div>
+		</div>
+		<div class="row mt-1">
+			<div class="col col-type d-none">
+				<ul id="docType"></ul>
+			</div>
+		</div>
+		<div class="row mt-1 mb-1">
+			<div class="col-6 col-gen-order d-none">
+				<div class="custom-control custom-switch">
+					<input type="checkbox" class="custom-control-input selected" id="generate-order" name="generate-order" checked="checked" />
+					<input id="generate-order" name="generate-order" type="hidden" value="false" />
+					<label class="custom-control-label" for="generate-order"> Generar Orden de Venta</label>
+				</div>
+			</div>
+			<div class="col-2"><label for="orderNumber" class="d-none">Orden de Venta</label></div>
+			<div class="col-4">
+				<div class="input-group mb-3 d-none">
+					<input id="orderNumber" type="number" class="form-control" />
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" type="button" id="verify-order">Verificar OV</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right pt-2">
+				<button class="btn btn-primary" id="purchase-license">Solicitar Licencia</button>
+			</div>
+		</div>
+	</form>
+	<div class="row">
+		<div class="col pt-3">
+			<div id="purchase-content"></div>
+		</div>
+	</div>
+	<form id="send-mail">
+		<div class="row">
+			<div class="col">
+				<div id="group-send" class="input-group mb-3 d-none">
+					<input type="email" id="recipient-email" class="form-control" placeholder="Correo del Destinatario" aria-label="Correo del Destinatario" aria-describedby="send-data" required>
+					<input type="text" id="recipient-name" class="form-control" placeholder="Nombre del Destinatario" aria-label="Nombre del Destinatario" aria-describedby="send-data" required>
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="button" id="send-data"><i class="fa fa-envelope"></i>&nbsp;Enviar por correo</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="Report">
+	<div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;"></div>
+</div>
+@section Scripts {
+	<script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter")",
+			urlClients = "@Url.Action("GetClients")",
+			urlProducts = "@Url.Action("GetProducts")",
+			urlGetTokens = "@Url.Action("GetTokens")",
+			urlGetPurchase = "@Url.Action("GetPurchase")",
+			urlGetProductToken = "@Url.Action("GetProductToken")",
+			urlSendMail = "@Url.Action("SendEMailToClient")",
+			urlReturnLicence = "@Url.Action("ReturnLicence")",
+			urlValidateOrder = "@Url.Action("ValidateOrder")",
+			urlExcel = "@Url.Action("ExportToExcel")",
+			urlDetail = "@Url.Action("GetPurchaseTokens")",
+			urlValidateClient = "@Url.Action("ValidateClient")",
+			urlService = "@Url.Content("~/api/reports/")";
+	</script>
+	<script src="~/lib/kendo-ui/js/jszip.min.js"></script>
+	<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+	<script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+	<environment include="Development">
+		<script src="~/js/areas/commercial/cisesd.js"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="~/js/areas/commercial/cisesd.min.js" asp-append-version="true"></script>
+	</environment>
+}
+	@section Styles {
+	<style type="text/css">
+		b {
+			margin-right: 8px;
+		}
+
+		.k-grid a.action {
+			margin-left: 4px;
+			margin-right: 4px;
+		}
+
+		.k-virtual-item p {
+			font-weight: 500;
+			font-size: 0.8em;
+			font-style: italic;
+		}
+	</style>
+}

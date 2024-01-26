@@ -1,0 +1,33 @@
+﻿@model BEntities.Base.Event
+<form>
+	<input type="hidden" asp-for="Id" />
+
+	<div class="row">
+		<label asp-for="Name" class="col-1">Nombre</label>
+		<div class="col-11">
+			<input type="text" asp-for="Name" class="form-control" />
+		</div>
+	</div>
+	<div class="row">
+		<label asp-for="Description" class="col-1">Descripci&oacute;n</label>
+		<div class="col-11">
+			<textarea asp-for="Description" class="form-control" style="height: 60px;"></textarea>
+		</div>
+	</div>
+	<div class="row">
+		<label asp-for="Date" class="col-1">Fecha</label>
+		<div class="col-4 col-sm-4 col-md-4 col-lg-4">
+			<kendo-datepicker for="Date" />
+		</div>
+	</div>
+	<div class="row">
+		<label asp-for="Detail" class="col-1 col-sm-1 col-md-1 col-lg-1">Valor</label>
+		<div class="col-11 col-sm-11 col-md-11 col-lg-11">
+			<textarea asp-for="Detail" class="form-control" style="height: 500px;"></textarea>
+		</div>
+	</div>
+	<div class="text-right pt-2">
+		<button id="cancel-event" class="btn btn-outline-secondary">Cancelar</button>
+		<button id="save-event" type="button" class="btn btn-primary">Guardar</button>
+	</div>
+</form>

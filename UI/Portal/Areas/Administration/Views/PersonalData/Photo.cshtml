@@ -1,0 +1,51 @@
+﻿@model string
+<div class="">
+	<div class="form-group row">
+		<div class="col">
+			@{ string strImage = string.IsNullOrEmpty(Model) ? "~/images/no-photo.jpg" : $"~/images/userdata/{Model}"; }
+			<img id="photo" src="@Url.Content(strImage)" style="max-width: 320px; max-height: 240px;" />
+			<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+				<div class="btn-group" role="group" aria-label="First group">
+					<button type="button" class="btn btn-primary" title="Capturar una imagen" id="photo-camera">
+						<i class="fa fa-camera"></i>
+					</button>
+					<button type="button" class="btn btn-primary" title="Escoger una imagen de la galer&iacute;a" id="photo-gallery">
+						<i class="fa fa-image"></i>
+					</button>
+					<button type="button" class="btn btn-danger" title="Eliminar imagen actual" id="photo-remove">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div id="camera" class="d-none">
+				<div id="my_camera"></div>
+				<div class="text-center">
+					<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+						<div class="btn-group" role="group" aria-label="...">
+							<a id="take-photo-ok" href="javascript:;" class="btn btn-outline-secondary">
+								<span><i class="fa fa-check"></i><span> Tomar foto</span></span>
+							</a>
+							<a id="take-photo-cancel" href="javascript:;" class="btn btn-outline-secondary">
+								<span><i class="fas fa-times"></i><span> Cancelar</span></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="alert alert-info">
+		<strong>¡Tener en cuenta!</strong> La fotograf&iacute;a es usada en todas las plataformas(Web, Android, iOS).
+	</div>
+	<div class="">
+		<div class="row">
+			<div class="col">
+				<button id="savePicture" class="btn btn-focus btn-primary">Guardar Foto</button>
+			</div>
+		</div>
+	</div>
+</div>
+<input id="gallery" type="file" class="d-none">
+<input type="hidden" id="new-photo" />

@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Mensajes Enviados a la Aplicación Móvil";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="filter-name" class="col-2 col-lg-1 text-nowrap">Nombre</label>
+                <div class="col-10 col-sm-4 col-lg-3 col-xl-2">
+                    <input type="text" id="filter-name" class="form-control" />
+                </div>
+                <label for="filter-initial-date" class="col-2 col-lg-1 text-nowrap">F. Inicial</label>
+                <div class="col-10 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+                    <input type="date" id="filter-initial-date" style="width: 115px" />
+                </div>
+                <label for="filter-final-date" class="col-2 col-lg-1 text-nowrap">F. Final</label>
+                <div class="col-10 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+                    <input type="date" id="filter-final-date" style="width: 115px" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail">
+    <form>
+        <div class="row">
+            <div class="col">
+                <label for="RecipientsType">Enviar a</label>
+                <input id="RecipientsType" />
+            </div>
+        </div>
+        <div id="divTopics" class="row d-none">
+            <div class="col">
+                <label for="messageTopics">Temas</label>
+                <input id="messageTopics" style="min-width: 250px;" />
+            </div>
+        </div>
+        <div id="divUsers" class="row d-none">
+            <div class="col">
+                <label for="messageUsers">Usuarios</label>
+                <input id="messageUsers" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="msg-title">Título</label>
+                <input type="text" id="msg-title" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="msg-body">Mensaje</label>
+                <textarea type="text" id="msg-body" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-2 col-md-1">Archivos:</label>
+            <div class="col-sm-10 col-md-11">
+                <input id="filesData" name="filesData" type="hidden" />
+                <div id="fileList"></div>
+                <div id="file-wrapper">
+                    <input id="files" name="files" type="file" aria-label="files" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-2 text-right">
+                <button id="send-msg" class="btn btn-primary">Enviar</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        var urlFilter = "@Url.Action("Filter", "PushNotification")",
+            urlSend = "@Url.Action("Send", "PushNotification")",
+            urlUsers = "@Url.Action("GetUsers")",
+            Permission = "@ViewData["Permission"]",
+            urlRemoveFile = "@Url.Action("RemoveFile")",
+            urlSaveFile = "@Url.Action("SaveFile")",
+            urlGetRecipients = "@Url.Action("GetRecipients")",
+            urlImages = "@Url.Content("~/images/piggybank/messages/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/mobileapp/notification.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/mobileapp/notification.min.js" asp-append-version="true"></script>
+    </environment>
+}

@@ -1,0 +1,45 @@
+﻿@model BEntities.SAP.Product
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Item
+        </dt>
+        <dd class="col-sm-10">
+			<display-for asp-for="Code"></display-for>
+        </dd>
+        <dt class="col-sm-2">
+            Descripci&oacute;n
+        </dt>
+        <dd class="col-sm-10">
+			<display-for asp-for="Name"></display-for>
+        </dd>
+        <dt class="col-sm-2">
+            Categor&iacute;a
+        </dt>
+        <dd class="col-sm-10">
+            <display-for asp-for="Category"></display-for>
+        </dd>
+        <dt class="col-sm-2">
+            Subcategor&iacute;a
+        </dt>
+        <dd class="col-sm-10">
+			<display-for asp-for="Subcategory"></display-for>
+        </dd>
+        <dt class="col-sm-2">
+            L&iacute;nea
+        </dt>
+        <dd class="col-sm-10">
+			<display-for asp-for="Line"></display-for>
+        </dd>
+        <dt class="col-sm-2">
+            Detalle
+        </dt>
+        <dd class="col-sm-10">
+			<display-for asp-for="Description"></display-for>
+        </dd>
+        <dt class="col-sm-2"></dt>
+        <dd class="col-sm-10">
+			<formatted-data asp-for="Commentaries"></formatted-data>
+        </dd>
+    </dl>
+</div>

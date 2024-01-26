@@ -1,0 +1,93 @@
+﻿@{
+	ViewData["Title"] = "Inicio";
+}
+<div class="jumbotron">
+	<h2>Portal DMC</h2>
+	<p>
+		<b>Pol&iacute;ticas, restricciones y permisos de uso del Portal de DMC S.A.</b>
+	</p>
+	<p>
+		La informaci&oacute;n contenida en la presente p&aacute;gina web es de propiedad y dominio exclusivos de <b>DMC S.A.</b> y est&aacute; protegida por leyes y normas nacionales e internacionales, reserv&aacute;ndose el derecho de mantener o concluir en cualquier momento y sin previo aviso el servicio en red de acuerdo a sus intereses. Se autoriza el uso de la misma &uacute;nicamente para fines comerciales directa y exclusivamente relacionados con la empresa por sus clientes. Cualquier publicaci&oacute;n, copia, reproducci&oacute;n o distribuci&oacute;n de la informaci&oacute;n a trav&eacute;s de distintas p&aacute;ginas web o cualquier otro medio deber&aacute; contar necesariamente con la autorizaci&oacute;n escrita y expresa de <b>DMC S.A.</b>
+	</p>
+	<p>
+		La correcta administraci&oacute;n de los permisos de acceso y/o contrase&ntilde;as proporcionadas son de entera responsabilidad de cada uno de los usuarios habilitados al acceso de la informaci&oacute;n publicada y contenida en el portal, debiendo guardar la confidencialidad pertinente.
+	</p>
+	<p>
+		La informaci&oacute;n vertida est&aacute; sujeta a variables de disponibilidad, inventario u otras, la cual es actualizada peri&oacute;dicamente, por lo que <b>DMC S.A.</b> no se responsabiliza en caso de cualquier conflicto emergente en caso de errores, omisiones, interpretaciones o erratas que pudiera contener, debiendo todo usuario confirmar cualquier informaci&oacute;n con su ejecutivo de ventas u otro funcionario de la empresa, de acuerdo a la informaci&oacute;n que est&aacute; usando o solicitando, para proceder a realizar cualquier negocio o contrato.
+	</p>
+	<p>
+		Cualquier acceso o uso que contradiga estos t&eacute;rminos est&aacute; desautorizado y estrictamente prohibido.
+	</p>
+	<p>
+		<b>DMC S.A.</b> se reserva el derecho de cancelar o inhabilitar temporalmente o permanentemente el acceso al Portal de cualquier usuario a sola discreci&oacute;n de <b>DMC S.A.</b>
+	</p>
+	<p>
+		<b>Hacer uso de este servicio confirma su inmediata aceptaci&oacute;n a &eacute;stas pol&iacute;ticas, restricciones y permisos, de acuerdo a lo descrito en el anterior texto.</b>
+	</p>
+</div>
+@*<div class="row">
+	<div class="col-12 col-md-6 col-lg">
+		<div class="alert alert-success" role="alert">
+			<div class="row">
+				<span class="k-label col-12 text-right text-big-3" id="currentPoints"></span>
+				<span class="col-12 text-right text-nowrap"><strong>Kbytes acumulados</strong></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 col-md-6 col-lg">
+		<div class="alert alert-warning" role="alert">
+			<div class="row">
+				<span class="k-label col-12 text-right text-big-3" id="currentAmount"></span>
+				<span class="col-12 text-right text-nowrap"><strong>Monto acumulado año</strong></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 text-center voucher d-none">
+		<a href="~/files/kbytes/Voucher-Kbytes.pdf" target="_blank">
+			<img src="~/images/campaigns/kbytes/Voucher2.jpg" />
+		</a>
+	</div>
+</div>*@
+<div class="row">
+	<div class="col text-center">
+		<a href="~/Commercial/MicrosoftOrders"><img src="~/images/campaigns/MicrosoftESD.gif" alt="Microsoft ESD" /></a>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<h4 id="openOrdersTitle"></h4>
+		<div id="openOrders"></div>
+	</div>
+</div>
+<div class="row box-container"></div>
+<div id="Detail"></div>
+<kendo-window name="Report" visible="false" modal="true" draggable="true" width="1100">
+	<content>
+		<div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;">
+		</div>
+	</content>
+</kendo-window>
+
+<script id="detailOrder" type="text/kendo-tmpl">
+	<div class="detailNote"></div>
+</script>
+<link href="~/css/areas/home-client.css" rel="stylesheet" />
+@section Scripts {
+	<script type="text/javascript">
+		var ulrLastEvents = "@Url.Action("LastEvents", "Home")",
+			urlAllEvents = "@Url.Action("Index", "Events", new { area = "Marketing" })",
+			urlEvent = "@Url.Action("Detail", "Events", new { area = "Marketing" })",
+			urlDetail = "@Url.Action("Detail", "Orders", new { area = "Commercial" })",
+			urlClientResume = "@Url.Action("GetClientResume", "Home")",
+			urlOpenOrders = "@Url.Action("ClientOpenOrders", "Home")",
+			urlService = "@Url.Content("~/api/reports/")";
+	</script>
+	<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+	<script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+	<environment include="Development">
+		<script src="~/js/areas/homeClient.js"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="~/js/areas/homeClient.min.js" asp-append-version="true"></script>
+	</environment>
+}

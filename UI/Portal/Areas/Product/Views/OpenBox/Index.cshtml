@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Productos con empaque abierto";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="FilSubsidiary" class="col-2 col-sm-1">Sucursal</label>
+                <div class="col-10 col-sm-5 col-md-5 col-lg-5">
+                    <input id="FilSubsidiary" class="w-100" />
+                </div>
+                <label for="FilProduct" class="col-2 col-sm-1">Producto</label>
+                <div class="col-10 col-sm-5 col-md-5 col-lg-5">
+                    <input type="text" id="FilProduct" class="form-control" />
+                </div>
+                <div class="col-10 col-sm-1 col-md-1 col-lg-1">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="FilEnabled" checked="checked">
+                        <label class="custom-control-label" for="FilEnabled">Habilitado</label>
+                    </div>
+                </div>
+                <div class="col-10 col-sm-1 col-md-1 col-lg-1">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="FilWithStock" checked="checked">
+                        <label class="custom-control-label" for="FilWithStock">Con Stock</label>
+                    </div>
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail"></div>
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "OpenBox")",
+			urlEdit = "@Url.Action("Edit", "OpenBox")",
+			urlSubsidiaries = "@Url.Action("GetSubsidiariesItems", "OpenBox")",
+			urlWarehouses = "@Url.Action("GetWarehouses2", "OpenBox")",
+			urlProducts = "@Url.Action("GetProducts", "OpenBox")",
+			urlDelete = "@Url.Action("Delete", "OpenBox")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/openbox.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/openbox.min.js" asp-append-version="true"></script>
+    </environment>
+}

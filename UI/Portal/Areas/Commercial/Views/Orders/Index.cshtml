@@ -1,0 +1,220 @@
+﻿@{
+	ViewData["Title"] = "Ordenes / Notas de Venta";
+	string cardCode = (string)ViewBag.CardCode;
+	DateTime initialDate = DateTime.Today.AddMonths(-3), finalDate = DateTime.Today;
+}
+<input type="hidden" id="LocalUser" value="Y" />
+<input type="hidden" id="SeeMargin" value="@ViewBag.SeeMargin" />
+<input type="hidden" id="SeeAllClients" value="@ViewBag.SeeAllClients" />
+<input type="hidden" id="SellerCode" value="@ViewBag.Sellercode" />
+<div class="row">
+	<div class="col-12 col-sm-7">
+		<h3 class="title">@ViewBag.Title</h3>
+	</div>
+	<div class="col-12 col-sm-5 text-right">
+		<a class="btn btn-secondary d-none" role="button" href="#" id="action-table-mode" title="Modo tabla"><i class="fas fa-table"></i></a>
+		@if (ViewBag.SeeMargin == "Y")
+		{
+			<a class="btn btn-secondary" role="button" href="#" id="action-show-all"><i class="fas fa-eye"></i></a>
+		}
+		<a class="btn btn-secondary d-none" title="Exportar a Excel" href="#" role="button" id="action-excel"><i class="far fa-file-excel"></i></a>
+		<a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div id="filter-box" class="bg-light px-2 py-3 collapse show">
+			<div class="row">
+				<div class="col pb-2">
+					<label for="search-by" class="align-bottom">Buscar por:</label>&nbsp;&nbsp;&nbsp;
+					<div class="btn-group btn-group-toggle" data-toggle="buttons">
+						<label class="btn btn-light active"><input type="radio" name="search-by" id="by-so" autocomplete="off" checked value="SO"> Orden de Venta</label>
+						<label class="btn btn-light"><input type="radio" name="search-by" id="by-sn" autocomplete="off" value="SN"> Nota de Venta</label>
+						<label class="btn btn-light"><input type="radio" name="search-by" id="by-dn" autocomplete="off" value="DN"> Nota de Entrega</label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<label for="number" class="col-3 col-sm-2 col-lg-1 col-xl-1 text-nowrap">N&uacute;mero</label>
+				<div class="col-9 col-sm-10 col-lg-4 col-xl-3">
+					<input id="number" type="number" class="form-control" />
+				</div>
+				<label for="initial-date" class="col-3 col-sm-2 col-lg-1 col-xl-1 text-nowrap">Fecha Inicial</label>
+				<div class="col-9 col-sm-4 col-lg-2 col-xl-2">
+					<input type="date" id="initial-date" style="width: 110px;" />
+				</div>
+				<label for="final-date" class="col-3 col-sm-2 col-lg-1 col-xl-1 text-nowrap">Fecha Final</label>
+				<div class="col-9 col-sm-4 col-lg-3 col-xl-2">
+					<input type="date" id="final-date" style="width: 110px;" />
+				</div>
+				<div class="col-6 col-sm-3 col-lg-3 col-xl-1">
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input chk-state" id="state-open" checked="checked">
+						<label class="custom-control-label" for="state-open">Abiertas</label>
+					</div>
+				</div>
+				<div class="col-6 col-sm-9 col-lg-3 col-xl-1">
+					<div class="custom-control custom-switch">
+						<input type="checkbox" class="custom-control-input chk-state" id="state-close">
+						<label class="custom-control-label" for="state-close">Cerradas</label>
+					</div>
+				</div>
+				<label for="client" class="col-3 col-sm-2 col-lg-1 col-xl-1 text-nowrap">Cliente</label>
+				<div class="col-9 col-sm-10 col-lg-5 col-xl-3">
+					<select id="client" style="width: 100%;" class="client"></select>
+				</div>
+				<label for="seller" class="col-3 col-sm-2 col-lg-1 col-xl-1 text-nowrap">Vendedor</label>
+				<div class="col-9 col-sm-10 col-lg-5 col-xl-3">
+					<select id="seller" style="width: 100%;"></select>
+				</div>
+				<label for="items-complete" class="col-3 col-sm-2 col-lg-1 col-xl-1 text-nowrap">Completo</label>
+				<div class="col-9 col-sm-4 col-lg-5 col-xl-3">
+					<select id="items-complete" class="w-100" multiple="multiple">
+						<option value="C">Completas</option>
+						<option value="PI">Parcialmente Incompleto</option>
+						<option value="I">Totalmente Incompleto</option>
+					</select>
+				</div>
+			</div>
+			<div class="row collapse" id="more-options">
+				<label for="client-order" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">Ord. Cliente</label>
+				<div class="col-9 col-sm-4 col-md-4 col-xl-3">
+					<input type="text" id="client-order" class="form-control" />
+				</div>
+				<label for="product" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">Producto</label>
+				<div class="col-9 col-sm-4 col-md-4 col-xl-3">
+					<input type="text" id="product" class="form-control" />
+				</div>
+				<label for="product-manager" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">G. Producto</label>
+				<div class="col-9 col-sm-10 col-md-10 col-xl-3">
+					<select id="product-manager" style="width: 100%;"></select>
+				</div>
+				<label for="line" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">L&iacute;nea</label>
+				<div class="col-9 col-sm-10 col-md-10 col-xl-3">
+					<select id="line" style="width: 100%;"></select>
+				</div>
+				<label for="category" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">Categor&iacute;a</label>
+				<div class="col-9 col-sm-10 col-md-10 col-xl-3">
+					<select id="category" style="width: 100%;" class="category"></select>
+				</div>
+				<label for="subcategory" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">Subcategor&iacute;a</label>
+				<div class="col-9 col-sm-10 col-md-10 col-xl-3">
+					<select id="subcategory" style="width: 100%;"></select>
+				</div>
+				<label for="subsidiary" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">Sucursal</label>
+				<div class="col-9 col-sm-10 col-md-10 col-xl-3">
+					<select id="subsidiary" multiple="multiple"></select>
+				</div>
+				<label for="warehouse" class="col-3 col-sm-2 col-md-2 col-xl-1 text-nowrap">Almac&eacute;n</label>
+				<div class="col-9 col-sm-10 col-md-10 col-xl-3">
+					<select id="warehouse" multiple="multiple"></select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col col-sm col-md col-lg col-xl text-right pt-2">
+					<a class="action more-options" data-toggle="collapse" href="#more-options" role="button" aria-expanded="false" aria-controls="more-options">M&aacute;s opciones</a>
+					<button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+					<button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col pt-3">
+		<div id="Listado" class="hide-margin"></div>
+	</div>
+</div>
+<div id="Detail"></div>
+<div id="Report">
+	<div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;"></div>
+</div>
+@section Scripts {
+	<script type="text/javascript">
+		var urlSubsidiaries = "@Url.Action("GetSubsidiaries")",
+			urlWarehouses = "@Url.Action("GetWarehouses")",
+			urlClients = "@Url.Action("GetClients")",
+			urlSellers = "@Url.Action("GetSellers")",
+			urlPMs = "@Url.Action("GetProductManagers")",
+			urlLines = "@Url.Action("GetLines")",
+			urlCategories = "@Url.Action("GetCategories")",
+			urlSubcategories = "@Url.Action("GetSubcategories")",
+			urlFilter = "@Url.Action("Filter")",
+			urlDetail = "@Url.Action("Detail")",
+			urlGetStock = "@Url.Action("GetStockDetail")",
+			urlDownloadFile = "@Url.Action("DownloadFile")",
+			urlExcel = "@Url.Action("ExportExcel")",
+			urlReservedItems = "@Url.Action("GetReservedItems")",
+			urlService = "@Url.Content("~/api/reports/")",
+			initialDate = "@initialDate",
+			finalDate = "@finalDate";
+	</script>
+	<script src="~/lib/kendo-ui/js/jszip.min.js"></script>
+	<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+	<script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+	<environment include="Development">
+		<script src="~/js/areas/commercial/orders.js"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="~/js/areas/commercial/orders.min.js" asp-append-version="true"></script>
+	</environment>
+}
+@section Styles {
+	<style type="text/css">
+
+		.k-state-selected .label {
+			color: #FFF;
+		}
+
+		.label {
+			color: #555;
+			font-weight: 500;
+			white-space: nowrap !important;
+		}
+
+		.k-state-selected .related-doc .action-link {
+			color: #b90c0c !important;
+		}
+
+		.related-doc {
+			background-color: #d8e3e8;
+			border: 1px solid #AAA;
+			border-radius: 4px;
+			padding: 4px;
+			float: left;
+			margin-right: 6px;
+			color: #1f1e1e;
+		}
+
+			.related-doc.nota-de-entrega {
+				background-color: #def4fe;
+				color: #10215b;
+				border-color: #9fc8fa;
+			}
+
+			.related-doc.nota-de-venta {
+				background-color: #defee2;
+				color: #105b18;
+				border-color: #a0fa9f;
+			}
+
+		.hide-margin .margin {
+			display: none;
+		}
+
+		.show-margin .margin {
+			display: inline;
+		}
+
+		/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+	</style>
+}

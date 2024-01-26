@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Clientes Menos Activos";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Salesman" class="col-3 col-sm-1">Vendedor</label>
+                <div class="col-9 col-sm-4">
+                    <input id="Salesman" style="width: 100%;" />
+                </div>
+                <label for="Client" class="col-3 col-sm-1">Cliente</label>
+                <div class="col-9 col-sm-4 col-lg-5">
+                    <input type="text" id="Client" class="form-control" />
+                </div>
+                <div class="col-12 col-sm-2 col-lg-1 text-right">
+                    <button type="button" id="action-search" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<div id="Detail">
+    <div id="Sessions"></div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "LessActiveUsers")",
+			urlSellers = "@Url.Action("GetSalesman", "LessActiveUsers")",
+			urlExport = "@Url.Action("Export", "LessActiveUsers")",
+			urlDetail = "@Url.Action("DetailSessions", "LessActiveUsers")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/reports/lessactiveusers.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/reports/lessactiveusers.min.js" asp-append-version="true"></script>
+    </environment>
+}

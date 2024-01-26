@@ -1,0 +1,34 @@
+﻿@model Portal.Models.MenuModel
+@{
+	List<BEntities.Base.Menu> lstSub = Model.Items.FindAll(i => i.IdParent == Model.Id);
+	foreach (var objSub in lstSub) {
+		if (objSub.isSeparator) {
+
+		} else {
+			if (Model.Items.Count(x => x.IdParent == objSub.Id) > 0) {
+				<li class="sidebar-dropdown">
+					<a href="#">
+						@if (!string.IsNullOrWhiteSpace(objSub.Icon) && objSub.Icon.ToLower() != "null") {
+							<i class="fa @objSub.Icon"></i>
+						}
+						<span>@objSub.Title</span>
+					</a>
+					<div class="sidebar-submenu">
+						<ul>
+							<partial name="_Submenu" model="new Portal.Models.MenuModel(Model.Items, objSub.Id, Model.Level + 1)" />
+						</ul>
+					</div>
+				</li>
+			} else {
+				<li>
+					<a asp-area="@objSub.Page.Area" asp-controller="@objSub.Page.Controller" asp-action="@objSub.Page.Action">
+						@if (!string.IsNullOrWhiteSpace(objSub.Icon) && objSub.Icon.ToLower() != "null") {
+							<i class="fa @objSub.Icon"></i>
+						}
+						<span>@objSub.Title</span>
+					</a>
+				</li>
+			}
+		}
+	}
+}

@@ -1,0 +1,284 @@
+﻿@model Portal.Models.LoginModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Iniciar Sesión";
+}
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<!-- begin::Head -->
+<head>
+    <meta charset="utf-8" />
+    <title>
+        Portal DMC | P&aacute;gina de Ingreso
+    </title>
+    <meta name="description" content="Latest updates and statistic charts">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--begin::Web font -->
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: { "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"] },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    <!--end::Web font -->
+    <!--begin::Base Styles -->
+    <environment include="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.bootstrap.min.css" />
+        <link href="~/css/site.css" rel="stylesheet" />
+        <link href="~/css/areas/login.css" rel="stylesheet" />
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/jquery.blockUI/jquery.blockUI.js"></script>
+        <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
+        <script src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+        <script src="~/lib/kendo-ui/js/cultures/kendo.culture.es-BO.min.js"></script>
+        <script src="~/lib/kendo-ui/js/messages/kendo.messages.es-BO.min.js"></script>
+        <script src="~/lib/multiple-select/multiple-select.js"></script>
+        <script src="~/js/site.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.bootstrap.min.css" />
+        <link href="~/lib/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/areas/login.css" rel="stylesheet" />
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/lib/jquery.blockUI/jquery.blockUI.min.js"></script>
+        <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
+        <script src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+        <script src="~/lib/kendo-ui/js/cultures/kendo.culture.es-BO.min.js"></script>
+        <script src="~/lib/kendo-ui/js/messages/kendo.messages.es-BO.min.js"></script>
+        <script src="~/lib/multiple-select/multiple-select.min.js"></script>
+        <script src="~/lib/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.js"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+    <!--end::Base Styles -->
+    <link rel="shortcut icon" href="~/favicon.ico" />
+    <style type="text/css">
+        .logo img {
+            width: 30%;
+        }
+    </style>
+</head>
+<!-- end::Head -->
+<!-- end::Body -->
+<body class="container-fluid h-100">
+    <div class="row h-100 m-0">
+        <div class="col-sm">
+            <div class="form-container s-login">
+                <div class="">
+                    <div class="">
+                        <div class="logo">
+                            <a href="#"><img src="~/images/logo3.png" /></a>
+                        </div>
+                        <div class="login-form">
+                            <div class="">
+                                <h3 class="">
+                                    Ingresar al Portal de consulta de DMC
+                                </h3>
+                            </div>
+                            <form asp-action="Login" method="post" class="form-horizontal">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <span id="errors" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input asp-for="Email" class="form-control" autocomplete="off" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Password" class="control-label"></label>
+                                    <input asp-for="Password" class="form-control" autocomplete="off" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div id="clients" class="form-group d-none">
+                                    <label asp-for="CardCode" class="control-label"></label>
+                                    <div class="">
+                                        <kendo-dropdownlist name="CardCode" datavaluefield="cardCode" datatextfield="cardName" option-label="Seleccione un Cliente..." on-change="onClientChanged" class="form-control" style="width: 100%;"></kendo-dropdownlist>
+                                        <span asp-validation-for="CardCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div id="profiles" class="form-group d-none">
+                                    <label asp-for="IdProfile" class="control-label"></label>
+                                    <div class="">
+                                        <kendo-dropdownlist name="IdProfile" datavaluefield="id" datatextfield="name" option-label="Seleccione un Perfil..." class="form-control" style="width: 100%;"></kendo-dropdownlist>
+                                        <span asp-validation-for="IdProfile" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col forget">
+                                        <a href="javascript:;" class="btn-link" id="m_login_forget_password">¿Olvid&oacute; su contrase&ntilde;a?</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-offset-2">
+                                        <input id="submit" type="button" value="Iniciar Sesi&oacute;n" class="btn btn-primary btn-focus" />
+                                    </div>
+                                </div>
+                                <div class="row mt-4 d-none">
+                                    <div class="col-md-offset-2">
+                                        <input id="enable-request-submit" type="button" value="Solicitar Habilitaci&oacute;n" class="btn btn-danger btn-focus" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="recovery-password-form">
+                            <input id="CodeGenerated" type="hidden" />
+                            <div class="">
+                                <h3 class="">
+                                    ¿Olvid&oacute; su contrase&ntilde;a?
+                                </h3>
+                                <div class="desc step-1">
+                                    Ingrese su correo electr&oacute;nico para enviarle un c&oacute;digo de restauraci&oacute;n, si su correo electr&oacute;nico no estaba registrado comun&iacute;quese con su ejecutivo de cuenta para poder restablecer su usuario.<br />
+                                    El  c&oacute;digo que se le enviar&aacute; por correo no es un contraseña temporal, s&oacute;lo sirve en este formulario para cambiar su contrase&ntilde;a actual. El c&oacute;digo es sensitivo ( distingue may&uacute;sculas de min&uacute;sculas ) y usa caracteres especiales.
+                                </div>
+                                <div class="desc step-2">
+                                    Ingrese el c&oacute;digo que se le envi&oacute; a su correo
+                                </div>
+                            </div>
+                            <form class="form-horizontal step-1" asp-action="ForgotPasswordAsync" asp-controller="Account">
+                                <div class="form-group">
+                                    <label for="RecoverEmail" class="control-label">Correo electr&oacute;nico</label>
+                                    <div class="">
+                                        <input id="RecoverEmail" class="form-control" autocomplete="off" type="email" required />
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <button id="send_code_submit" class="btn btn-primary btn-focus">Enviar C&oacute;digo</button>
+                                    <button id="send_code_cancel" class="btn btn-outline-secondary btn-outline-focus">Cancelar</button>
+                                </div>
+                            </form>
+                            <form class="form-horizontal step-2" asp-action="ChangePassword" asp-controller="Account">
+                                <div class="form-group">
+                                    <label for="CodeSent" class="control-label">C&oacute;digo Enviado</label>
+                                    <div class="">
+                                        <input id="CodeSent" name="CodeSent" class="form-control" autocomplete="off" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="NewPassword" class="control-label">Nueva Contrase&ntilde;a</label>
+                                    <div class="">
+                                        <input id="NewPassword" name="NewPassword" class="form-control" autocomplete="off" type="password" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ConfirmPassword" class="control-label">Confirmar Contrase&ntilde;a</label>
+                                    <div class="">
+                                        <input id="ConfirmPassword" name="ConfirmPassword" class="form-control" autocomplete="off" type="password" required />
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <button id="change_password_submit" class="btn btn-primary btn-focus">Cambiar Contrase&ntilde;a</button>
+                                    <button id="change_password_cancel" class="btn btn-outline-secondary btn-outline-focus">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="request-user-form">
+                            <div class="">
+                                <h3 class="">
+                                    Solicitud de usuario
+                                </h3>
+                                <div class="desc">
+                                    Este proceso podr&iacute;a demorar entre 24h a 72h laborables despu&eacute;s de la verificaci&oacute;n de los datos proporcionados, y la confirmaci&oacute;n de quien solicita el acceso es no solamente cliente activo de DMC, sino que es el Gerente General, Propietario o Representante Legal de la empresa que hace esta solicitud y que debe coincidir con nuestros registros.
+                                </div>
+                            </div>
+                            <form asp-action="SendUserRequest" asp-controller="Account" class="">
+                                <div class="form-group">
+                                    <label for="ClientCode" class="control-label">Cod. Cliente</label>
+                                    <div>
+                                        <input type="text" id="ClientCode" name="ClientCode" class="form-control" autocomplete="off" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ClientName" class="control-label">Nombre Cliente (Empresa)</label>
+                                    <div>
+                                        <input id="ClientName" name="ClientName" class="form-control" autocomplete="off" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Name" class="control-label">Nombre</label>
+                                    <div>
+                                        <input id="Name" name="Name" class="form-control" autocomplete="off" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="EMail" class="control-label">Correo electr&oacute;nico</label>
+                                    <div>
+                                        <input id="EMail" name="EMail" class="form-control" autocomplete="off" type="email" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Position" class="control-label">Cargo</label>
+                                    <div>
+                                        <input id="Position" name="Position" class="form-control" autocomplete="off" required />
+                                    </div>
+                                </div>
+                                <div class="row form-group ">
+                                    <div class="col ">
+                                        <label class="">
+                                            <input type="checkbox" name="agree" id="agree" required />
+                                            Acepto los t&eacute;rminos y condiciones.
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <span class="k-invalid-msg" data-for="agree"></span>
+                                </div>
+                                <div class="">
+                                    <button id="user_request_submit" class="btn btn-primary btn-focus">Enviar solicitud</button>
+                                    <button id="user_request_cancel" class="btn btn-outline-secondary btn-outline-focus ">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="link-user-request">
+                        <span class="">¿Todav&iacute;a no tiene usuario?</span>
+                        &nbsp;&nbsp;
+                        <a href="javascript:;" id="m_login_signup" class="">Solicite uno</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="terms">
+                <h3 class="terms-header">
+                    T&eacute;rminos y Condiciones de acceso
+                </h3>
+                <p class="terms-msg">
+                    El acceso al servicio que presta el Portal de DMC, se considera privado y de car&aacute;cter confidencial; constituye un beneficio para nuestros clientes, implementado de forma unilateral y voluntaria por DMC, y podr&aacute; ser suspendido por simple y unilateral decisi&oacute;n de DMC en cualquier momento.
+                    La informaci&oacute;n contenida en este es &uacute;nicamente informativa y referencial, y no obliga a DMC, ni constituye derechos a favor de las partes y el cliente no tiene el derecho a reclamo alguno, por la suspensi&oacute;n del servicio temporal o permanente, o modificaci&oacute;n unilateral de la informaci&oacute;n. Solicitar el acceso al portal, o el ingreso al portal confirma que el cliente est&aacute; de acuerdo con esta pol&iacute;tica, aceptando estas condiciones de uso.
+                </p>
+            </div>
+        </div>
+    </div>
+    <!--begin::Base Scripts -->
+    <!--end::Base Scripts -->
+    <!--begin::Page Snippets -->
+    <script type="text/javascript">
+        var urlLogin = "@Url.Action("LoginPostAsync", "Account", new { area = "" })",
+            urlEnableUser = "@Url.Action("RequestEnableUser", "Account", new { area = "" })",
+			returnUrl = "@ViewData["returnUrl"]",
+			urlProfiles = "@Url.Action("getAssignedProfiles", "Account", new { area = "" })",
+			urlForgotPassword = "@Url.Action("ForgotPasswordAsync", "Account", new { area = "" })";
+    </script>
+    <script src="~/js/areas/login.js" asp-append-version="true"></script>
+    <!--end::Page Snippets -->
+</body>
+<!-- end::Body -->
+</html>

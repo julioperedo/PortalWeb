@@ -1,0 +1,20 @@
+﻿@model Portal.Areas.Marketing.Models.Event
+<div>
+	<div class="event">
+		<h4>@Html.DisplayFor(model => model.Name)</h4>
+
+		@if (Model.Date.Hour == 0 && Model.Date.Minute == 0) {
+			<div class="text-right">
+				@Model.Date.ToString("dd/MM/yyyy")
+			</div>
+		} else {
+			<div class="text-right">
+				@Model.Date.ToString("dd/MM/yyyy HH:mm")
+			</div>
+		}
+		<hr />
+		<div class="content">
+			@Html.Raw(Model.Description)
+		</div>
+	</div>
+</div>

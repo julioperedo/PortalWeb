@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Usuarios";
+}
+<div class="row">
+    <div class="col-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-5 text-right">
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-6 col-xl-3 d-inline-block">
+                    <label for="filClients" class="text-nowrap">Cliente</label>
+                    <select id="filClients" class="mw-100"></select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-6 col-xl-3 d-inline-block">
+                    <label for="filProfiles" class="text-nowrap">Perfil</label>
+                    <select id="filProfiles" class="w-100"></select>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-6 col-xl-4">
+                    <label for="filName" class="text-nowrap">Nombre</label>
+                    <input type="text" id="filName" class="form-control" />
+                </div>
+                <div class="col text-right pt-2">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Detail" visible="false" title="Usuario" modal="true" draggable="true" width="950" on-refresh="onRefresh" on-close="onCloseWindow">
+    <content><div style='text-align: center;'>Cargando ...</div></content>
+</kendo-window>
+<div id="assignments">
+    <div>
+        <input type="hidden" id="assigned-userid" />
+        <div class="row">
+            <label for="assigned-clients" class="col-md-1">Clientes</label>
+            <div class="col-md-11">
+                <select multiple="multiple" id="assigned-clients"></select>
+            </div>
+        </div>
+        <div class="row">
+            <label for="assigned-profiles" class="col-md-1">Perfiles</label>
+            <div class="col-md-11">
+                <select multiple="multiple" id="assigned-profiles"></select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right pt-2">
+                <button type="button" class="btn btn-outline-secondary mr-1" id="action-cancel-assigment">Cancelar</button>
+                <button type="button" class="btn btn-primary mr-2" id="action-save-assigment">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="extra-permissions">
+    <div>
+        <input type="hidden" id="permissions-userid" />
+        <div class="row">
+            <div class="col pt-3">
+                <h5 id="title-permissions"></h5>
+                <div id="tabs" class="custom-tab"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-2">
+                <div class="alert alert-info font-weight-bold">
+                    Los permisos especiales son adicionales a los que ya tiene con su perfil.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right">
+                <button type="button" class="btn btn-outline-secondary mr-1" id="action-cancel-permission">Cancelar</button>
+                <button type="button" class="btn btn-primary mr-2" id="action-save-permission">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .template-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+
+        .template-wrapper p {
+            font-size: 1em;
+            line-height: 1.2;
+            padding: 20px;
+            text-align: left;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+    a.disabled {
+        color: #ccc;
+    }
+</style>
+@section Scripts {
+<script type="text/javascript">
+    var urlFilter = "@Url.Action("Filter", "Users")",
+        urlEdit = "@Url.Action("Edit", "Users")",
+        urlDelete = "@Url.Action("Delete", "Users")",
+        urlClients = "@Url.Action("GetClients", "Users")",
+        urlProfiles = "@Url.Action("GetProfiles", "Users")",
+        urlAssigments = "@Url.Action("AssignedClients", "Users")",
+        urlSendEmail = "@Url.Action("SendUserData", "Users")",
+        urlBlackList = "@Url.Action("IsBlackList", "Users")",
+        urlPermissions = "@Url.Action("GerPermissions")",
+        urlSavePermissions = "@Url.Action("SavePermissions")";
+</script>
+<environment include="Development">
+    <script src="~/js/areas/administration/users.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/areas/administration/users.min.js" asp-append-version="true"></script>
+</environment>
+}

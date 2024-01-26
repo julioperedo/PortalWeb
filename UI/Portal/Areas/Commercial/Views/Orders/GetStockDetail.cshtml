@@ -1,0 +1,50 @@
+﻿@model IEnumerable<BEntities.SAP.ProductStock>
+<div>
+    <table class="table">
+        <tr>
+            <th>Sucursal</th>
+            <th>Almac&eacute;n</th>
+            <th>Item</th>
+            <th class="text-right">Stock</th>
+            <th class="text-right">Reservado</th>
+            <th class="text-right">Disponible</th>
+            <th class="text-right">Pedido</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subsidiary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Warehouse)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemCode)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
+                <td class="text-right">
+                    @if (item.Reserved > 0)
+                    {
+                        <a class="reserved action action-link" data-subsidiary="@item.Subsidiary" data-warehouse="@item.Warehouse" data-itemCode="@item.ItemCode">@Html.DisplayFor(modelItem => item.Reserved)</a>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Reserved)
+                    }
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Available2)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => item.Requested)
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+    <table class="table items-reserved"></table>
+</div>

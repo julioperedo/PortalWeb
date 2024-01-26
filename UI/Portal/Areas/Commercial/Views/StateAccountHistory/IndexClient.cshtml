@@ -1,0 +1,151 @@
+﻿@{
+	ViewBag.Title = "Histórico del Estado de Cuentas";
+}
+<div class="row">
+	<div class="col">
+		<h3 class="title">@ViewBag.Title</h3>
+	</div>
+	<div class="col text-right">
+		<a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+		<a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div id="filter-box" class="bg-light px-2 py-3 collapse show">
+			<div class="row">
+				<input id="clients" type="hidden" value="@ViewBag.CardCode" />
+				<input type="hidden" id="isClient" value="Y" />
+				<label for="initialDate" class="control-label col-2 col-md-1 text-right">Desde</label>
+				<div class="col-10 col-sm-3 col-md-2">
+					<input id="initialDate" type="date" />
+				</div>
+				<label for="finalDate" class="control-label col-2 col-md-1 col-lg-1 text-right">Hasta</label>
+				<div class="col-8 col-sm-3 col-md-2">
+					<input id="finalDate" type="date" />
+				</div>
+				<div class="col-2 col-md-1 text-right">
+					<button id="filter" type="button" class="btn btn-primary">Buscar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12 col-md-3 col-lg-2">
+		<div class="custom-container">
+			<div class="alert alert-warning">
+				<table style="width: 100%;" id="periodBefore"></table>
+			</div>
+			<div class="alert alert-success">
+				<table style="width: 100%;" id="periodSelected"></table>
+			</div>
+			<div class="alert alert-info">
+				<table style="width: 100%;" id="periodNow"></table>
+			</div>
+			<div>Los negativos son en favor del cliente</div>
+		</div>
+	</div>
+	<div class="col-12 col-md-9 col-lg-10" style="padding-top: 6px;">
+		<div id="Listado"></div>
+	</div>
+</div>
+<div id="report">
+	<div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;">
+	</div>
+</div>
+<div id="detail"></div>
+<style type="text/css">
+	.custom-container {
+		padding-top: 10px;
+		margin-left: -5px;
+		margin-right: -20px;
+	}
+
+		.custom-container .alert {
+			margin-bottom: 8px;
+		}
+
+	.level-1 {
+		font-weight: 700;
+	}
+
+	.level-2 {
+		font-weight: 700;
+		font-size: 1.3em;
+	}
+
+	.level-3 {
+		font-weight: 700;
+		font-size: 1.4em;
+	}
+
+	.level-4 {
+		font-weight: 700;
+		font-size: 1.7em;
+	}
+</style>
+
+<script type="text/x-kendo-template" id="template">
+	<div class="row">
+		<div class="col-5">Recibo : <strong>#= data.docNumber #</strong></div>
+		<div class="col-5">Fecha : #= kendo.toString(data.docDate, "dd-MM-yyyy") #</div>
+	</div>
+	<div class="row">
+		<div class="col-5">Estado Recibo : #= data.state #</div>
+	</div>
+	<div class="row">
+		<div class="col-5">Total Recibo : <strong>#= kendo.toString(data.totalReceipt, "N2") #</strong></div>
+	</div>
+	<div class="row">
+		<div class="col-5">Pago a Cuenta : #= kendo.toString(data.onAccount, "N2") #</div>
+		<div class="col-5">Total Sin Aplicar : #= kendo.toString(data.notAppliedTotal, "N2") #</div>
+	</div>
+	<br />
+	<table class="table table-hover">
+		<thead>
+			<tr><td><strong>Nota de Venta</strong></td><td class="text-center"><strong>Fecha</strong></td><td class="text-center"><strong>T&eacute;rmino</strong></td><td class="text-right"><strong>Monto Pagado</strong></td><td class="text-right"><strong>Total Nota</strong></td><td class="text-right"><strong>D&iacute;as Mora</strong></td></tr>
+		</thead>
+		# var decTotal = 0, decPayed = 0; #
+		# for (var i = 0; i < data.notes.length; i++) { #
+		# decTotal += data.notes[i].total; #
+		# decPayed += data.notes[i].notePaidAmount; #
+		<tr>
+			<td># if (data.notes[i].noteNumber > 0) { # #= data.notes[i].noteNumber # # } #</td>
+			<td class="text-center"># if (data.notes[i].noteNumber > 0) { # #= kendo.toString(JSON.toDate(data.notes[i].noteDate), "dd-MM-yyyy") # # } #</td>
+			<td class="text-center"># if (data.notes[i].noteNumber > 0) { # #= data.notes[i].terms # # } #</td>
+			<td class="text-right">#= kendo.toString(data.notes[i].total, "N2") #</td>
+			<td class="text-right">#= kendo.toString(data.notes[i].notePaidAmount, "N2") #</td>
+			<td class="text-right">#= kendo.toString(data.notes[i].dueDays, "N0") #</td>
+		</tr>
+		# } #
+		<tfoot>
+			<tr>
+				<td><strong>TOTAL</strong></td>
+				<td></td>
+				<td></td>
+				<td class="text-right"><strong>#= kendo.toString(decTotal, "N2") #</strong></td>
+				<td class="text-right"><strong>#= kendo.toString(decPayed, "N2") #</strong></td>
+				<td></td>
+			</tr>
+		</tfoot>
+	</table>
+</script>
+@section Scripts {
+	<script type="text/javascript">
+	var urlClients = "@Url.Action("GetClients", "StateAccountHistory")",
+		urlSellerClients = "@Url.Action("GetClientsBySeller", "StateAccountHistory")",
+		urlFilter = "@Url.Action("Filter", "StateAccountHistory")",
+		urlExport = "@Url.Action("ExportExcel", "StateAccountHistory")",
+		urlPayment = "@Url.Action("GetPaymentReceipt", "StateAccountHistory")",
+		urlService = "@Url.Content("~/api/reports/")";
+	</script>
+	<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+	<script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+	<environment include="Development">
+		<script src="~/js/areas/commercial/stateaccounthistory.js"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="~/js/areas/commercial/stateaccounthistory.min.js" asp-append-version="true"></script>
+	</environment>
+}

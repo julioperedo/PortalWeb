@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Pivot de Stock";
+}
+<div class="row">
+    <div class="col-12 col-sm-7">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+    <div class="col-12 col-sm-5 text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="" href="#" id="action-config"><i class="fas fa-cogs"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="Subsidiary" class="col-3 col-sm-2 col-lg-1">Sucursal</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Subsidiary" multiple="multiple"></select>
+                </div>
+                <label for="Storehouse" class="col-3 col-sm-2 col-lg-1">Almac&eacute;n</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Storehouse" multiple="multiple"></select>
+                </div>
+                <label for="Category" class="col-3 col-sm-2 col-lg-1">Categor&iacute;a</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Category" multiple="multiple"></select>
+                </div>
+                <label for="SubCategory" class="col-3 col-sm-2 col-lg-1">Subcategor&iacute;a</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="SubCategory" multiple="multiple"></select>
+                </div>
+                <label for="Line" class="col-3 col-sm-2 col-lg-1">L&iacute;nea</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <select id="Line" multiple="multiple"></select>
+                </div>
+                <label for="GP" class="col-3 col-sm-2 col-lg-1">G. Producto</label>
+                <div class="col-9 col-sm-4 col-md-4 col-lg-5">
+                    <input id="GP" class="w-100" />
+                </div>
+                <div class="col">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="ColapsedRows" checked="checked">
+                        <label class="custom-control-label" for="ColapsedRows">Filas Colapsadas</label>
+                    </div>
+                </div>
+                <div class="col text-right pt-3">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table id="pivot" style="width:100%;height:100%;"></table>
+<link href="~/lib/easyui/easyui.css" rel="stylesheet" />
+<link href="~/css/areas/reports/pivotsales.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilter = "@Url.Action("Filter", "PivotStock")",
+			urlGetSubsidiaries = "@Url.Action("GetSubsidiaries", "PivotSales")",
+			urlWarehouses = "@Url.Action("GetWarehouses", "PivotSales")",
+			urlCategories = "@Url.Action("GetCategories", "PivotSales")",
+			urlSubcategories = "@Url.Action("GetSubcategories2", "PivotSales")",
+			urlLines = "@Url.Action("GetLines", "PivotSales")",
+			urlPManagers = "@Url.Action("GetProductManagers", "PivotSales")",
+			urlExport = "@Url.Action("Export", "PivotStock")";
+    </script>
+    <script src="~/lib/easyui/jquery.easyui.min.js"></script>
+    <script src="~/lib/easyui/jquery.easyui.pivotgrid.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/reports/pivotstock.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/reports/pivotstock.min.js" asp-append-version="true"></script>
+    </environment>
+}

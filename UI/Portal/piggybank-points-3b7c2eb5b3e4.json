@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "piggybank-points",
+  "private_key_id": "3b7c2eb5b3e490b4229c7956d003150ad16edb4f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCJ0iydUBYrGkkj\npEMTUL9NCQtoAqy5h9e4F4vV4JqNhQXFnHtXjv81744iCPJJFg1PQSlEyT6xNsBb\n8ft8nEdw+4fCzEpLDY8bJ9LsAqEumPJHjjR3K2cEwIbO997eN6W+5yDxMPsZM6uf\n/doGHuC1PFAVSyL2/ECWnhSrhJG/+XMmxLDbtNgc8UjSJYUtgzJ5ZlMQrTSUE8+D\ndlrOHXAuoMYw8HMhvc4rdm0pqwJ+tPkOnM9QljjXmrQPQqIkybzXC93Nxax2mhMn\noaKbzPaWUD5/M/Gx6lUYfHYdkfs9rzhPBGLq4CEtRP1jMKhugCcbQVgtDGuwNJb/\nlgT0mtTRAgMBAAECggEAHkYovrWk6PrxLf8bLNcD7qwZ8VMFFgwc+rdRZD3eNVAP\nIIVrIqSqsvJYSmmkryFE8y/hHNcICm14e7oAADNkDhFylPvDJhFoahKpZmZ9eXrn\nXYiDRdom2whflH8mWbHnmrOyrMiRn8uV26MrjUSjH6yL+uFyYMaweWVoLPUF/yE9\n+iLA61hf+8BJkpckVuWiiNC8iaL9jgUdZU7VWV4+0xe9aec402N/EATWzUgKgovg\nOVrRXdW34FvD9df65wWu4OjzgNlkAhlYP5OvS/IFtC75Xh61269+uMHMXUr9zaSb\nesgbHDnbP/xdGkbsUNZZJNLTlO4YPDrGQu4UTUEWQQKBgQDAipPIyNqRHb/jKBRk\nGpBT+edvBsYTVZPE1MHLVgpYi6OLlk/ZjMRDR7hHOZlwkhECEDU8guNS5B3PZQn4\naRvSudQArarVnRex4Cq3A94/db6Skun7ZH+70OZDvqBmT+vwG0WCX+XkrV8aGGRy\nPpb88Wt2uFqccgJD328ftBRd3QKBgQC3PqQVj2E5etBHqsP4oqtJOM322J4XxAlV\nrrOEcK8maHlX4XZe7HXDu1eZNATplS2f+pSfPWP70o+GGneHiXNXCl8e47Lm3Ph8\nk7fPybNc5ODQCbxXSEVawElbALTsVlp8foLzh2dcQyi7RQkf7W1cnCSvvVxKHaLh\nbZt+H8fFhQKBgAfDDmYfwr/q5RtxODE46OyZvHy7VyzcXFKpCQ77bvtW1ccAzkNE\n63yS3Zjxd4AUQ19D7AF+fU+QJqt/tUEwa5C5MRS9648lABmJoe8y1rjUNFSQW6Jo\n0MVvjHjarHizbB2H2+t/ljL70kOpDBOW9ltIGD72+6Am8HRwA3jRt6h5AoGAK2cv\n8FdkvPulB8Sf5G2LSq2kw1otoA1z9JKLvMwAAIXwb+tcYUF652ChcA1NOJJ4GxN8\nTnd5DjWify4Xr8fTxQMU4rkmL96ZENDgUdxBmrgvs7cKoFXi74rqFR8Gu4/8oM5K\ncCpbRhQ2Op0wexp+s9fcLLAagwegA+s1UFtwsw0CgYBlgBHfpn3gq+4C7F9mVswJ\nteHIpq8muTkMv10chQSTl3IGSQN+5utSj5LjFoW/QX7X/PcTnDe+YjXxTvnBOMHX\nTVLP4w3WqT3QOQ5S1PRPml5fwMvQFzL+KIz4VCF+/WFxXqC62rzVJVfAlBVxGFzH\nBsLnqyLYQ+TTBMAGqmAa1w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "piggybank-points@appspot.gserviceaccount.com",
+  "client_id": "108151270312418714872",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/piggybank-points%40appspot.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

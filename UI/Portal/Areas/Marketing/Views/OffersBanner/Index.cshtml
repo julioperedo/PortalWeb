@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Generar Brochure de Ofertas";
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="bg-light border rounded px-2 py-3">
+            <div class="row">
+                <div class="col">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-light active"><input type="radio" name="search-by" id="by-offer" autocomplete="off" checked="" value="O"> Ofertas</label>
+                        <label class="btn btn-light"><input type="radio" name="search-by" id="by-new" autocomplete="off" value="N"> Productos Nuevos</label>
+                        <label class="btn btn-light"><input type="radio" name="search-by" id="by-all" autocomplete="off" value="A"> Todos los Productos</label>
+                    </div>
+                </div>
+                <div class="col-7 text-right">
+                    <label for="export-type">Exportar como</label>
+                    <select id="export-type" name="export-type">
+                        <option value="I">Imagen</option>
+                        <option value="P">PDF</option>
+                    </select>
+                    <div class="form-check form-check-inline align-bottom ml-5">
+                        <input type="hidden" name="chk-sa" value="false" />
+                        <label class="switch">
+                            <input class="form-check-input chk-subsidiary" type="checkbox" id="chk-sa" value="true">
+                            <span class="slider round"></span>
+                        </label>&nbsp;&nbsp;
+                        <label class="action" for="chk-sa">Santa Cruz</label>
+                    </div>
+                    <div class="form-check form-check-inline align-bottom">
+                        <input type="hidden" name="chk-la" value="false" />
+                        <label class="switch">
+                            <input class="form-check-input chk-subsidiary" type="checkbox" id="chk-la" value="true">
+                            <span class="slider round"></span>
+                        </label>&nbsp;&nbsp;
+                        <label class="action" for="chk-la">Miami</label>
+                    </div>
+                    <div class="form-check form-check-inline align-bottom mr-5">
+                        <input type="hidden" name="chk-iq" value="false" />
+                        <label class="switch">
+                            <input class="form-check-input chk-subsidiary" type="checkbox" id="chk-iq" name="chk-iq" value="true">
+                            <span class="slider round"></span>
+                        </label>&nbsp;&nbsp;
+                        <label class="action" for="chk-iq">Iquique</label>
+                    </div>
+                    <button class="btn btn-primary" id="generate-file" disabled><i class="fas fa-download"></i> Descargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div class="text-right"> <span class="action" id="select-all">Todos</span></div>
+        <div id="Listado"></div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        var urlGetOffers = "@Url.Action("GetOffers")",
+            urlGetNewProducts = "@Url.Action("GetNewProducts")",
+            urlGetAllProducts = "@Url.Action("GetAllProducts")",
+            urlGenerateFile = "@Url.Action("GenerateFile")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/marketing/offersbanner.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/marketing/offersbanner.min.js" asp-append-version="true"></script>
+    </environment>
+}
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/marketing/offersbanner.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/marketing/offersbanner.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}

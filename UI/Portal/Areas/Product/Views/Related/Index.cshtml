@@ -1,0 +1,192 @@
+﻿@{
+    ViewData["Title"] = "Configuración de Productos Relacionados";
+}
+<div id="tabshoppingcart" class="custom-tab mt-3">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#tab-categories" role="tab" aria-selected="true">Categor&iacute;as Relacionadas</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-products" role="tab">Productos Relacionados</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-banners" role="tab">Banners</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="tab-categories" class="tab-pane active show pt-3" role="tabpanel">
+            <div id="categories"></div>
+        </div>
+        <div id="tab-products" class="tab-pane pt-3" role="tabpanel">
+            <div id="products"></div>
+        </div>
+        <div id="tab-banners" class="tab-pane pt-3" role="tabpanel">
+            <div id="banners"></div>
+        </div>
+    </div>
+</div>
+<div id="detail-category">
+    <form>
+        <input type="hidden" id="category-id" />
+        <div class="row">
+            <div class="col">
+                <label for="category-name">Categor&iacute;a</label>
+                <input id="category-name" class="w-100" />
+            </div>
+            <div class="col">
+                <label for="related-name">Relacionada</label>
+                <input id="related-name" class="w-100" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3 text-right">
+                <button id="cancel-category" class="btn btn-outline-secondary">Cancelar</button>
+                <button id="save-category" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="detail-product">
+    <form>
+        <input type="hidden" id="product-id" />
+        <div class="row">
+            <div class="col">
+                <label for="product-name">Producto</label>
+                <input id="product-name" class="w-100" />
+            </div>
+            <div class="col">
+                <label for="related-product-name">Producto Relacionado</label>
+                <input id="related-product-name" class="w-100" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3 text-right">
+                <button id="cancel-product" class="btn btn-outline-secondary">Cancelar</button>
+                <button id="save-product" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="detail-banner">
+    <form>
+        <input id="gallery" type="file" class="d-none">
+        <input type="hidden" id="old-photo" />
+        <input type="hidden" id="new-photo" />
+        <input type="hidden" id="banner-id" />
+        <div class="row">
+            <div class="col">
+                <label for="banner-name">Nombre</label>
+                <input id="banner-name" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3">
+                <img id="banner-url" style="max-width: 970px; max-height: 240px;" />
+                <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="">
+                    <div class="btn-group" role="group" aria-label="First group">
+                        <button type="button" class="btn btn-primary" title="Escoger una imagen de la galer&iacute;a" id="photo-gallery">
+                            <i class="fa fa-image"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" title="Eliminar imagen actual" id="photo-remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3 pb-3">
+                <label for="banner-enabled">Habilitado</label>
+                <input id="banner-enabled" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="banner-since">Desde</label>
+                <input id="banner-since" type="date" />
+            </div>
+            <div class="col">
+                <label for="banner-until">Hasta</label>
+                <input id="banner-until" type="date" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3 text-right">
+                <button id="cancel-banner" class="btn btn-outline-secondary">Cancelar</button>
+                <button id="save-banner" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="detail-banner-item">
+    <form>
+        <input type="hidden" id="banner-item-id" />
+        <div class="row">
+            <div class="col pt-3">
+                <label for="banner-item-product">Producto</label>
+                <input id="banner-item-product" class="w-100" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3">
+                <label for="banner-item-subsidiary">Sucursal</label>
+                <input id="banner-item-subsidiary" class="w-100" />
+            </div>
+            <div class="col pt-3">
+                <label for="banner-item-price">Precio</label>
+                <input id="banner-item-price" class="form-control" type="number" min="0" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3 text-right">
+                <button id="cancel-banner-item" class="btn btn-outline-secondary">Cancelar</button>
+                <button id="save-banner-item" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="detail-banner-trigger">
+    <form>
+        <input type="hidden" id="banner-trigger-id" />
+        <div class="row">
+            <div class="col pt-3">
+                <label for="banner-trigger-product">Producto</label>
+                <input id="banner-trigger-product" class="w-100" />
+            </div>
+            <div class="col pt-3">
+                <label for="banner-trigger-category">Categor&iacute;a</label>
+                <input id="banner-trigger-category" class="w-100" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col pt-3 text-right">
+                <button id="cancel-banner-trigger" class="btn btn-outline-secondary">Cancelar</button>
+                <button id="save-banner-trigger" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        var urlGetRelatedCategories = "@Url.Action("GetRelatedCategories")",
+            urlGetRelatedProducts = "@Url.Action("GetRelatedProducts")",
+            urlGetBanners = "@Url.Action("GetBanners")",
+            urlGetCategories = "@Url.Action("GetUsedCategories")",
+            urlGetProducts = "@Url.Action("GetEnabledProducts")",
+            urlDeleteCategory = "@Url.Action("DeleteCategory")",
+            urlSaveCategory = "@Url.Action("SaveCategory")",
+            urlDeleteProduct = "@Url.Action("DeleteProduct")",
+            urlSaveProduct = "@Url.Action("SaveProduct")",
+            urlGetBannerDetail = "@Url.Action("GetBannerDetail")",
+            urlSaveBanner = "@Url.Action("SaveBanner")",
+            urlDeleteBanner = "@Url.Action("DeleteBanner")",
+            urlSaveImageBase64 = "@Url.Action("SavePhotoBase64")",
+            urlSaveBannerItem = "@Url.Action("SaveBannerItem")",
+            urlDeleteBannerItem = "@Url.Action("DeleteBannerItem")",
+            urlSaveBannerTrigger = "@Url.Action("SaveBannerTrigger")",
+            urlDeleteBannerTrigger = "@Url.Action("DeleteBannerTrigger")",
+            urlGetSubsidiaries = "@Url.Action("GetSubsidiaries")",
+            urlImages = "@Url.Content("~/images/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/related.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/related.min.js" asp-append-version="true"></script>
+    </environment>
+}

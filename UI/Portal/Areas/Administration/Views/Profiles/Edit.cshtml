@@ -1,0 +1,190 @@
+﻿@model BEntities.Security.Profile
+@{
+    var inserts = new List<short>() { 1, 3, 5, 7 };
+    var updates = new List<short>() { 2, 3, 6, 7 };
+    var deletes = new List<short>() { 4, 5, 6, 7 };
+    var Activities = from a in Model.ListProfileActivitys
+                     group a by a.ModuleName into g
+                     select new
+                     {
+                         Module = g.Key,
+                         Detail = from d in g
+                                  select new { Id = d.Id, IdActivity = d.IdActivity, Activity = d.ActivityName, Insert = inserts.Contains(d.Permission), Update = updates.Contains(d.Permission), Delete = deletes.Contains(d.Permission) }
+                     };
+
+    var Pages = from p in Model.ListProfilePages
+                group p by p.ModuleName into g
+                select new { Module = g.Key, Detail = from d in g select new { Id = d.Id, IdPage = d.IdPage, Page = d.PageName, Selected = d.Id != 0 } };
+
+    var Charts = from c in Model.ListProfileCharts
+                 group c by c.ChartGroup into g
+                 select new { GroupName = g.Key, Detail = from d in g select new { Id = d.Id, IdChart = d.IdChart, Chart = d.ChartName, Selected = d.Id != 0 } };
+    string forClients = Model.isExternalCapable ? @"checked=""checked""" : "";
+}
+<div class="row">
+    <div class="col-12 col-sm-5 pb-5">
+        <form asp-action="Edit" id="form-profile">
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="isBase" type="hidden" />
+            <div class="form-group">
+                <label asp-for="Name">Nombre</label>
+                <input asp-for="Name" class="form-control" type="text" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Descripci&oacute;n</label>
+                <textarea asp-for="Description" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="switch">
+                    <input type="checkbox" id="isExternalCapable" name="isExternalCapable" @forClients />
+                    <span class="slider round"></span>
+                </label>
+                <input type="hidden" name="isExternalCapable" value="false" />
+                <label for="isExternalCapable" class="action">Para Clientes</label>
+
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-sm-7 pb-5">
+        <div class="custom-tab">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Acciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">P&aacute;ginas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab3" role="tab">Gr&aacute;ficas en Dashboard</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active show" id="tab1" role="tabpanel">
+                    <div class="row">
+                        @foreach (var module in Activities)
+                        {
+                            <div class="col-12 pt-2">
+                                <div class="card no-shadow">
+                                    <div class="card-header">@module.Module</div>
+                                    <div class="card-body">
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th style="text-align: center;">Insertar</th>
+                                                <th style="text-align: center;">Actualizar</th>
+                                                <th style="text-align: center;">Eliminar</th>
+                                            </tr>
+                                            @foreach (var act in module.Detail)
+                                            {
+                                                string insertChecked = act.Insert ? @"checked=""checked""" : "", updateChecked = act.Update ? @"checked=""checked""" : "", deleteChecked = act.Delete ? @"checked=""checked""" : "";
+                                                <tr class="activity-row">
+                                                    <td>
+                                                        @act.Activity
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="i-@act.IdActivity" @insertChecked class="p-insert" data-id="@act.Id" data-idactivity="@act.IdActivity" data-value="@act.Insert" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="u-@act.IdActivity" @updateChecked class="p-update" data-value="@act.Update" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="d-@act.IdActivity" @deleteChecked class="p-delete" data-value="@act.Delete" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab2" role="tabpanel">
+                    <div class="row">
+                        @foreach (var module in Pages)
+                        {
+                            <div class="col-12">
+                                <div class="card no-shadow mt-2">
+                                    <div class="card-header">@module.Module</div>
+                                    <div class="card-body">
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var item in module.Detail)
+                                            {
+                                                string selectedChecked = item.Selected ? @"checked=""checked""" : "";
+                                                <tr class="page-row">
+                                                    <td>
+                                                        @item.Page
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="p-@item.IdPage" @selectedChecked data-id="@item.Id" data-idpage="@item.IdPage" data-value="@item.Selected" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab3" role="tabpanel">
+                    <div class="row">
+                        @foreach (var module in Charts)
+                        {
+                            <div class="col-12">
+                                <div class="card no-shadow mt-2">
+                                    <div class="card-header">@module.GroupName</div>
+                                    <div class="card-body">
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th></th>
+                                            </tr>
+                                            @foreach (var chart in module.Detail)
+                                            {
+                                                string selectedChecked = chart.Selected ? @"checked=""checked""" : "";
+                                                <tr class="chart-row">
+                                                    <td>
+                                                        @chart.Chart
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="c-@chart.IdChart" @selectedChecked data-id="@chart.Id" data-idchart="@chart.IdChart" data-value="@chart.Selected" />
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div><br />
+    </div>
+</div>
+<div class="row" style="position: fixed; bottom: 0; background-color: #FFF; width: 97%;">
+    <div class="col text-right pt-4 pb-4">
+        <button type="button" id="action-cancel" class="btn btn-outline-secondary">Cancelar</button>
+        <button type="button" id="action-save" class="btn btn-primary">Guardar</button>
+    </div>
+</div>

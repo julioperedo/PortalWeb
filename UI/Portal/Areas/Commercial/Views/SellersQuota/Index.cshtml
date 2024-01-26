@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Presupuesto Ejecutivos de Cuenta";
+    int month = DateTime.Today.Month;
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <label for="year" class="col-1 text-nowrap text-right">A&ntilde;o</label>
+                <div class="col-5 col-sm-3 col-md-3 col-lg-2">
+                    <input id="year" type="number" class="form-control w-100" value="@DateTime.Today.Year" />
+                </div>
+                <label for="month" class="col-1 text-nowrap text-right">Mes</label>
+                <div class="col-5 col-sm-4 col-md-4">
+                    <select id="month" style="width: 100%;">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+                <div class="col col-sm-3 col-md-3 col-lg-4 text-right pt-2">
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 pl-4 pt-2">
+        <div id="QuoteContent"></div>
+    </div>
+    <div class="col pt-2 pl-4">
+        <button type="button" class="btn btn-primary" id="action-save">Guardar</button>
+    </div>
+</div>
+<link href="~/lib/handsontable/handsontable.full.css" rel="stylesheet" />
+@section Scripts {
+    <script type="text/javascript">
+		var urlSave = "@Url.Action("Save", "SellersQuota")",
+			urlFilter = "@Url.Action("Filter", "SellersQuota")",
+			currentMonth = "@month";
+    </script>
+    <script src="~/lib/handsontable/handsontable.full.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/commercial/sellersquota.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/commercial/sellersquota.min.js" asp-append-version="true"></script>
+    </environment>
+}

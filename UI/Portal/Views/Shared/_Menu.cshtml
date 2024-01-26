@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Http
+@if (User.Identity.IsAuthenticated)
+{
+    List<BEntities.Base.Menu> lstMenu = Context?.Session?.Get<List<BEntities.Base.Menu>>("Menu") ?? new List<BEntities.Base.Menu>();
+    if (lstMenu?.Count == 0)
+    {
+        BComponents.Base.Menu bcMenu = new BComponents.Base.Menu();
+        var profileClaim = User.FindFirst("ProfileCode");
+        long IdProfile = 0;
+        if (profileClaim != null && profileClaim.Value != "")
+        {
+            IdProfile = long.Parse(profileClaim.Value);
+        }
+        lstMenu = bcMenu.ListByProfile(IdProfile, "[Order]", BEntities.Base.relMenu.Page);
+        Context.Session.Set("Menu", lstMenu);
+    }
+    List<BEntities.Base.Menu> lstRoot = (from m in lstMenu where m.IdParent == null orderby m.Order select m).ToList();
+    foreach (var beItem in lstRoot)
+    {
+        if (lstMenu.Count(x => x.IdParent == beItem.Id) > 0)
+        {
+            <li class="sidebar-dropdown">
+                <a href="#">
+                    @if (!string.IsNullOrWhiteSpace(beItem.Icon) && beItem.Icon.ToLower() != "null")
+                    {
+                        <i class="fa @beItem.Icon"></i>
+                    }
+                    <span class="menu-text">@beItem.Title</span>
+                </a>
+                <div class="sidebar-submenu">
+                    <ul>
+                        <partial name="_Submenu" model="new Portal.Models.MenuModel(lstMenu, beItem.Id, 0)" />
+                    </ul>
+                </div>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a asp-area="@beItem.Page.Area" asp-controller="@beItem.Page.Controller" asp-action="@beItem.Page.Action">
+                    @if (!string.IsNullOrWhiteSpace(beItem.Icon) && beItem.Icon.ToLower() != "null")
+                    {
+                        <i class="fa @beItem.Icon"></i>
+                    }
+                    <span class="menu-text">@beItem.Title</span>
+                </a>
+            </li>
+        }
+    }
+}

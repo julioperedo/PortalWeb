@@ -1,0 +1,57 @@
+﻿@model Portal.Areas.Visits.Models.Visit
+@{
+	string myClass = Model.CardCode == "CVAR-001" ? "" : " d-none", classReason = Model.IdReason == 55 ? "" : " d-none";
+}
+<form>
+	<input type="hidden" asp-for="Id" />
+	<div class="form-horizontal">
+		<div class="row">
+			<label asp-for="CardCode" class="col-sm-2 col-md-1"></label>
+			<div class="col-sm-4 col-md-4">
+				<input asp-for="CardCode" class="w-100" />
+			</div>
+			<label asp-for="ClientDescription" class="col-sm-2 @myClass"></label>
+			<div class="col-sm-4 col-md-5 @myClass">
+				<input type="text" asp-for="ClientDescription" class="form-control" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="VisitorId" class="col-sm-2 col-md-1"></label>
+			<div class="col-sm-4 col-md-4">
+				<input asp-for="VisitorId" class="w-100" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="StaffId" class="col-sm-2 col-md-1"></label>
+			<div class="col-sm-4 col-md-4">
+				<input asp-for="StaffId" class="w-100" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="ReasonVisit" class="col-sm-2 col-md-1"></label>
+			<div class="col-sm-4 col-md-4">
+				<input asp-for="IdReason" class="w-100" />
+			</div>
+			<div class="col-sm-6 col-md-7">
+				<input type="text" asp-for="ReasonVisit" class="form-control @classReason" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="SecurityCardId" class="col-sm-2 col-md-1 text-nowrap"></label>
+			<div class="col-sm-4 col-md-4">
+				<input type="text" asp-for="SecurityCardId" class="form-control" />
+			</div>
+		</div>
+		<div class="row">
+			<label asp-for="Commentaries" class="col-sm-2 col-md-1 text-nowrap"></label>
+			<div class="col-sm-10 col-md-11">
+				<input type="text" asp-for="Commentaries" class="form-control" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right pt-2">
+				<button type="button" class="save-visit btn btn-primary">Guardar Visita</button>
+			</div>
+		</div>
+	</div>
+</form>

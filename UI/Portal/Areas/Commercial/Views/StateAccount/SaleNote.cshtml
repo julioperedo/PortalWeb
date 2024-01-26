@@ -1,0 +1,23 @@
+﻿@model Portal.Areas.Commercial.Models.SaleNoteReport
+<div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;">
+</div>
+<a asp-action="Detail" asp-route-id="@Model.CardCode">Volver al estado de cuentas</a>
+
+<style type="text/css">
+    #reportViewer1 {
+        margin: 5px;
+    }
+</style>
+<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+		var cardCode = subsidiary = "@Model.Subsidiary", number = "@Model.SaleNote", user = "@Model.User", urlService = "@Url.Content("~/api/reports/")";
+        $("#reportViewer1").telerik_ReportViewer({
+            serviceUrl: urlService,
+            reportSource: { report: "SaleNote.trdp", parameters: { Subsidiary: subsidiary, DocNumber: number, User: user } },
+            viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
+			scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+            scale: 1.0
+        });
+	});
+</script>

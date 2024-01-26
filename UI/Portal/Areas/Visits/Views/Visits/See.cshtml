@@ -1,0 +1,48 @@
+﻿@model BEntities.Visits.Visit
+@{
+    string photo = string.IsNullOrWhiteSpace(Model.ClientPhoto) ? Url.Content("~/images/no-photo.jpg") : Url.Content("~/images/person/" + Model.ClientPhoto);
+}
+<div class="row">
+    <div class="col-4">
+        <img src="@photo" />
+    </div>
+    <div class="col-8">
+        <strong><span>Cliente: </span></strong> <span>( @Model.CardCode ) @Model.ClientName</span><br />
+        <strong><span>Nombre: </span></strong> <span>( @Model.Visitor.DocumentId ) @Model.Visitor.FullName</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        @if (string.IsNullOrWhiteSpace(Model.LicencePlate))
+        {
+            <strong><span>Placa: </span></strong> <span>@Model.LicencePlate</span>
+        }
+        <br />
+        <strong><span>Ingreso: </span></strong> <span>@Model.InitialDate.ToString("dd/MM/yyyy HH:mm:ss")</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        @if (Model.FinalDate.HasValue)
+        {
+            <strong><span>Salida: </span></strong> <span>@Model.FinalDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</span>
+        }
+        <br />
+        <strong><span>Personal Visitado: </span></strong> <span>@Model.Staff.FullName</span><br />
+        <strong><span>Motivo de Visita: </span></strong> <span>@Model.ReasonVisit</span><br />
+        @if (!string.IsNullOrWhiteSpace(Model.Commentaries))
+        {
+            <strong><span>Comentarios: </span></strong> <span>@Model.Commentaries</span>
+        }
+    </div>
+</div>
+<div class="row">
+    @if (!string.IsNullOrWhiteSpace(Model.ClientDocId))
+    {
+        <div class="col-12 col-sm-6">
+            <span class="zoom">
+                <img src="@Url.Content("~/images/person/" + Model.ClientDocId)" class="image-zoom" />
+            </span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ClientDocIdRev))
+    {
+        <div class="col-12 col-sm-6">
+            <span class="zoom">
+                <img src="@Url.Content("~/images/person/" + Model.ClientDocIdRev)" class="image-zoom" />
+            </span>
+        </div>
+    }
+</div>

@@ -1,0 +1,300 @@
+﻿@{
+	ViewData["Title"] = "Lista de Precios";
+}
+<span id="notification" style="display:none;"></span>
+<div class="row">
+	<div class="col-12 col-md">
+		<h3 class="title">@ViewBag.Title</h3>
+		<input type="hidden" id="LocalUser" value="@ViewBag.LocalUser" />
+		<input type="hidden" id="SeeStock" value="@ViewBag.SeeStock" />
+		<input type="hidden" id="SeeProviderOrders" value="@ViewBag.SeeProviderOrders" />
+		<input type="hidden" id="ProductRequirements" value="@ViewBag.ProductRequirements" />
+		<input type="hidden" id="LastSearch" />
+	</div>
+	<div class="col-12 col-md text-right">
+		<div class="tool-box">
+			<a class="btn btn-secondary" title="Descargar toda la lista en Excel" href="~/files/Lista-de-Precios-DMC-EXCEL.zip" target="_blank" id="action-download-list"><i class="fas fa-download"></i></a>
+			<a class="btn btn-secondary" title="Exportar selección en Excel" role="button" href="#" id="action-excel"><i class="fas fa-file-download"></i></a>
+			<select id="AvailableIn" class="InToolbox" multiple="multiple"></select>
+			@if (ViewBag.LocalUser == "Y")
+			{
+				<a class="btn btn-secondary" role="button" href="#" id="show-all" data-selected="Y"><i class="fas fa-check-square"></i> Mostrar Todo</a>
+			}
+			<div class="btn-group btn-group-toggle action" data-toggle="buttons" id="layouts">
+				<div class="btn btn-info"><input type="radio" name="layouts" value="old-list"><i class="fas fa-th-list" title="Lista"></i></div>
+				<div class="btn btn-info"><input type="radio" name="layouts" value="list" /><i class="fas fa-stream"></i></div>
+				<div class="btn btn-info"><input type="radio" name="layouts" value="grid"><i class="fas fa-th-large" title="Grilla"></i></div>
+			</div>
+			@if (ViewBag.LocalUser == "Y")
+			{
+				<a id="action-table" class="btn btn-secondary d-none" title="Mostrar Resultado en tabla" role="button" aria-expanded="false" aria-controls="filter-box" href="#"><i class="fas fa-table"></i></a>
+			}
+			<a id="action-filters" class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+			<a id="action-back" class="btn btn-secondary" role="button" title="Limpiar y volver" href="#filter-box" data-toggle="collapse" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-chevron-left"></i> Volver</a>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div id="filter-box" class="bg-light px-sm-2 py-sm-3 collapse show">
+			<div class="row">
+				<label for="Lines" class="col-3 col-lg-2 col-xl-1">L&iacute;nea</label>
+				<div class="col-9 col-lg-4 col-xl-3">
+					<div id="Lines" class="w-100"></div>
+				</div>
+				<label for="Category" class="col-3 col-lg-2 col-xl-1 text-nowrap">Categor&iacute;a</label>
+				<div class="col-9 col-lg-4 col-xl-3">
+					<div id="Category" class="w-100"></div>
+				</div>
+				<label for="SubCategory" class="col-3 col-lg-2 col-xl-1 text-nowrap">Subcategor&iacute;a</label>
+				<div class="col-9 col-lg-4 col-xl-3">
+					<div id="SubCategory" class="w-100"></div>
+				</div>
+				<label for="ItemFilter" class="col-3 col-lg-2 col-xl-1">Filtro</label>
+				<div class="col-9 col-lg-4 col-xl-5">
+					<input type="text" id="ItemFilter" name="ItemFilter" class="form-control" />
+				</div>
+				<div class="col-12 col-md text-right">
+					<button id="search-products" class="btn btn-primary">Buscar</button>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col">
+					<div id="LineList"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col footer">
+					La lista de precios DMC S.A. est&aacute; sujeta a cambios de precios, as&iacute; como variaci&oacute;n en su disponibilidad y t&eacute;rminos de ofertas, garant&iacute;as y otros aspectos. Por tal raz&oacute;n DMC S.A. no se hace responsable por errores u omisiones que se den en la presente, pues estar&iacute;an exentos a la responsabilidad directa por los mismos. Las im&aacute;genes de productos son referenciales.
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12">
+		<div id="products-content" class="old-list">
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="row addresses">
+			<div class="col-12 col-sm-6 col-md-4 col-lg-4 address sc">
+				<strong>DMC S.A.</strong><br />
+				Av. Grigota # 3800<br />
+				<strong>Tel&eacute;fono:</strong> 354 3000 - 780 06494<br />
+				<strong>Fax:</strong> 354 3637<br />
+				Santa Cruz - Bolivia<br />
+				Contacto Comercial: Departamento de Ventas
+				<p>
+					<strong>Horario de Atenci&oacute;n</strong><br />
+					@*Lunes a Jueves 8:30 am – 12:30 pm / 2:30 pm – 6:30 pm<br />
+						Viernes y/o fin de mes   8:30 am – 12:30 pm / 2:30 pm – 7:00 pm*@
+					Continuo de 8:30 am a 5:30 pm
+				</p>
+			</div>
+			<div class="col-12 col-sm-6 col-md-4 col-lg-4 address la">
+				<strong>DMC LATIN AMERICA INC.</strong><br />
+				9935 NW 88 Ave.<br />
+				Miami, FL 33178<br />
+				Contacto Comercial: Receiving Department<br />
+				<strong>Tel&eacute;fono:</strong> 786 245 4457, (305) 887-1955
+				<p>
+					ENTREGAS FOB MIAMI se realizan todos los d&iacute;as excepto Viernes.<br />Entregas de mercader&iacute;a hasta las 4:00 pm
+				</p>
+			</div>
+			<div class="col-12 col-sm-6 col-md-4 col-lg-4 address iqq">
+				<strong>IMPORTADORA DMC IQUIQUE LTDA</strong><br />
+				Recinto Amurallado, Manzana 12, Galpón 8<br />
+				Zona Franca Iquique<br />
+				Iquique - Chile<br />
+				<strong>T&eacute;lefono:</strong>56 57254 2460<br />
+				<strong>Celular:</strong>56 988394955  -  56 950182979<br />
+				<strong>Fax:</strong>56 57254 2461
+				<p>
+					<strong>Horario de Atenci&oacute;n</strong><br />
+					@*Lunes a Viernes 9:00 am – 2:00 pm / 3:00 pm – 7:00 pm<br />
+						Entrega de mercader&iacute;as  de 9:00 am - 1:45pm / 3:00 pm - 6:45pm*@
+					8:30 am a 5:30 pm
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="Detail"></div>
+<div id="CartDetail">
+	<form>
+		<input type="hidden" id="cart-idproduct" />
+		<input type="hidden" id="cart-pricedata" />
+		<input type="hidden" id="cart-openbox" />
+		<div class="row">
+			<div class="col">
+				<b><span id="cart-itemcode"></span></b><br />
+				<span id="cart-itemname"></span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<label for="cart-subsidiary">Sucursal</label>
+				<div id="cart-subsidiary" class="w-100"></div>
+			</div>
+			<div class="col">
+				<label for="cart-quantity">Cantidad</label>
+				<input type="number" id="cart-quantity" class="form-control" required />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col pt-2">
+				Precio: <span id="cart-price"></span> $Us
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right pt-2">
+				<button id="cart-additem" class="btn btn-primary">Agregar al Carrito</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="Report">
+	<div id="reportViewer1" class="k-widget" style="width: 100%; height: 650px;"></div>
+</div>
+<div id="RequestDetail">
+	<form>
+		<div class="row mt-1">
+			<div class="col"><h5 id="ProductName"></h5><input id="IdProduct" name="IdProduct" type="hidden" /></div>
+		</div>
+		<div class="row pt-1">
+			<div class="col-2"><label for="CardCode">Cliente</label></div>
+			<div class="col-10"><input id="CardCode" name="CardCode" class="w-100" required /></div>
+		</div>
+		<div class="row pt-1">
+			<div class="col-2"><label for="IdSubsidiary">Sucursal</label></div>
+			<div class="col-4"><input id="IdSubsidiary" name="IdSubsidiary" class="w-100" required /></div>
+			<div class="col-2"><label for="Quantity">Cantidad</label></div>
+			<div class="col-4"><input id="Quantity" name="Quantity" type="number" class="form-control" min="1" required /></div>
+		</div>
+		<div class="row pt-1">
+			<div class="col-2"><label for="Description">Comentarios</label></div>
+			<div class="col-10"><textarea id="Description" name="Description" class="form-control" rows="3"></textarea></div>
+		</div>
+		<div class="row">
+			<div class="col text-right pt-2">
+				<button class="btn btn-primary" type="button" id="save-request">Guardar</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/x-kendo-tmpl" id="templateLine">
+	<div class="line">
+		<div class="line-inner">
+			<input type="hidden" value="#:id#" class="lineId" />
+			<input type="hidden" value="#:imageURL#" class="lineImg" />
+			<div class="lineLogo">
+				<span class="helper"></span>
+				<img src="@Url.Content("~/images/lines")/#:imageURL#" alt="#:name#" />
+			</div>
+		</div>
+		# if(subLines.length > 1) { #
+		<div class="submenu d-none">
+			#   for (var i = 0; i < subLines.length; i++) { #
+			<div class="submenu-item" id="#:subLines[i].id#">#:subLines[i].name#</div>
+			#   } #
+		</div>
+		# } #
+	</div>
+</script>
+<script id="department-template" type="text/x-kendo-template">
+	<div class="card no-shadow mb-4">
+		<div class="card-header">#=name#</div>
+		<div class="card-body">
+			<div class="content-contacts #=className#">
+				# for (var i = 0; i < managers.length; i++) { #
+				<div class="contact">
+					<img src="#=managers[i].photo#" /><br />
+					<span class="name">#=managers[i].name#</span><br />
+					<span class="position">#=managers[i].position#</span><br />
+					# if (managers[i].phone) { # <span>Interno #=managers[i].phone#</span><br /> # } #
+					<a class="mail" href="mailto:#=managers[i].mail#">#=managers[i].mail#</a>
+				</div>
+				# } #
+			</div>
+			<div class="content-contacts #=className#">
+				# for (var i = 0; i < members.length; i++) { #
+				<div class="contact">
+					<img src="#=members[i].photo#" /><br />
+					<span class="name">#=members[i].name#</span><br />
+					<span class="position">#=members[i].position#</span><br />
+					# if (members[i].phone) { # <span>Interno #=members[i].phone#</span><br /> # } #
+					<a class="mail" href="mailto:#=members[i].mail#">#=members[i].mail#</a>
+				</div>
+				# } #
+			</div>
+		</div>
+	</div>
+</script>
+<script id="errorTemplate" type="text/x-kendo-template">
+	<div class="connection-error">
+		<i class="far fa-times-circle"></i>
+		<h4>#= title #</h4>
+		<p>#= message #</p>
+	</div>
+</script>
+<script id="successTemplate" type="text/x-kendo-template">
+	<div class="connection-success">
+		<i class="far fa-check-circle"></i>
+		<h4>#= title #</h4>
+		<p>#= message #</p>
+	</div>
+</script>
+@section Styles {
+	<meta http-equiv="Refresh" content="28800">
+	<link href="~/lib/magicsuggest/magicsuggest-min.css" rel="stylesheet" />
+	<environment include="Development">
+		<link href="~/css/areas/product/pricelist.css" rel="stylesheet" />
+	</environment>
+	<environment exclude="Development">
+		<link href="~/css/areas/product/pricelist.min.css" rel="stylesheet" asp-append-version="true" />
+	</environment>
+}
+@section Scripts {
+	<script type="text/javascript">
+		var urlGetLines = "@Url.Action("GetLines")",
+			urlGetCategories = "@Url.Action("GetCategories")",
+			urlGetSubcategories = "@Url.Action("GetSubcategories")",
+			urlGetSubsidiaries = "@Url.Action("GetSubsidiaries")",
+			urlGetAvailableLines = "@Url.Action("GetAvailablesLines")",
+			urlStaff = "@Url.Action("GetStaff")",
+			urlOpenBoxes = "@Url.Action("GetOpenBoxes")",
+			urlDetailProduct = "@Url.Action("Detail", "Product")",
+			urlLine = "@Url.Action("Lines")",
+			urlGetStock = "@Url.Action("GetStock")",
+			urlGetDetailPopup = "@Url.Action("DetailPopUp", "Product")",
+			urlReservedItems = "@Url.Action("GetReservedItems")",
+			urlExportExcel = "@Url.Action("ExportExcel")",
+			urlGetItems = "@Url.Action("GetItems")",
+			urlGetProviderOrders = "@Url.Action("GetProviderOrders")",
+			urlAddItemSC = "@Url.Action("AddItem", "TempOrders", new { area = "Commercial" })",
+			urlAddItemTS = "@Url.Action("AddItem", "TempSale", new { area = "" })",
+			urlGetSubsidiariesByProduct = "@Url.Action("GetSubsidiariesByProduct", "TempSale", new { area = "" })",
+			urlAddRequest = "@Url.Action("Edit", "Request")",
+			urlClients = "@Url.Action("GetClients")",
+			urlClientsByGroup = "@Url.Action("GetClientsByList")",
+			urlImagesStaff = "@Url.Content("~/images/staff/")",
+			urlImagesLine = "@Url.Content("~/images/lines/")",
+			urlNoImage = "@Url.Content("~/images/no-image.jpg")",
+			urlNewImage = "@Url.Content("~/images/nuevo.png")",
+			urlImagesProduct = "@Url.Content("~/images/products/")",
+			urlService = "@Url.Content("~/api/reports/")";
+	</script>
+	<script src="~/lib/magicsuggest/magicsuggest.min.js"></script>
+	<script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
+	<script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>
+	<environment include="Development">
+		<script src="~/js/areas/product/pricelist.js"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="~/js/areas/product/pricelist.min.js" asp-append-version="true"></script>
+	</environment>
+}

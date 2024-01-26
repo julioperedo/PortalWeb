@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Inventario";
+    var alignCenter = new Dictionary<string, object> { ["style"] = "text-align: center" };
+    var alignRight = new Dictionary<string, object> { ["class"] = "text-right" };
+}
+<div class="row">
+    <div class="col">
+        <h3 class="title">@ViewBag.Title</h3>
+        <input type="hidden" id="IsLocal" value="@ViewBag.Local" />
+        <input type="hidden" id="IsClientAllowed" value="@ViewBag.ClientAllowed" />
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <div class="col-sm-2 col-xl-1"><label for="FilSubsidiaries">Sucursal</label></div>
+                <div class="col-sm-4 col-xl-5"><select id="FilSubsidiaries" placeholder="Seleccione al menos una Sucursal" class="w-100" multiple="multiple"></select> </div>
+                <div class="col-sm-2 col-xl-1"><label for="FilWarehouses">Almac&eacute;n</label></div>
+                <div class="col-sm-4 col-xl-5"><select id="FilWarehouses" placeholder="Seleccione al menos un Almac&eacute;n" multiple="multiple"></select></div>
+                <div class="col-sm-2 col-xl-1"><label for="FilItemCode">Cod.&nbsp;Item</label></div>
+                <div class="col-sm-4 col-xl-5"><input type="text" id="FilItemCode" class="form-control" /></div>
+                <div class="col-sm-2 col-xl-1"><label for="FilDescription">Descripci&oacute;n</label></div>
+                <div class="col-sm-4 col-xl-5"><input type="text" id="FilDescription" class="form-control" /></div>
+                <div class="col-sm-2 col-xl-1"><label for="FilCategory">Categor&iacute;a</label></div>
+                <div class="col-sm-4 col-xl-5">
+                    <kendo-dropdownlist name="FilCategory" option-label="Seleccione una Categoría ..." datatextfield="name" datavaluefield="id" style="width: 100%;">
+                        <datasource>
+                            <transport>
+                                <read url="@Url.Action("GetCategories", "Inventory")" />
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-2 col-xl-1"><label for="FilSubcategory">Subcategor&iacute;a</label></div>
+                <div class="col-sm-4 col-xl-5">
+                    <kendo-dropdownlist name="FilSubcategory" option-label="Seleccione una Subcategoría ..." datatextfield="name" datavaluefield="id" style="width: 100%;" enable="false" cascade-from="FilCategory">
+                        <datasource server-filtering="true">
+                            <transport>
+                                <read url="@Url.Action("GetSubcategories", "Inventory")" data="filterSubcategories" />
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-2 col-xl-1"><label for="FilLines">L&iacute;nea</label></div>
+                <div class="col-sm-4 col-xl-5"><select id="FilLines" placeholder="Seleccione al menos una L&iacute;nea" multiple="multiple"></select></div>
+                <div class="col-sm-4 col-xl-2">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="FilAvailable" checked>
+                        <label class="custom-control-label" for="FilAvailable">Items Disponibles</label>
+                    </div>
+                </div>
+                @if (ViewBag.Local == "Y")
+                {
+                    <div class="col-sm-3 col-xl-2">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="FilStock">
+                            <label class="custom-control-label" for="FilStock">Con Stock</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xl-2">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="FilBlocked">
+                            <label class="custom-control-label" for="FilBlocked">Items Bloqueados</label>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" id="FilStock" value="false" />
+                    <input type="hidden" id="FilBlocked" value="false" />
+                }
+            </div>
+            <div class="row">
+                <div class="col text-right">
+                    <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
+                    <button type="button" class="btn btn-primary mr-2" id="action-filter">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="Listado"></div>
+    </div>
+</div>
+<kendo-window name="Detail" title="Producto" draggable="true" width="650" modal="true" visible="false" scrollable="true" on-close="onCloseWindow" on-refresh="onRefreshWindow" actions='new string[] { "Close" }'>
+    <content>Cargando...</content>
+    <popup-animation enabled="false" />
+</kendo-window>
+@section Scripts {
+    <script type="text/javascript">
+        var urlSubsidiaries = "@Url.Action("GetSubsidiaries", "Inventory")",
+            urlWarehouses = "@Url.Action("GetWarehouses", "Inventory")",
+            urlLines = "@Url.Action("GetLines", "Inventory")",
+            urlFilter = "@Url.Action("Filter", "Inventory")",
+            urlDetail = "@Url.Action("Detail", "Inventory")",
+            urlExcel = "@Url.Action("ExportExcel", "Inventory")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/product/inventory.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/inventory.min.js" asp-append-version="true"></script>
+    </environment>
+}

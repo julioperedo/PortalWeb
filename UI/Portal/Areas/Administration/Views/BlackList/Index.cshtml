@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Lista Negra";
+}
+<div class="row">
+    <div class="col mb-3">
+        <h3 class="title">@ViewBag.Title</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card bg-light mb-3 no-shadow">
+            <div class="card-body">
+                <h5 class="card-title">De Clientes</h5>
+                <p class="card-text">Listado de clientes a los que no se deber&iacute;a dar acceso al portal.</p>
+                <select id="clients"></select>
+                <div class="text-right mt-2">
+                    <button id="action-save-clients" type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-light mb-3 no-shadow">
+            <div class="card-body">
+                <h5 class="card-title">De Correos</h5>
+                <p class="card-text">Lista de correos electr&oacute;nicos a los que no se le enviar&aacute; ninguna notificaci&oacute;n.</p>
+                <div>
+                    <div class="input-group mb-3">
+                        <input id="filter-mails" type="text" class="form-control" placeholder="Correo Electr&oacute;nico" />
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button" id="action-filter-mails"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="emails"></div>
+                <div>
+                    <form id="form-add-mail">
+                        <div class="input-group mt-2">
+                            <input id="new-mail" name="new-mail" type="email" class="form-control" placeholder="Correo Electr&oacute;nico" required />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" id="add-mail">Agregar</button>
+                            </div>
+                        </div>
+                        <span data-for="new-mail" class="k-invalid-msg"></span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+		var urlFilterMails = "@Url.Action("FilterMails", "BlackList")",
+			urlClientsListed = "@Url.Action("GetBlacklist", "BlackList")",
+			urlAddMail = "@Url.Action("AddMailBlacklist", "BlackList")",
+            urlSaveClients = "@Url.Action("SaveClients", "BlackList")",
+			urlClients = "@Url.Action("GetClients", "BlackList")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/administration/blacklist.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/administration/blacklist.min.js" asp-append-version="true"></script>
+    </environment>
+}
