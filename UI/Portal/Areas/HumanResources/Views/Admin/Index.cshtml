@@ -1,45 +1,47 @@
 ﻿@{
-	ViewData["Title"] = "Solicitudes de Vacaciones";
+    ViewData["Title"] = "Solicitudes de Vacaciones";
 }
 <div class="custom-tab">
-	<ul class="nav nav-tabs" role="tablist">
-		<li class="nav-item">
-			<a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Solicitudes</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Resumen Empleados</a>
-		</li>
-	</ul>
-	<div class="tab-content">
-		<div class="tab-pane active show" id="tab1" role="tabpanel">
-			<div id="list-requests"></div>
-		</div>
-		<div class="tab-pane" id="tab2" role="tabpanel">
-			<div id="list-employees"></div>
-		</div>
-	</div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active show" data-toggle="tab" href="#tab1" role="tab" aria-selected="true">Solicitudes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab2" role="tab">Resumen Empleados</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active show" id="tab1" role="tabpanel">
+            <div id="list-requests"></div>
+        </div>
+        <div class="tab-pane" id="tab2" role="tabpanel">
+            <div id="list-employees"></div>
+        </div>
+    </div>
 </div>
 @section Styles {
-	<environment include="Development">
-		<link href="~/css/areas/human-resources/admin.css" rel="stylesheet" />
-	</environment>
-	<environment exclude="Development">
-		<link href="~/css/areas/human-resources/admin.min.css" rel="stylesheet" asp-append-version="true" />
-	</environment>
+    <environment include="Development">
+        <link href="~/css/areas/human-resources/admin.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/human-resources/admin.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
 }
 @section Scripts {
-	<script type="text/javascript">
-		var urlEmployeesResume = "@Url.Action("GetEmployeesResume")",
-			urlRequests = "@Url.Action("GetRequests")",
-			urlApprove = "@Url.Action("Approve")",
-			urlReject = "@Url.Action("Reject")";
-	</script>
-	<environment include="Development">
-		<script src="~/js/areas/human-resources/admin.js"></script>
-		<script src="~/lib/form-data-json/form-data-json.js"></script>
-	</environment>
-	<environment exclude="Development">
-		<script src="~/js/areas/human-resources/admin.min.js" asp-append-version="true"></script>
-		<script src="~/lib/form-data-json/form-data-json.min.js"></script>
-	</environment>
+    <script type="text/javascript">
+        var urlEmployeesResume = "@Url.Action("GetEmployeesResume")",
+            urlRequests = "@Url.Action("GetRequests")",
+            urlApprove = "@Url.Action("Approve")",
+            urlReject = "@Url.Action("Reject")";
+    </script>
+    <environment include="Development">
+        <script src="~/js/areas/human-resources/admin.js"></script>
+        <script src="~/lib/form-data-json/form-data-json.js"></script>
+        <script src="~/lib/lodash.js/lodash.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/human-resources/admin.min.js" asp-append-version="true"></script>
+        <script src="~/lib/form-data-json/form-data-json.min.js"></script>
+        <script src="~/lib/lodash.js/lodash.min.js"></script>
+    </environment>
 }

@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  * @module highcharts/modules/item-series
  * @requires highcharts
  *
@@ -10,4 +10,4 @@
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../modules/item-series.src.js';
+import '../../Series/Item/ItemSeries.js';

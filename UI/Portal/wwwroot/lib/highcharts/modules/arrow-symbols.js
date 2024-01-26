@@ -1,13 +1,9 @@
-/*
- Highcharts JS v8.1.2 (2020-06-16)
-
- Arrow Symbols
-
- (c) 2017-2019 Lars A. V. Cabrera
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/modules/arrow-symbols",["highcharts"],function(f){a(f);a.Highcharts=f;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function f(a,e,b,c){a.hasOwnProperty(e)||(a[e]=c.apply(null,b))}a=a?a._modules:{};f(a,"parts-gantt/ArrowSymbols.js",[a["parts/SVGRenderer.js"]],function(a){a.prototype.symbols.arrow=function(a,b,c,d){return[["M",
-a,b+d/2],["L",a+c,b],["L",a,b+d/2],["L",a+c,b+d]]};a.prototype.symbols["arrow-half"]=function(e,b,c,d){return a.prototype.symbols.arrow(e,b,c/2,d)};a.prototype.symbols["triangle-left"]=function(a,b,c,d){return[["M",a+c,b],["L",a,b+d/2],["L",a+c,b+d],["Z"]]};a.prototype.symbols["arrow-filled"]=a.prototype.symbols["triangle-left"];a.prototype.symbols["triangle-left-half"]=function(e,b,c,d){return a.prototype.symbols["triangle-left"](e,b,c/2,d)};a.prototype.symbols["arrow-filled-half"]=a.prototype.symbols["triangle-left-half"]});
-f(a,"masters/modules/arrow-symbols.src.js",[],function(){})});
-//# sourceMappingURL=arrow-symbols.js.map
+/**
+ * Highcharts JS v11.2.0 (2023-10-30)
+ *
+ * Arrow Symbols
+ *
+ * (c) 2017-2021 Lars A. V. Cabrera
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/modules/arrow-symbols",["highcharts"],function(o){return e(o),e.Highcharts=o,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var o=e?e._modules:{};function t(e,o,t,n){e.hasOwnProperty(o)||(e[o]=n.apply(null,t),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:o,module:e[o]}})))}t(o,"Extensions/ArrowSymbols.js",[o["Core/Utilities.js"]],function(e){let o=[];function t(e,o,t,n){return[["M",e,o+n/2],["L",e+t,o],["L",e,o+n/2],["L",e+t,o+n]]}function n(e,o,n,r){return t(e,o,n/2,r)}function r(e,o,t,n){return[["M",e+t,o],["L",e,o+n/2],["L",e+t,o+n],["Z"]]}function s(e,o,t,n){return r(e,o,t/2,n)}return{compose:function(i){if(e.pushUnique(o,i)){let e=i.prototype.symbols;e.arrow=t,e["arrow-filled"]=r,e["arrow-filled-half"]=s,e["arrow-half"]=n,e["triangle-left"]=r,e["triangle-left-half"]=s}}}}),t(o,"masters/modules/arrow-symbols.src.js",[o["Core/Globals.js"],o["Extensions/ArrowSymbols.js"]],function(e,o){o.compose(e.SVGRenderer)})});//# sourceMappingURL=arrow-symbols.js.map

@@ -162,8 +162,9 @@ function setupControls() {
 }
 
 function onAprove(e) {
-    let row = $(e.currentTarget).closest(".request"), item = $(e.currentTarget).closest(".k-listview").data("kendoListView").dataItem(row),
-        question = `¿Est&aacute; seguro que desea aprobar la solicitud de <b>${item.employeeName}</b>?` + (item.availableDays < item.days ? `, sólo tiene ${item.availableDays} días disponibles.` : '');
+    let row = $(e.currentTarget).closest(".request"), item = $(e.currentTarget).closest(".k-listview").data("kendoListView").dataItem(row);
+      var  question = `¿Est&aacute; seguro que desea aprobar la solicitud de <b>${item.employeeName}</b>?`;
+    if (item.vacation) question += item.availableDays < item.vacation.days ? `, sólo tiene ${item.availableDays} días disponibles de los ${item.vacation.days} solicitados.` : '';
     question += `<br /><label for="comments" class="pt-2">Comentarios</label><textarea id="comments" type="text" class="form-control" rows="2"></textarea>`;
     //console.log(item);
     showConfirm(question, function (r) {

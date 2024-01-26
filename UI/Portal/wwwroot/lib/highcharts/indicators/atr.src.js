@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Sebastian Bochan
+ * (c) 2010-2021 Sebastian Bochan
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,13 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/atr.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/ATR/ATRIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -36,45 +43,40 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var isArray = U.isArray,
-            seriesType = U.seriesType;
-        var UNDEFINED;
-        /* eslint-disable valid-jsdoc */
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { isArray, merge } = U;
+        /* *
+         *
+         *  Functions
+         *
+         * */
         // Utils:
         /**
          * @private
          */
         function accumulateAverage(points, xVal, yVal, i) {
-            var xValue = xVal[i],
-                yValue = yVal[i];
+            const xValue = xVal[i], yValue = yVal[i];
             points.push([xValue, yValue]);
         }
         /**
          * @private
          */
         function getTR(currentPoint, prevPoint) {
-            var pointY = currentPoint,
-                prevY = prevPoint,
-                HL = pointY[1] - pointY[2],
-                HCp = prevY === UNDEFINED ? 0 : Math.abs(pointY[1] - prevY[3]),
-                LCp = prevY === UNDEFINED ? 0 : Math.abs(pointY[2] - prevY[3]),
-                TR = Math.max(HL,
-                HCp,
-                LCp);
+            const pointY = currentPoint, prevY = prevPoint, HL = pointY[1] - pointY[2], HCp = typeof prevY === 'undefined' ? 0 : Math.abs(pointY[1] - prevY[3]), LCp = typeof prevY === 'undefined' ? 0 : Math.abs(pointY[2] - prevY[3]), TR = Math.max(HL, HCp, LCp);
             return TR;
         }
         /**
          * @private
          */
         function populateAverage(points, xVal, yVal, i, period, prevATR) {
-            var x = xVal[i - 1],
-                TR = getTR(yVal[i - 1],
-                yVal[i - 2]),
-                y;
-            y = (((prevATR * (period - 1)) + TR) / period);
+            const x = xVal[i - 1], TR = getTR(yVal[i - 1], yVal[i - 2]), y = (((prevATR * (period - 1)) + TR) / period);
             return [x, y];
         }
-        /* eslint-enable valid-jsdoc */
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The ATR series type.
          *
@@ -84,47 +86,31 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('atr', 'sma', 
-        /**
-         * Average true range indicator (ATR). This series requires `linkedTo`
-         * option to be set.
-         *
-         * @sample stock/indicators/atr
-         *         ATR indicator
-         *
-         * @extends      plotOptions.sma
-         * @since        6.0.0
-         * @product      highstock
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/atr
-         * @optionparent plotOptions.atr
-         */
-        {
-            params: {
-                period: 14
+        class ATRIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.points = void 0;
+                this.options = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            getValues: function (series, params) {
-                var period = params.period,
-                    xVal = series.xData,
-                    yVal = series.yData,
-                    yValLen = yVal ? yVal.length : 0,
-                    xValue = xVal[0],
-                    yValue = yVal[0],
-                    range = 1,
-                    prevATR = 0,
-                    TR = 0,
-                    ATR = [],
-                    xData = [],
-                    yData = [],
-                    point,
-                    i,
-                    points;
-                points = [[xValue, yValue]];
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, xVal = series.xData, yVal = series.yData, yValLen = yVal ? yVal.length : 0, xValue = xVal[0], yValue = yVal[0], points = [[xValue, yValue]], ATR = [], xData = [], yData = [];
+                let point, i, prevATR = 0, range = 1, TR = 0;
                 if ((xVal.length <= period) ||
                     !isArray(yVal[0]) ||
                     yVal[0].length !== 4) {
@@ -157,7 +143,40 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Average true range indicator (ATR). This series requires `linkedTo`
+         * option to be set.
+         *
+         * @sample stock/indicators/atr
+         *         ATR indicator
+         *
+         * @extends      plotOptions.sma
+         * @since        6.0.0
+         * @product      highstock
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/atr
+         * @optionparent plotOptions.atr
+         */
+        ATRIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
+            /**
+             * @excluding index
+             */
+            params: {
+                index: void 0 // unused index, do not inherit (#15362)
+            }
         });
+        SeriesRegistry.registerSeriesType('atr', ATRIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `ATR` series. If the [type](#series.atr.type) option is not specified, it
          * is inherited from [chart.type](#chart.type).
@@ -172,6 +191,7 @@
          */
         ''; // to include the above in the js output
 
+        return ATRIndicator;
     });
     _registerModule(_modules, 'masters/indicators/atr.src.js', [], function () {
 

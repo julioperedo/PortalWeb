@@ -1,24 +1,28 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  * @module highcharts/modules/annotations-advanced
  * @requires highcharts
  *
  * Annotations module
  *
- * (c) 2009-2019 Torstein Honsi
+ * (c) 2009-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../annotations/annotations.src.js';
-import '../../annotations/types/BasicAnnotation.js';
-import '../../annotations/types/CrookedLine.js';
-import '../../annotations/types/ElliottWave.js';
-import '../../annotations/types/Tunnel.js';
-import '../../annotations/types/InfinityLine.js';
-import '../../annotations/types/Fibonacci.js';
-import '../../annotations/types/Pitchfork.js';
-import '../../annotations/types/VerticalLine.js';
-import '../../annotations/types/Measure.js';
-import '../../annotations/navigationBindings.js';
-import '../../annotations/popup.js';
+import Highcharts from '../../Core/Globals.js';
+import Annotation from '../../Extensions/Annotations/Annotation.js';
+import '../../Extensions/Annotations/Types/BasicAnnotation.js';
+import '../../Extensions/Annotations/Types/CrookedLine.js';
+import '../../Extensions/Annotations/Types/ElliottWave.js';
+import '../../Extensions/Annotations/Types/Tunnel.js';
+import '../../Extensions/Annotations/Types/InfinityLine.js';
+import '../../Extensions/Annotations/Types/TimeCycles.js';
+import '../../Extensions/Annotations/Types/Fibonacci.js';
+import '../../Extensions/Annotations/Types/FibonacciTimeZones.js';
+import '../../Extensions/Annotations/Types/Pitchfork.js';
+import '../../Extensions/Annotations/Types/VerticalLine.js';
+import '../../Extensions/Annotations/Types/Measure.js';
+const G = Highcharts;
+G.Annotation = Annotation;
+Annotation.compose(G.Chart, G.Pointer, G.SVGRenderer);

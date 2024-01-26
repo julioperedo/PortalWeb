@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Sebastian Bochan
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/momentum",["highcharts","highcharts/modules/stock"],function(b){a(b);a.Highcharts=b;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function b(a,b,k,p){a.hasOwnProperty(b)||(a[b]=p.apply(null,k))}a=a?a._modules:{};b(a,"indicators/momentum.src.js",[a["parts/Utilities.js"]],function(a){function b(a,b,c,g,d){c=c[g-1][3]-
-c[g-d-1][3];b=b[g-1];a.shift();return[b,c]}var k=a.isArray;a=a.seriesType;a("momentum","sma",{params:{period:14}},{nameBase:"Momentum",getValues:function(a,f){f=f.period;var c=a.xData,g=(a=a.yData)?a.length:0,d=c[0],l=[],m=[],n=[];if(!(c.length<=f)&&k(a[0])){var h=a[0][3];h=[[d,h]];for(d=f+1;d<g;d++){var e=b(h,c,a,d,f,void 0);l.push(e);m.push(e[0]);n.push(e[1])}e=b(h,c,a,d,f,void 0);l.push(e);m.push(e[0]);n.push(e[1]);return{values:l,xData:m,yData:n}}}});""});b(a,"masters/indicators/momentum.src.js",
-[],function(){})});
-//# sourceMappingURL=momentum.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Sebastian Bochan
+ *
+ * License: www.highcharts.com/license
+ */!function(t){"object"==typeof module&&module.exports?(t.default=t,module.exports=t):"function"==typeof define&&define.amd?define("highcharts/indicators/momentum",["highcharts","highcharts/modules/stock"],function(e){return t(e),t.Highcharts=e,t}):t("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(t){"use strict";var e=t?t._modules:{};function s(t,e,s,o){t.hasOwnProperty(e)||(t[e]=o.apply(null,s),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:e,module:t[e]}})))}s(e,"Stock/Indicators/Momentum/MomentumIndicator.js",[e["Core/Series/SeriesRegistry.js"],e["Core/Utilities.js"]],function(t,e){let{sma:s}=t.seriesTypes,{extend:o,isArray:n,merge:i}=e;function u(t,e,s,o,n){let i=e[s-1][n]-e[s-o-1][n],u=t[s-1];return[u,i]}class r extends s{constructor(){super(...arguments),this.data=void 0,this.options=void 0,this.points=void 0}getValues(t,e){let s,o;let i=e.period,r=e.index,a=t.xData,d=t.yData,h=d?d.length:0,c=[],m=[],p=[];if(!(a.length<=i)&&n(d[0])){for(s=i+1;s<h;s++)o=u(a,d,s,i,r),c.push(o),m.push(o[0]),p.push(o[1]);return o=u(a,d,s,i,r),c.push(o),m.push(o[0]),p.push(o[1]),{values:c,xData:m,yData:p}}}}return r.defaultOptions=i(s.defaultOptions,{params:{index:3}}),o(r.prototype,{nameBase:"Momentum"}),t.registerSeriesType("momentum",r),r}),s(e,"masters/indicators/momentum.src.js",[],function(){})});//# sourceMappingURL=momentum.js.map

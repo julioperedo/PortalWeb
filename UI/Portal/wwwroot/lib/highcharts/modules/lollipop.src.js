@@ -1,11 +1,10 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  *
- * (c) 2009-2019 Sebastian Bochan, Rafal Sebestjanski
+ * (c) 2009-2021 Sebastian Bochan, Rafal Sebestjanski
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -20,25 +19,151 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'modules/lollipop.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js']], function (H, U) {
+    _registerModule(_modules, 'Series/Lollipop/LollipopPoint.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
-         *  (c) 2010-2020 Sebastian Bochan, Rafal Sebestjanski
+         *  (c) 2010-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var seriesType = U.seriesType;
-        var areaProto = H.seriesTypes.area.prototype,
-            colProto = H.seriesTypes.column.prototype;
+        const { series: { prototype: { pointClass: Point } }, seriesTypes: { scatter: { prototype: { pointClass: ScatterPoint } }, dumbbell: { prototype: { pointClass: DumbbellPoint } } } } = SeriesRegistry;
+        const { extend } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
+        class LollipopPoint extends Point {
+            constructor() {
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                super(...arguments);
+                this.options = void 0;
+                this.series = void 0;
+                this.plotX = void 0;
+                this.pointWidth = void 0;
+            }
+        }
+        extend(LollipopPoint.prototype, {
+            destroy: DumbbellPoint.prototype.destroy,
+            pointSetState: ScatterPoint.prototype.setState,
+            setState: DumbbellPoint.prototype.setState
+        });
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+
+        return LollipopPoint;
+    });
+    _registerModule(_modules, 'Series/Lollipop/LollipopSeries.js', [_modules['Series/Lollipop/LollipopPoint.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Series/Series.js'], _modules['Core/Utilities.js']], function (LollipopPoint, SeriesRegistry, Series, U) {
+        /* *
+         *
+         *  (c) 2010-2021 Sebastian Bochan, Rafal Sebestjanski
+         *
+         *  License: www.highcharts.com/license
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         * */
+        const { seriesTypes: { column: { prototype: colProto }, dumbbell: { prototype: dumbbellProto }, scatter: ScatterSeries } } = SeriesRegistry;
+        const { extend, merge } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
+        /**
+         * Lollipop series type
+         *
+         * @private
+         * @class
+         * @name Highcharts.seriesTypes.lollipop
+         *
+         * @augments Highcharts.Series
+         *
+         */
+        class LollipopSeries extends Series {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
+            }
+            /**
+             * Extend the series' drawPoints method by applying a connector
+             * and coloring markers.
+             * @private
+             *
+             * @function Highcharts.Series#drawPoints
+             *
+             * @param {Highcharts.Series} this The series of points.
+             *
+             */
+            drawPoints() {
+                const series = this, pointLength = series.points.length;
+                let i = 0, point;
+                super.drawPoints.apply(series, arguments);
+                // Draw connectors
+                while (i < pointLength) {
+                    point = series.points[i];
+                    series.drawConnector(point);
+                    i++;
+                }
+            }
+            /**
+             * Extend the series' translate method to use grouping option.
+             * @private
+             *
+             * @function Highcharts.Series#translate
+             *
+             * @param {Highcharts.Series} this The series of points.
+             *
+             */
+            translate() {
+                const series = this;
+                colProto.translate.apply(series, arguments);
+                // Correct x position
+                for (const point of series.points) {
+                    const { pointWidth, shapeArgs } = point;
+                    if (shapeArgs?.x) {
+                        shapeArgs.x += pointWidth / 2;
+                        point.plotX = shapeArgs.x || 0;
+                    }
+                }
+            }
+        }
         /**
          * The lollipop series is a carteseian series with a line anchored from
          * the x axis and a dot at the end to mark the value.
@@ -52,20 +177,34 @@
          *
          * @extends      plotOptions.dumbbell
          * @product      highcharts highstock
-         * @excluding    fillColor, fillOpacity, lineWidth, stack, stacking, lowColor,
-         *               stickyTracking, trackByArea
-         * @since 8.0.0
+         * @excluding    fillColor, fillOpacity, lineWidth, stack, stacking,
+         *               lowColor, stickyTracking, trackByArea
+         * @since        8.0.0
          * @optionparent plotOptions.lollipop
          */
-        seriesType('lollipop', 'dumbbell', {
-            /** @ignore-option */
-            lowColor: void 0,
+        LollipopSeries.defaultOptions = merge(Series.defaultOptions, {
             /** @ignore-option */
             threshold: 0,
             /** @ignore-option */
             connectorWidth: 1,
             /** @ignore-option */
             groupPadding: 0.2,
+            /**
+             * Whether to group non-stacked lollipop points or to let them
+             * render independent of each other. Non-grouped lollipop points
+             * will be laid out individually and overlap each other.
+             *
+             * @sample highcharts/series-lollipop/enabled-grouping/
+             *         Multiple lollipop series with grouping
+             * @sample highcharts/series-lollipop/disabled-grouping/
+             *         Multiple lollipop series with disabled grouping
+             *
+             * @type      {boolean}
+             * @default   true
+             * @since     8.0.0
+             * @product   highcharts highstock
+             * @apioption plotOptions.lollipop.grouping
+             */
             /** @ignore-option */
             pointPadding: 0.1,
             /** @ignore-option */
@@ -79,35 +218,35 @@
                     halo: false
                 }
             },
-            tooltip: {
-                pointFormat: '<span style="color:{series.color}">●</span> {series.name}: <b>{point.y}</b><br/>'
-            }
-        }, {
-            pointArrayMap: ['y'],
-            pointValKey: 'y',
-            toYData: function (point) {
-                return [H.pick(point.y, point.low)];
+            /** @ignore-option */
+            lineWidth: 0,
+            dataLabels: {
+                align: void 0,
+                verticalAlign: void 0
             },
-            translatePoint: areaProto.translate,
-            drawPoint: areaProto.drawPoints,
-            drawDataLabels: colProto.drawDataLabels,
-            setShapeArgs: colProto.translate
-        }, {
-            pointSetState: areaProto.pointClass.prototype.setState,
-            setState: H.seriesTypes.dumbbell.prototype.pointClass.prototype.setState,
-            init: function (series, options, x) {
-                if (H.isObject(options) && 'low' in options) {
-                    options.y = options.low;
-                    delete options.low;
-                }
-                return H.Point.prototype.init.apply(this, arguments);
-            }
+            pointRange: 1
         });
+        extend(LollipopSeries.prototype, {
+            alignDataLabel: colProto.alignDataLabel,
+            crispCol: colProto.crispCol,
+            drawConnector: dumbbellProto.drawConnector,
+            drawDataLabels: colProto.drawDataLabels,
+            getColumnMetrics: colProto.getColumnMetrics,
+            getConnectorAttribs: dumbbellProto.getConnectorAttribs,
+            pointClass: LollipopPoint
+        });
+        SeriesRegistry.registerSeriesType('lollipop', LollipopSeries);
+        /* *
+         *
+         *  Default export
+         *
+         * */
         /**
          * The `lollipop` series. If the [type](#series.lollipop.type) option is
          * not specified, it is inherited from [chart.type](#chart.type).
          *
          * @extends   series,plotOptions.lollipop
+         * @excluding boostThreshold, boostBlending
          * @product   highcharts highstock
          * @requires  highcharts-more
          * @requires  modules/dumbbell
@@ -177,14 +316,15 @@
          * @apioption series.lollipop.data
          */
         /**
-        * The y value of the point.
-        *
-        * @type      {number|null}
-        * @product   highcharts highstock
-        * @apioption series.line.data.y
-        */
-        ''; // adds doclets above to transpiled file
+         * The y value of the point.
+         *
+         * @type      {number|null}
+         * @product   highcharts highstock
+         * @apioption series.line.data.y
+         */
+        (''); // adds doclets above to transpiled file
 
+        return LollipopSeries;
     });
     _registerModule(_modules, 'masters/modules/lollipop.src.js', [], function () {
 

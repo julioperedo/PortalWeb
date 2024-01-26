@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Parabolic SAR Indicator for Highstock
+ * Parabolic SAR Indicator for Highcharts Stock
  *
- * (c) 2010-2019 Grzegorz Blachliński
+ * (c) 2010-2021 Grzegorz Blachliński
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,26 +21,39 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/psar.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/PSAR/PSARIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
-         *  Parabolic SAR indicator for Highstock
+         *  Parabolic SAR indicator for Highcharts Stock
          *
-         *  (c) 2010-2020 Grzegorz Blachliński
+         *  (c) 2010-2021 Grzegorz Blachliński
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var seriesType = U.seriesType;
-        /* eslint-disable require-jsdoc */
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { merge } = U;
+        /* *
+         *
+         *  Functions
+         *
+         * */
         // Utils:
         function toFixed(a, n) {
             return parseFloat(a.toFixed(n));
@@ -112,7 +124,11 @@
             }
             return pEP;
         }
-        /* eslint-enable require-jsdoc */
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The Parabolic SAR series type.
          *
@@ -122,103 +138,37 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('psar', 'sma', 
-        /**
-         * Parabolic SAR. This series requires `linkedTo`
-         * option to be set and should be loaded
-         * after `stock/indicators/indicators.js` file.
-         *
-         * @sample stock/indicators/psar
-         *         Parabolic SAR Indicator
-         *
-         * @extends      plotOptions.sma
-         * @since        6.0.0
-         * @product      highstock
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/psar
-         * @optionparent plotOptions.psar
-         */
-        {
-            lineWidth: 0,
-            marker: {
-                enabled: true
-            },
-            states: {
-                hover: {
-                    lineWidthPlus: 0
-                }
-            },
-            /**
-             * @excluding period
-             */
-            params: {
-                /**
-                 * The initial value for acceleration factor.
-                 * Acceleration factor is starting with this value
-                 * and increases by specified increment each time
-                 * the extreme point makes a new high.
-                 * AF can reach a maximum of maxAccelerationFactor,
-                 * no matter how long the uptrend extends.
-                 */
-                initialAccelerationFactor: 0.02,
-                /**
-                 * The Maximum value for acceleration factor.
-                 * AF can reach a maximum of maxAccelerationFactor,
-                 * no matter how long the uptrend extends.
-                 */
-                maxAccelerationFactor: 0.2,
-                /**
-                 * Acceleration factor increases by increment each time
-                 * the extreme point makes a new high.
+        class PSARIndicator extends SMAIndicator {
+            constructor() {
+                /* *
                  *
-                 * @since 6.0.0
-                 */
-                increment: 0.02,
-                /**
-                 * Index from which PSAR is starting calculation
+                 *  Static Properties
                  *
-                 * @since 6.0.0
-                 */
-                index: 2,
-                /**
-                 * Number of maximum decimals that are used in PSAR calculations.
+                 * */
+                super(...arguments);
+                /* *
                  *
-                 * @since 6.0.0
-                 */
-                decimals: 4
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.nameComponents = void 0;
+                this.points = void 0;
+                this.options = void 0;
             }
-        }, {
-            nameComponents: false,
-            getValues: function (series, params) {
-                var xVal = series.xData,
-                    yVal = series.yData, 
-                    // Extreme point is the lowest low for falling and highest high
-                    // for rising psar - and we are starting with falling
-                    extremePoint = yVal[0][1],
-                    accelerationFactor = params.initialAccelerationFactor,
-                    maxAccelerationFactor = params.maxAccelerationFactor,
-                    increment = params.increment, 
-                    // Set initial acc factor (for every new trend!)
-                    initialAccelerationFactor = params.initialAccelerationFactor,
-                    PSAR = yVal[0][2],
-                    decimals = params.decimals,
-                    index = params.index,
-                    PSARArr = [],
-                    xData = [],
-                    yData = [],
-                    previousDirection = 1,
-                    direction,
-                    EPMinusPSAR,
-                    accelerationFactorMultiply,
-                    newDirection,
-                    prevLow,
-                    prevPrevLow,
-                    prevHigh,
-                    prevPrevHigh,
-                    newExtremePoint,
-                    high,
-                    low,
-                    ind;
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const xVal = series.xData, yVal = series.yData, maxAccelerationFactor = params.maxAccelerationFactor, increment = params.increment, 
+                // Set initial acc factor (for every new trend!)
+                initialAccelerationFactor = params.initialAccelerationFactor, decimals = params.decimals, index = params.index, PSARArr = [], xData = [], yData = [];
+                let accelerationFactor = params.initialAccelerationFactor, direction, 
+                // Extreme point is the lowest low for falling and highest high
+                // for rising psar - and we are starting with falling
+                extremePoint = yVal[0][1], EPMinusPSAR, accelerationFactorMultiply, newDirection, previousDirection = 1, prevLow, prevPrevLow, prevHigh, prevPrevHigh, PSAR = yVal[0][2], newExtremePoint, high, low, ind;
                 if (index >= yVal.length) {
                     return;
                 }
@@ -267,7 +217,84 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Parabolic SAR. This series requires `linkedTo`
+         * option to be set and should be loaded
+         * after `stock/indicators/indicators.js` file.
+         *
+         * @sample stock/indicators/psar
+         *         Parabolic SAR Indicator
+         *
+         * @extends      plotOptions.sma
+         * @since        6.0.0
+         * @product      highstock
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/psar
+         * @optionparent plotOptions.psar
+         */
+        PSARIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
+            lineWidth: 0,
+            marker: {
+                enabled: true
+            },
+            states: {
+                hover: {
+                    lineWidthPlus: 0
+                }
+            },
+            /**
+             * @excluding period
+             */
+            params: {
+                period: void 0,
+                /**
+                 * The initial value for acceleration factor.
+                 * Acceleration factor is starting with this value
+                 * and increases by specified increment each time
+                 * the extreme point makes a new high.
+                 * AF can reach a maximum of maxAccelerationFactor,
+                 * no matter how long the uptrend extends.
+                 */
+                initialAccelerationFactor: 0.02,
+                /**
+                 * The Maximum value for acceleration factor.
+                 * AF can reach a maximum of maxAccelerationFactor,
+                 * no matter how long the uptrend extends.
+                 */
+                maxAccelerationFactor: 0.2,
+                /**
+                 * Acceleration factor increases by increment each time
+                 * the extreme point makes a new high.
+                 *
+                 * @since 6.0.0
+                 */
+                increment: 0.02,
+                /**
+                 * Index from which PSAR is starting calculation
+                 *
+                 * @since 6.0.0
+                 */
+                index: 2,
+                /**
+                 * Number of maximum decimals that are used in PSAR calculations.
+                 *
+                 * @since 6.0.0
+                 */
+                decimals: 4
+            }
         });
+        SeriesRegistry.registerSeriesType('psar', PSARIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `PSAR` series. If the [type](#series.psar.type) option is not specified, it
          * is inherited from [chart.type](#chart.type).
@@ -282,6 +309,7 @@
          */
         ''; // to include the above in the js output
 
+        return PSARIndicator;
     });
     _registerModule(_modules, 'masters/indicators/psar.src.js', [], function () {
 

@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Money Flow Index indicator for Highstock
-
- (c) 2010-2019 Grzegorz Blachliski
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/mfi",["highcharts","highcharts/modules/stock"],function(c){a(c);a.Highcharts=c;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function c(a,c,h,m){a.hasOwnProperty(c)||(a[c]=m.apply(null,h))}a=a?a._modules:{};c(a,"indicators/mfi.src.js",[a["parts/Utilities.js"]],function(a){function c(a){return a.reduce(function(a,
-n){return a+n})}function h(a){return(a[1]+a[2]+a[3])/3}var m=a.error,v=a.isArray;a=a.seriesType;a("mfi","sma",{params:{period:14,volumeSeriesID:"volume",decimals:4}},{nameBase:"Money Flow Index",getValues:function(a,b){var e=b.period,p=a.xData,f=a.yData,n=f?f.length:0,w=b.decimals,g=1,d=a.chart.get(b.volumeSeriesID),q=d&&d.yData,r=[],t=[],u=[],k=[],l=[];if(!d)m("Series "+b.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0,a.chart);else if(!(p.length<=e)&&v(f[0])&&4===f[0].length&&q){for(a=h(f[g]);g<
-e+1;)b=a,a=h(f[g]),b=a>=b,d=a*q[g],k.push(b?d:0),l.push(b?0:d),g++;for(e=g-1;e<n;e++)e>g-1&&(k.shift(),l.shift(),b=a,a=h(f[e]),b=a>b,d=a*q[e],k.push(b?d:0),l.push(b?0:d)),b=c(l),d=c(k),b=d/b,b=parseFloat((100-100/(1+b)).toFixed(w)),r.push([p[e],b]),t.push(p[e]),u.push(b);return{values:r,xData:t,yData:u}}}});""});c(a,"masters/indicators/mfi.src.js",[],function(){})});
-//# sourceMappingURL=mfi.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Money Flow Index indicator for Highcharts Stock
+ *
+ * (c) 2010-2021 Grzegorz Blachliński
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/indicators/mfi",["highcharts","highcharts/modules/stock"],function(t){return e(t),e.Highcharts=t,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var t=e?e._modules:{};function s(e,t,s,i){e.hasOwnProperty(t)||(e[t]=i.apply(null,s),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:t,module:e[t]}})))}s(t,"Stock/Indicators/MFI/MFIIndicator.js",[t["Core/Series/SeriesRegistry.js"],t["Core/Utilities.js"]],function(e,t){let{sma:s}=e.seriesTypes,{extend:i,merge:o,error:n,isArray:r}=t;function u(e){return e.reduce(function(e,t){return e+t})}function a(e){return(e[1]+e[2]+e[3])/3}class d extends s{constructor(){super(...arguments),this.data=void 0,this.options=void 0,this.points=void 0}getValues(e,t){let s=t.period,i=e.xData,o=e.yData,d=o?o.length:0,h=t.decimals,c=e.chart.get(t.volumeSeriesID),f=c&&c.yData,l=[],p=[],m=[],v=[],g=[],y,D,I,S,x,j,w=!1,C=1;if(!c){n("Series "+t.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0,e.chart);return}if(!(i.length<=s)&&r(o[0])&&4===o[0].length&&f){for(y=a(o[C]);C<s+1;)D=y,w=(y=a(o[C]))>=D,I=y*f[C],v.push(w?I:0),g.push(w?0:I),C++;for(j=C-1;j<d;j++)j>C-1&&(v.shift(),g.shift(),D=y,w=(y=a(o[j]))>D,I=y*f[j],v.push(w?I:0),g.push(w?0:I)),S=u(g),x=parseFloat((100-100/(1+u(v)/S)).toFixed(h)),l.push([i[j],x]),p.push(i[j]),m.push(x);return{values:l,xData:p,yData:m}}}}return d.defaultOptions=o(s.defaultOptions,{params:{index:void 0,volumeSeriesID:"volume",decimals:4}}),i(d.prototype,{nameBase:"Money Flow Index"}),e.registerSeriesType("mfi",d),d}),s(t,"masters/indicators/mfi.src.js",[],function(){})});//# sourceMappingURL=mfi.js.map

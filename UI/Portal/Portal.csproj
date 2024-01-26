@@ -20,8 +20,8 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Portal</RootNamespace>
     <AssemblyName>Portal</AssemblyName>
-    <AssemblyVersion>2024.1.26.0915</AssemblyVersion>
-    <FileVersion>2024.1.26.0915</FileVersion>
+    <AssemblyVersion>2024.1.26.1106</AssemblyVersion>
+    <FileVersion>2024.1.26.1106</FileVersion>
     <UserSecretsId>5248c4c2-4ef2-414a-89ae-52adde05c837</UserSecretsId>
   </PropertyGroup>
 

@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Sebastian Bochan
+ * (c) 2010-2021 Sebastian Bochan
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,13 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/momentum.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/Momentum/MomentumIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -36,16 +43,25 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var isArray = U.isArray,
-            seriesType = U.seriesType;
-        /* eslint-disable require-jsdoc */
-        function populateAverage(points, xVal, yVal, i, period) {
-            var mmY = yVal[i - 1][3] - yVal[i - period - 1][3],
-                mmX = xVal[i - 1];
-            points.shift(); // remove point until range < period
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { extend, isArray, merge } = U;
+        /* *
+         *
+         *  Functions
+         *
+         * */
+        /**
+         * @private
+         */
+        function populateAverage(xVal, yVal, i, period, index) {
+            const mmY = yVal[i - 1][index] - yVal[i - period - 1][index], mmX = xVal[i - 1];
             return [mmX, mmY];
         }
-        /* eslint-enable require-jsdoc */
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The Momentum series type.
          *
@@ -55,7 +71,56 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('momentum', 'sma', 
+        class MomentumIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, index = params.index, xVal = series.xData, yVal = series.yData, yValLen = yVal ? yVal.length : 0, MM = [], xData = [], yData = [];
+                let i, MMPoint;
+                if (xVal.length <= period) {
+                    return;
+                }
+                // Switch index for OHLC / Candlestick / Arearange
+                if (!isArray(yVal[0])) {
+                    return;
+                }
+                // Calculate value one-by-one for each period in visible data
+                for (i = (period + 1); i < yValLen; i++) {
+                    MMPoint = populateAverage(xVal, yVal, i, period, index);
+                    MM.push(MMPoint);
+                    xData.push(MMPoint[0]);
+                    yData.push(MMPoint[1]);
+                }
+                MMPoint = populateAverage(xVal, yVal, i, period, index);
+                MM.push(MMPoint);
+                xData.push(MMPoint[0]);
+                yData.push(MMPoint[1]);
+                return {
+                    values: MM,
+                    xData: xData,
+                    yData: yData
+                };
+            }
+        }
         /**
          * Momentum. This series requires `linkedTo` option to be set.
          *
@@ -69,62 +134,25 @@
          * @requires     stock/indicators/momentum
          * @optionparent plotOptions.momentum
          */
-        {
+        MomentumIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
             params: {
-                period: 14
-            }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameBase: 'Momentum',
-            getValues: function (series, params) {
-                var period = params.period,
-                    xVal = series.xData,
-                    yVal = series.yData,
-                    yValLen = yVal ? yVal.length : 0,
-                    xValue = xVal[0],
-                    yValue = yVal[0],
-                    MM = [],
-                    xData = [],
-                    yData = [],
-                    index,
-                    i,
-                    points,
-                    MMPoint;
-                if (xVal.length <= period) {
-                    return;
-                }
-                // Switch index for OHLC / Candlestick / Arearange
-                if (isArray(yVal[0])) {
-                    yValue = yVal[0][3];
-                }
-                else {
-                    return;
-                }
-                // Starting point
-                points = [
-                    [xValue, yValue]
-                ];
-                // Calculate value one-by-one for each period in visible data
-                for (i = (period + 1); i < yValLen; i++) {
-                    MMPoint = populateAverage(points, xVal, yVal, i, period, index);
-                    MM.push(MMPoint);
-                    xData.push(MMPoint[0]);
-                    yData.push(MMPoint[1]);
-                }
-                MMPoint = populateAverage(points, xVal, yVal, i, period, index);
-                MM.push(MMPoint);
-                xData.push(MMPoint[0]);
-                yData.push(MMPoint[1]);
-                return {
-                    values: MM,
-                    xData: xData,
-                    yData: yData
-                };
+                index: 3
             }
         });
+        extend(MomentumIndicator.prototype, {
+            nameBase: 'Momentum'
+        });
+        SeriesRegistry.registerSeriesType('momentum', MomentumIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `Momentum` series. If the [type](#series.momentum.type) option is not
          * specified, it is inherited from [chart.type](#chart.type).
@@ -139,6 +167,7 @@
          */
         ''; // to include the above in the js output
 
+        return MomentumIndicator;
     });
     _registerModule(_modules, 'masters/indicators/momentum.src.js', [], function () {
 

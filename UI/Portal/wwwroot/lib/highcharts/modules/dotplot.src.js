@@ -1,13 +1,12 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  *
  * Dot plot series type for Highcharts
  *
- * (c) 2010-2019 Torstein Honsi
+ * (c) 2010-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,16 +21,59 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'modules/dotplot.src.js', [_modules['parts/SVGRenderer.js'], _modules['parts/Utilities.js']], function (SVGRenderer, U) {
+    _registerModule(_modules, 'Series/DotPlot/DotPlotSeriesDefaults.js', [], function () {
         /* *
          *
-         *  (c) 2009-2020 Torstein Honsi
+         *  (c) 2009-2021 Torstein Honsi
+         *
+         *  Dot plot series type for Highcharts
+         *
+         *  License: www.highcharts.com/license
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
+        const DotPlotSeriesDefaults = {
+            itemPadding: 0.2,
+            marker: {
+                symbol: 'circle',
+                states: {
+                    hover: {},
+                    select: {}
+                }
+            }
+        };
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+
+        return DotPlotSeriesDefaults;
+    });
+    _registerModule(_modules, 'Series/DotPlot/DotPlotSeries.js', [_modules['Series/DotPlot/DotPlotSeriesDefaults.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (DotPlotSeriesDefaults, SeriesRegistry, U) {
+        /* *
+         *
+         *  (c) 2009-2021 Torstein Honsi
          *
          *  Dot plot series type for Highcharts
          *
@@ -47,10 +89,13 @@
          * - Custom icons like persons, carts etc. Either as images, font icons or
          *   Highcharts symbols.
          */
-        var extend = U.extend,
-            objectEach = U.objectEach,
-            pick = U.pick,
-            seriesType = U.seriesType;
+        const { column: ColumnSeries } = SeriesRegistry.seriesTypes;
+        const { extend, merge, pick } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * @private
          * @class
@@ -58,43 +103,37 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('dotplot', 'column', {
-            itemPadding: 0.2,
-            marker: {
-                symbol: 'circle',
-                states: {
-                    hover: {},
-                    select: {}
-                }
+        class DotPlotSeries extends ColumnSeries {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
             }
-        }, {
-            markerAttribs: void 0,
-            drawPoints: function () {
-                var series = this,
-                    renderer = series.chart.renderer,
-                    seriesMarkerOptions = this.options.marker,
-                    itemPaddingTranslated = this.yAxis.transA *
-                        series.options.itemPadding,
-                    borderWidth = this.borderWidth,
-                    crisp = borderWidth % 2 ? 0.5 : 1;
-                this.points.forEach(function (point) {
-                    var yPos,
-                        attr,
-                        graphics,
-                        itemY,
-                        pointAttr,
-                        pointMarkerOptions = point.marker || {},
-                        symbol = (pointMarkerOptions.symbol ||
-                            seriesMarkerOptions.symbol),
-                        radius = pick(pointMarkerOptions.radius,
-                        seriesMarkerOptions.radius),
-                        size,
-                        yTop,
-                        isSquare = symbol !== 'rect',
-                        x,
-                        y;
-                    point.graphics = graphics = point.graphics || {};
-                    pointAttr = point.pointAttr ?
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            drawPoints() {
+                const series = this, options = series.options, renderer = series.chart.renderer, seriesMarkerOptions = options.marker, itemPaddingTranslated = series.yAxis.transA *
+                    options.itemPadding, borderWidth = series.borderWidth, crisp = borderWidth % 2 ? 0.5 : 1;
+                for (const point of series.points) {
+                    const pointMarkerOptions = point.marker || {}, symbol = (pointMarkerOptions.symbol ||
+                        seriesMarkerOptions.symbol), radius = pick(pointMarkerOptions.radius, seriesMarkerOptions.radius), isSquare = symbol !== 'rect';
+                    let yPos, attr, graphics, size, yTop, x, y;
+                    point.graphics = graphics = point.graphics || [];
+                    const pointAttr = point.pointAttr ?
                         (point.pointAttr[point.selected ? 'selected' : ''] ||
                             series.pointAttr['']) :
                         series.pointAttribs(point, point.selected && 'select');
@@ -107,10 +146,10 @@
                         if (!point.graphic) {
                             point.graphic = renderer.g('point').add(series.group);
                         }
-                        itemY = point.y;
                         yTop = pick(point.stackY, point.y);
                         size = Math.min(point.pointWidth, series.yAxis.transA - itemPaddingTranslated);
-                        for (yPos = yTop; yPos > yTop - point.y; yPos--) {
+                        let i = Math.floor(yTop);
+                        for (yPos = yTop; yPos > yTop - point.y; yPos--, i--) {
                             x = point.barX + (isSquare ?
                                 point.pointWidth / 2 - size / 2 :
                                 0);
@@ -127,34 +166,47 @@
                                 height: Math.round(size),
                                 r: radius
                             };
-                            if (graphics[itemY]) {
-                                graphics[itemY].animate(attr);
+                            let graphic = graphics[i];
+                            if (graphic) {
+                                graphic.animate(attr);
                             }
                             else {
-                                graphics[itemY] = renderer.symbol(symbol)
+                                graphic = renderer.symbol(symbol)
                                     .attr(extend(attr, pointAttr))
                                     .add(point.graphic);
                             }
-                            graphics[itemY].isActive = true;
-                            itemY--;
+                            graphic.isActive = true;
+                            graphics[i] = graphic;
                         }
                     }
-                    objectEach(graphics, function (graphic, key) {
-                        if (!graphic.isActive) {
-                            graphic.destroy();
-                            delete graphic[key];
+                    let i = -1;
+                    for (const graphic of graphics) {
+                        ++i;
+                        if (graphic) {
+                            if (!graphic.isActive) {
+                                graphic.destroy();
+                                graphics.splice(i, 1);
+                            }
+                            else {
+                                graphic.isActive = false;
+                            }
                         }
-                        else {
-                            graphic.isActive = false;
-                        }
-                    });
-                });
+                    }
+                }
             }
+        }
+        DotPlotSeries.defaultOptions = merge(ColumnSeries.defaultOptions, DotPlotSeriesDefaults);
+        extend(DotPlotSeries.prototype, {
+            markerAttribs: void 0
         });
-        SVGRenderer.prototype.symbols.rect = function (x, y, w, h, options) {
-            return SVGRenderer.prototype.symbols.callout(x, y, w, h, options);
-        };
+        SeriesRegistry.registerSeriesType('dotplot', DotPlotSeries);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
 
+        return DotPlotSeries;
     });
     _registerModule(_modules, 'masters/modules/dotplot.src.js', [], function () {
 

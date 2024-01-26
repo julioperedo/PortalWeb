@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  * @module highcharts/highcharts-3d
  * @requires highcharts
  *
@@ -8,14 +8,25 @@
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../parts-3d/Math.js';
-import '../parts-3d/SVGRenderer.js';
-import '../parts-3d/Chart3D.js';
-import '../parts-3d/ZAxis.js';
-import '../parts-3d/Axis3D.js';
-import '../parts-3d/Tick3D.js';
-import '../parts-3d/Series.js';
-import '../parts-3d/Column.js';
-import '../parts-3d/Pie.js';
-import '../parts-3d/Scatter.js';
-import '../parts-3d/VMLRenderer.js';
+import Highcharts from '../Core/Globals.js';
+import Chart3D from '../Core/Chart/Chart3D.js';
+import Area3DSeries from '../Series/Area3D/Area3DSeries.js';
+import Axis3DComposition from '../Core/Axis/Axis3DComposition.js';
+import RendererRegistry from '../Core/Renderer/RendererRegistry.js';
+import Series3D from '../Core/Series/Series3D.js';
+import StackItem from '../Core/Axis/Stacking/StackItem.js';
+import SVGRenderer3D from '../Core/Renderer/SVG/SVGRenderer3D.js';
+import ZAxis from '../Core/Axis/ZAxis.js';
+import Column3DComposition from '../Series/Column3D/Column3DComposition.js';
+import Pie3DSeries from '../Series/Pie3D/Pie3DSeries.js';
+import '../Series/Scatter3D/Scatter3DSeries.js';
+const G = Highcharts;
+// Compositions
+Area3DSeries.compose(G.seriesTypes.area);
+Axis3DComposition.compose(G.Axis, G.Tick);
+Chart3D.compose(G.Chart, G.Fx);
+Column3DComposition.compose(G.Series, StackItem);
+Pie3DSeries.compose(G.Series);
+Series3D.compose(G.Series);
+SVGRenderer3D.compose(RendererRegistry.getRendererType());
+ZAxis.compose(G.Chart);

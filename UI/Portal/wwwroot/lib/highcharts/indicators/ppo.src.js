@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Wojciech Chmiel
+ * (c) 2010-2021 Wojciech Chmiel
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,75 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'mixins/indicator-required.js', [_modules['parts/Utilities.js']], function (U) {
-        /**
-         *
-         *  (c) 2010-2020 Daniel Studencki
-         *
-         *  License: www.highcharts.com/license
-         *
-         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
-         *
-         * */
-        var error = U.error;
-        /* eslint-disable no-invalid-this, valid-jsdoc */
-        var requiredIndicatorMixin = {
-                /**
-                 * Check whether given indicator is loaded,
-            else throw error.
-                 * @private
-                 * @param {Highcharts.Indicator} indicator
-                 *        Indicator constructor function.
-                 * @param {string} requiredIndicator
-                 *        Required indicator type.
-                 * @param {string} type
-                 *        Type of indicator where function was called (parent).
-                 * @param {Highcharts.IndicatorCallbackFunction} callback
-                 *        Callback which is triggered if the given indicator is loaded.
-                 *        Takes indicator as an argument.
-                 * @param {string} errMessage
-                 *        Error message that will be logged in console.
-                 * @return {boolean}
-                 *         Returns false when there is no required indicator loaded.
-                 */
-                isParentLoaded: function (indicator,
-            requiredIndicator,
-            type,
-            callback,
-            errMessage) {
-                    if (indicator) {
-                        return callback ? callback(indicator) : true;
-                }
-                error(errMessage || this.generateMessage(type, requiredIndicator));
-                return false;
-            },
-            /**
-             * @private
-             * @param {string} indicatorType
-             *        Indicator type
-             * @param {string} required
-             *        Required indicator
-             * @return {string}
-             *         Error message
-             */
-            generateMessage: function (indicatorType, required) {
-                return 'Error: "' + indicatorType +
-                    '" indicator type requires "' + required +
-                    '" indicator loaded before. Please read docs: ' +
-                    'https://api.highcharts.com/highstock/plotOptions.' +
-                    indicatorType;
-            }
-        };
-
-        return requiredIndicatorMixin;
-    });
-    _registerModule(_modules, 'indicators/ppo.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js'], _modules['mixins/indicator-required.js']], function (H, U, requiredIndicatorMixin) {
+    _registerModule(_modules, 'Stock/Indicators/PPO/PPOIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -98,11 +43,13 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var correctFloat = U.correctFloat,
-            error = U.error,
-            seriesType = U.seriesType;
-        var EMA = H.seriesTypes.ema,
-            requiredIndicator = requiredIndicatorMixin;
+        const { ema: EMAIndicator } = SeriesRegistry.seriesTypes;
+        const { correctFloat, extend, merge, error } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The PPO series type.
          *
@@ -112,82 +59,46 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('ppo', 'ema', 
-        /**
-         * Percentage Price Oscillator. This series requires the
-         * `linkedTo` option to be set and should be loaded after the
-         * `stock/indicators/indicators.js` and `stock/indicators/ema.js`.
-         *
-         * @sample {highstock} stock/indicators/ppo
-         *         Percentage Price Oscillator
-         *
-         * @extends      plotOptions.ema
-         * @since        7.0.0
-         * @product      highstock
-         * @excluding    allAreas, colorAxis, joinBy, keys, navigatorOptions,
-         *               pointInterval, pointIntervalUnit, pointPlacement,
-         *               pointRange, pointStart, showInNavigator, stacking
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/ema
-         * @requires     stock/indicators/ppo
-         * @optionparent plotOptions.ppo
-         */
-        {
-            /**
-             * Paramters used in calculation of Percentage Price Oscillator series
-             * points.
-             *
-             * @excluding period
-             */
-            params: {
-                /**
-                 * Periods for Percentage Price Oscillator calculations.
+        class PPOIndicator extends EMAIndicator {
+            constructor() {
+                /* *
                  *
-                 * @type    {Array<number>}
-                 * @default [12, 26]
-                 */
-                periods: [12, 26]
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *   Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series.prototype
-         */
-        {
-            nameBase: 'PPO',
-            nameComponents: ['periods'],
-            init: function () {
-                var args = arguments,
-                    ctx = this;
-                requiredIndicator.isParentLoaded(EMA, 'ema', ctx.type, function (indicator) {
-                    indicator.prototype.init.apply(ctx, args);
-                    return;
-                });
-            },
-            getValues: function (series, params) {
-                var periods = params.periods,
-                    index = params.index, 
-                    // 0- date, 1- Percentage Price Oscillator
-                    PPO = [],
-                    xData = [],
-                    yData = [],
-                    periodsOffset, 
-                    // Shorter Period EMA
-                    SPE, 
-                    // Longer Period EMA
-                    LPE,
-                    oscillator,
-                    i;
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const periods = params.periods, index = params.index, 
+                // 0- date, 1- Percentage Price Oscillator
+                PPO = [], xData = [], yData = [];
+                let oscillator, i;
                 // Check if periods are correct
                 if (periods.length !== 2 || periods[1] <= periods[0]) {
                     error('Error: "PPO requires two periods. Notice, first period ' +
                         'should be lower than the second one."');
                     return;
                 }
-                SPE = EMA.prototype.getValues.call(this, series, {
+                // Shorter Period EMA
+                const SPE = super.getValues.call(this, series, {
                     index: index,
                     period: periods[0]
                 });
-                LPE = EMA.prototype.getValues.call(this, series, {
+                // Longer Period EMA
+                const LPE = super.getValues.call(this, series, {
                     index: index,
                     period: periods[1]
                 });
@@ -195,7 +106,7 @@
                 if (!SPE || !LPE) {
                     return;
                 }
-                periodsOffset = periods[1] - periods[0];
+                const periodsOffset = periods[1] - periods[0];
                 for (i = 0; i < LPE.yData.length; i++) {
                     oscillator = correctFloat((SPE.yData[i + periodsOffset] -
                         LPE.yData[i]) /
@@ -211,7 +122,58 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Percentage Price Oscillator. This series requires the
+         * `linkedTo` option to be set and should be loaded after the
+         * `stock/indicators/indicators.js`.
+         *
+         * @sample {highstock} stock/indicators/ppo
+         *         Percentage Price Oscillator
+         *
+         * @extends      plotOptions.ema
+         * @since        7.0.0
+         * @product      highstock
+         * @excluding    allAreas, colorAxis, joinBy, keys, navigatorOptions,
+         *               pointInterval, pointIntervalUnit, pointPlacement,
+         *               pointRange, pointStart, showInNavigator, stacking
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/ppo
+         * @optionparent plotOptions.ppo
+         */
+        PPOIndicator.defaultOptions = merge(EMAIndicator.defaultOptions, {
+            /**
+             * Paramters used in calculation of Percentage Price Oscillator series
+             * points.
+             *
+             * @excluding period
+             */
+            params: {
+                period: void 0,
+                /**
+                 * Periods for Percentage Price Oscillator calculations.
+                 *
+                 * @type    {Array<number>}
+                 * @default [12, 26]
+                 */
+                periods: [12, 26]
+            }
         });
+        extend(PPOIndicator.prototype, {
+            nameBase: 'PPO',
+            nameComponents: ['periods']
+        });
+        SeriesRegistry.registerSeriesType('ppo', PPOIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `Percentage Price Oscillator` series. If the [type](#series.ppo.type)
          * option is not specified, it is inherited from [chart.type](#chart.type).
@@ -223,12 +185,12 @@
          *            navigatorOptions, pointInterval, pointIntervalUnit,
          *            pointPlacement, pointRange, pointStart, showInNavigator, stacking
          * @requires  stock/indicators/indicators
-         * @requires  stock/indicators/ema
          * @requires  stock/indicators/ppo
          * @apioption series.ppo
          */
         ''; // to include the above in the js output
 
+        return PPOIndicator;
     });
     _registerModule(_modules, 'masters/indicators/ppo.src.js', [], function () {
 

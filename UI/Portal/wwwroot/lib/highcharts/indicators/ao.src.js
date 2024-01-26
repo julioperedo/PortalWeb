@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Wojciech Chmiel
+ * (c) 2010-2021 Wojciech Chmiel
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,13 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/ao.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js']], function (H, U) {
+    _registerModule(_modules, 'Stock/Indicators/AO/AOIndicator.js', [_modules['Core/Globals.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (H, SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -36,10 +43,14 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var correctFloat = U.correctFloat,
-            isArray = U.isArray,
-            seriesType = U.seriesType;
-        var noop = H.noop;
+        const { noop } = H;
+        const { column: { prototype: columnProto }, sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { extend, merge, correctFloat, isArray } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The AO series type
          *
@@ -49,82 +60,31 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('ao', 'sma', 
-        /**
-         * Awesome Oscillator. This series requires the `linkedTo` option to
-         * be set and should be loaded after the `stock/indicators/indicators.js`
-         *
-         * @sample {highstock} stock/indicators/ao
-         *         Awesome
-         *
-         * @extends      plotOptions.sma
-         * @since        7.0.0
-         * @product      highstock
-         * @excluding    allAreas, colorAxis, joinBy, keys, navigatorOptions,
-         *               params, pointInterval, pointIntervalUnit, pointPlacement,
-         *               pointRange, pointStart, showInNavigator, stacking
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/ao
-         * @optionparent plotOptions.ao
-         */
-        {
-            /**
-             * Color of the Awesome oscillator series bar that is greater than the
-             * previous one. Note that if a `color` is defined, the `color`
-             * takes precedence and the `greaterBarColor` is ignored.
-             *
-             * @sample {highstock} stock/indicators/ao/
-             *         greaterBarColor
-             *
-             * @type  {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
-             * @since 7.0.0
-             */
-            greaterBarColor: '#06B535',
-            /**
-             * Color of the Awesome oscillator series bar that is lower than the
-             * previous one. Note that if a `color` is defined, the `color`
-             * takes precedence and the `lowerBarColor` is ignored.
-             *
-             * @sample {highstock} stock/indicators/ao/
-             *         lowerBarColor
-             *
-             * @type  {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
-             * @since 7.0.0
-             */
-            lowerBarColor: '#F21313',
-            threshold: 0,
-            groupPadding: 0.2,
-            pointPadding: 0.2,
-            crisp: false,
-            states: {
-                hover: {
-                    halo: {
-                        size: 0
-                    }
-                }
+        class AOIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameBase: 'AO',
-            nameComponents: false,
-            // Columns support:
-            markerAttribs: noop,
-            getColumnMetrics: H.seriesTypes.column.prototype.getColumnMetrics,
-            crispCol: H.seriesTypes.column.prototype.crispCol,
-            translate: H.seriesTypes.column.prototype.translate,
-            drawPoints: H.seriesTypes.column.prototype.drawPoints,
-            drawGraph: function () {
-                var indicator = this,
-                    options = indicator.options,
-                    points = indicator.points,
-                    userColor = indicator.userOptions.color,
-                    positiveColor = options.greaterBarColor,
-                    negativeColor = options.lowerBarColor,
-                    firstPoint = points[0],
-                    i;
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            drawGraph() {
+                const indicator = this, options = indicator.options, points = indicator.points, userColor = indicator.userOptions.color, positiveColor = options.greaterBarColor, negativeColor = options.lowerBarColor, firstPoint = points[0];
+                let i;
                 if (!userColor && firstPoint) {
                     firstPoint.color = positiveColor;
                     for (i = 1; i < points.length; i++) {
@@ -139,28 +99,13 @@
                         }
                     }
                 }
-            },
-            getValues: function (series) {
-                var shortPeriod = 5,
-                    longPeriod = 34,
-                    xVal = series.xData || [],
-                    yVal = series.yData || [],
-                    yValLen = yVal.length,
-                    AO = [], // 0- date, 1- Awesome Oscillator
-                    xData = [],
-                    yData = [],
-                    high = 1,
-                    low = 2,
-                    shortSum = 0,
-                    longSum = 0,
-                    shortSMA, // Shorter Period SMA
-                    longSMA, // Longer Period SMA
-                    awesome,
-                    shortLastIndex,
-                    longLastIndex,
-                    price,
-                    i,
-                    j;
+            }
+            getValues(series) {
+                const shortPeriod = 5, longPeriod = 34, xVal = series.xData || [], yVal = series.yData || [], yValLen = yVal.length, AO = [], // 0- date, 1- Awesome Oscillator
+                xData = [], yData = [], high = 1, low = 2;
+                let shortSMA, // Shorter Period SMA
+                longSMA, // Longer Period SMA
+                awesome, shortLastIndex, longLastIndex, price, i, j, longSum = 0, shortSum = 0;
                 if (xVal.length <= longPeriod ||
                     !isArray(yVal[0]) ||
                     yVal[0].length !== 4) {
@@ -198,7 +143,87 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Awesome Oscillator. This series requires the `linkedTo` option to
+         * be set and should be loaded after the `stock/indicators/indicators.js`
+         *
+         * @sample {highstock} stock/indicators/ao
+         *         Awesome
+         *
+         * @extends      plotOptions.sma
+         * @since        7.0.0
+         * @product      highstock
+         * @excluding    allAreas, colorAxis, joinBy, keys, navigatorOptions,
+         *               params, pointInterval, pointIntervalUnit, pointPlacement,
+         *               pointRange, pointStart, showInNavigator, stacking
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/ao
+         * @optionparent plotOptions.ao
+         */
+        AOIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
+            params: {
+                // Index and period are unchangeable, do not inherit (#15362)
+                index: void 0,
+                period: void 0
+            },
+            /**
+             * Color of the Awesome oscillator series bar that is greater than the
+             * previous one. Note that if a `color` is defined, the `color`
+             * takes precedence and the `greaterBarColor` is ignored.
+             *
+             * @sample {highstock} stock/indicators/ao/
+             *         greaterBarColor
+             *
+             * @type  {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
+             * @since 7.0.0
+             */
+            greaterBarColor: "#06b535" /* Palette.positiveColor */,
+            /**
+             * Color of the Awesome oscillator series bar that is lower than the
+             * previous one. Note that if a `color` is defined, the `color`
+             * takes precedence and the `lowerBarColor` is ignored.
+             *
+             * @sample {highstock} stock/indicators/ao/
+             *         lowerBarColor
+             *
+             * @type  {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
+             * @since 7.0.0
+             */
+            lowerBarColor: "#f21313" /* Palette.negativeColor */,
+            threshold: 0,
+            groupPadding: 0.2,
+            pointPadding: 0.2,
+            crisp: false,
+            states: {
+                hover: {
+                    halo: {
+                        size: 0
+                    }
+                }
+            }
         });
+        extend(AOIndicator.prototype, {
+            nameBase: 'AO',
+            nameComponents: false,
+            // Columns support:
+            markerAttribs: noop,
+            getColumnMetrics: columnProto.getColumnMetrics,
+            crispCol: columnProto.crispCol,
+            translate: columnProto.translate,
+            drawPoints: columnProto.drawPoints
+        });
+        SeriesRegistry.registerSeriesType('ao', AOIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * An `AO` series. If the [type](#series.ao.type)
          * option is not specified, it is inherited from [chart.type](#chart.type).
@@ -215,6 +240,7 @@
          */
         ''; // for including the above in the doclets
 
+        return AOIndicator;
     });
     _registerModule(_modules, 'masters/indicators/ao.src.js', [], function () {
 

@@ -151,7 +151,7 @@
                                     Ingrese el c&oacute;digo que se le envi&oacute; a su correo
                                 </div>
                             </div>
-                            <form class="form-horizontal step-1" asp-action="ForgotPasswordAsync" asp-controller="Account">
+                            <form class="form-horizontal step-1" asp-action="ForgotPassword" asp-controller="Account">
                                 <div class="form-group">
                                     <label for="RecoverEmail" class="control-label">Correo electr&oacute;nico</label>
                                     <div class="">
@@ -271,11 +271,11 @@
     <!--end::Base Scripts -->
     <!--begin::Page Snippets -->
     <script type="text/javascript">
-        var urlLogin = "@Url.Action("LoginPostAsync", "Account", new { area = "" })",
+        var urlLogin = "@Url.Action("LoginPost", "Account", new { area = "" })",
             urlEnableUser = "@Url.Action("RequestEnableUser", "Account", new { area = "" })",
 			returnUrl = "@ViewData["returnUrl"]",
 			urlProfiles = "@Url.Action("getAssignedProfiles", "Account", new { area = "" })",
-			urlForgotPassword = "@Url.Action("ForgotPasswordAsync", "Account", new { area = "" })";
+			urlForgotPassword = "@Url.Action("ForgotPassword", "Account", new { area = "" })";
     </script>
     <script src="~/js/areas/login.js" asp-append-version="true"></script>
     <!--end::Page Snippets -->

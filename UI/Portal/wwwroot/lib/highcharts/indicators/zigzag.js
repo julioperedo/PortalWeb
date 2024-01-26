@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Kacper Madej
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/zigzag",["highcharts","highcharts/modules/stock"],function(h){a(h);a.Highcharts=h;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function h(a,m,k,e){a.hasOwnProperty(m)||(a[m]=e.apply(null,k))}a=a?a._modules:{};h(a,"indicators/zigzag.src.js",[a["parts/Utilities.js"]],function(a){a=a.seriesType;a("zigzag","sma",{params:{lowIndex:2,
-highIndex:1,deviation:1}},{nameComponents:["deviation"],nameSuffixes:["%"],nameBase:"Zig Zag",getValues:function(a,k){var e=k.lowIndex,l=k.highIndex,f=k.deviation/100;k=1+f;var h=1-f;f=a.xData;var c=a.yData;a=c?c.length:0;var g=[],q=[],r=[],b,n,t=!1,p=!1;if(!(!f||1>=f.length||a&&(void 0===c[0][e]||void 0===c[0][l]))){var m=c[0][e];var u=c[0][l];for(b=1;b<a;b++){if(c[b][e]<=u*h){g.push([f[0],u]);var d=[f[b],c[b][e]];t=n=!0}else c[b][l]>=m*k&&(g.push([f[0],m]),d=[f[b],c[b][l]],n=!1,t=!0);if(t){q.push(g[0][0]);
-r.push(g[0][1]);var v=b++;b=a}}for(b=v;b<a;b++)n?(c[b][e]<=d[1]&&(d=[f[b],c[b][e]]),c[b][l]>=d[1]*k&&(p=l)):(c[b][l]>=d[1]&&(d=[f[b],c[b][l]]),c[b][e]<=d[1]*h&&(p=e)),!1!==p&&(g.push(d),q.push(d[0]),r.push(d[1]),d=[f[b],c[b][p]],n=!n,p=!1);e=g.length;0!==e&&g[e-1][0]<f[a-1]&&(g.push(d),q.push(d[0]),r.push(d[1]));return{values:g,xData:q,yData:r}}}});""});h(a,"masters/indicators/zigzag.src.js",[],function(){})});
-//# sourceMappingURL=zigzag.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Kacper Madej
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/indicators/zigzag",["highcharts","highcharts/modules/stock"],function(t){return e(t),e.Highcharts=t,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var t=e?e._modules:{};function i(e,t,i,s){e.hasOwnProperty(t)||(e[t]=s.apply(null,i),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:t,module:e[t]}})))}i(t,"Stock/Indicators/Zigzag/ZigzagIndicator.js",[t["Core/Series/SeriesRegistry.js"],t["Core/Utilities.js"]],function(e,t){let{sma:i}=e.seriesTypes,{merge:s,extend:o}=t;class n extends i{constructor(){super(...arguments),this.data=void 0,this.points=void 0,this.options=void 0}getValues(e,t){let i=t.lowIndex,s=t.highIndex,o=t.deviation/100,n={low:1+o,high:1-o},a=e.xData,h=e.yData,d=h?h.length:0,r=[],u=[],p=[],g,l,c,f,m=!1,v=!1;if(!a||a.length<=1||d&&(void 0===h[0][i]||void 0===h[0][s]))return;let y=h[0][i],x=h[0][s];for(g=1;g<d;g++)h[g][i]<=x*n.high?(r.push([a[0],x]),c=[a[g],h[g][i]],f=!0,m=!0):h[g][s]>=y*n.low&&(r.push([a[0],y]),c=[a[g],h[g][s]],f=!1,m=!0),m&&(u.push(r[0][0]),p.push(r[0][1]),l=g++,g=d);for(g=l;g<d;g++)f?(h[g][i]<=c[1]&&(c=[a[g],h[g][i]]),h[g][s]>=c[1]*n.low&&(v=s)):(h[g][s]>=c[1]&&(c=[a[g],h[g][s]]),h[g][i]<=c[1]*n.high&&(v=i)),!1!==v&&(r.push(c),u.push(c[0]),p.push(c[1]),c=[a[g],h[g][v]],f=!f,v=!1);let w=r.length;return 0!==w&&r[w-1][0]<a[d-1]&&(r.push(c),u.push(c[0]),p.push(c[1])),{values:r,xData:u,yData:p}}}return n.defaultOptions=s(i.defaultOptions,{params:{index:void 0,period:void 0,lowIndex:2,highIndex:1,deviation:1}}),o(n.prototype,{nameComponents:["deviation"],nameSuffixes:["%"],nameBase:"Zig Zag"}),e.registerSeriesType("zigzag",n),n}),i(t,"masters/indicators/zigzag.src.js",[],function(){})});//# sourceMappingURL=zigzag.js.map

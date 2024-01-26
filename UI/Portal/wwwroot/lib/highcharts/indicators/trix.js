@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Rafal Sebestjanski
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/trix",["highcharts","highcharts/modules/stock"],function(b){a(b);a.Highcharts=b;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function b(a,c,d,e){a.hasOwnProperty(c)||(a[c]=e.apply(null,d))}a=a?a._modules:{};b(a,"mixins/indicator-required.js",[a["parts/Utilities.js"]],function(a){var c=a.error;return{isParentLoaded:function(a,
-e,b,f,g){if(a)return f?f(a):!0;c(g||this.generateMessage(b,e));return!1},generateMessage:function(a,c){return'Error: "'+a+'" indicator type requires "'+c+'" indicator loaded before. Please read docs: https://api.highcharts.com/highstock/plotOptions.'+a}}});b(a,"indicators/trix.src.js",[a["parts/Globals.js"],a["parts/Utilities.js"],a["mixins/indicator-required.js"]],function(a,c,b){var e=c.correctFloat;c=c.seriesType;var d=a.seriesTypes.tema;c("trix","tema",{},{init:function(){var a=arguments,c=this;
-b.isParentLoaded(d,"tema",c.type,function(b){b.prototype.init.apply(c,a)})},getTemaPoint:function(a,c,b,d){if(d>c)var f=[a[d-3],0!==b.prevLevel3?e(b.level3-b.prevLevel3)/b.prevLevel3*100:null];return f}});""});b(a,"masters/indicators/trix.src.js",[],function(){})});
-//# sourceMappingURL=trix.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Rafal Sebestjanski
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/indicators/trix",["highcharts","highcharts/modules/stock"],function(t){return e(t),e.Highcharts=t,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var t=e?e._modules:{};function i(e,t,i,s){e.hasOwnProperty(t)||(e[t]=s.apply(null,i),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:t,module:e[t]}})))}i(t,"Stock/Indicators/TRIX/TRIXIndicator.js",[t["Core/Series/SeriesRegistry.js"],t["Core/Utilities.js"]],function(e,t){let{tema:i}=e.seriesTypes,{correctFloat:s,merge:o}=t;class n extends i{constructor(){super(...arguments),this.data=void 0,this.options=void 0,this.points=void 0}getTemaPoint(e,t,i,o){if(o>t)return[e[o-3],0!==i.prevLevel3?s(i.level3-i.prevLevel3)/i.prevLevel3*100:null]}}return n.defaultOptions=o(i.defaultOptions),e.registerSeriesType("trix",n),n}),i(t,"masters/indicators/trix.src.js",[],function(){})});//# sourceMappingURL=trix.js.map

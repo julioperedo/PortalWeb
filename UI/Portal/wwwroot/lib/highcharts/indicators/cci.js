@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Sebastian Bochan
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/cci",["highcharts","highcharts/modules/stock"],function(c){a(c);a.Highcharts=c;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function c(a,c,k,l){a.hasOwnProperty(c)||(a[c]=l.apply(null,k))}a=a?a._modules:{};c(a,"indicators/cci.src.js",[a["parts/Utilities.js"]],function(a){function c(a){return a.reduce(function(a,
-c){return a+c},0)}var k=a.isArray;a=a.seriesType;a("cci","sma",{params:{period:14}},{getValues:function(a,e){e=e.period;var m=a.xData,l=(a=a.yData)?a.length:0,n=[],d=1,p=[],q=[],r=[];if(!(m.length<=e)&&k(a[0])&&4===a[0].length){for(;d<e;){var b=a[d-1];n.push((b[1]+b[2]+b[3])/3);d++}for(d=e;d<=l;d++){b=a[d-1];b=(b[1]+b[2]+b[3])/3;var g=n.push(b);var f=n.slice(g-e);g=c(f)/e;var h,u=f.length,t=0;for(h=0;h<u;h++)t+=Math.abs(g-f[h]);f=t/e;b=(b-g)/(.015*f);p.push([m[d-1],b]);q.push(m[d-1]);r.push(b)}return{values:p,
-xData:q,yData:r}}}});""});c(a,"masters/indicators/cci.src.js",[],function(){})});
-//# sourceMappingURL=cci.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Sebastian Bochan
+ *
+ * License: www.highcharts.com/license
+ */!function(t){"object"==typeof module&&module.exports?(t.default=t,module.exports=t):"function"==typeof define&&define.amd?define("highcharts/indicators/cci",["highcharts","highcharts/modules/stock"],function(e){return t(e),t.Highcharts=e,t}):t("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(t){"use strict";var e=t?t._modules:{};function s(t,e,s,i){t.hasOwnProperty(e)||(t[e]=i.apply(null,s),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:e,module:t[e]}})))}s(e,"Stock/Indicators/CCI/CCIIndicator.js",[e["Core/Series/SeriesRegistry.js"],e["Core/Utilities.js"]],function(t,e){let{sma:s}=t.seriesTypes,{isArray:i,merge:o}=e;class n extends s{constructor(){super(...arguments),this.data=void 0,this.points=void 0,this.options=void 0}getValues(t,e){let s=e.period,o=t.xData,n=t.yData,r=n?n.length:0,a=[],u=[],c=[],d=[],h,l,f=[],p,g=1,m,y,v,C;if(!(o.length<=s)&&i(n[0])&&4===n[0].length){for(;g<s;)l=n[g-1],a.push((l[1]+l[2]+l[3])/3),g++;for(C=s;C<=r;C++)y=((l=n[C-1])[1]+l[2]+l[3])/3,p=a.push(y),m=(f=a.slice(p-s)).reduce(function(t,e){return t+e},0)/s,v=function(t,e){let s=t.length,i=0,o;for(o=0;o<s;o++)i+=Math.abs(e-t[o]);return i}(f,m)/s,h=(y-m)/(.015*v),u.push([o[C-1],h]),c.push(o[C-1]),d.push(h);return{values:u,xData:c,yData:d}}}}return n.defaultOptions=o(s.defaultOptions,{params:{index:void 0}}),t.registerSeriesType("cci",n),n}),s(e,"masters/indicators/cci.src.js",[],function(){})});//# sourceMappingURL=cci.js.map

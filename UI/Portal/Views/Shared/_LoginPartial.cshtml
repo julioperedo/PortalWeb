@@ -1,4 +1,4 @@
-﻿@if (User.Identity.IsAuthenticated) {
+﻿@if (User.Identity?.IsAuthenticated ?? false) {
 	string strName = User?.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? "";
 	string strAllowShoppingCart = User?.FindFirst("AllowShoppingCart")?.Value ?? "N";
 	string cardCode = User?.FindFirst("CardCode")?.Value ?? "";
@@ -7,7 +7,7 @@
 			<li>
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;@strName <b class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li><a asp-action="PersonalData" asp-controller="User" asp-area="Administration"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;Mis Datos</a></li>
+					<li><a asp-action="Index" asp-controller="PersonalData" asp-area="Administration"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;Mis Datos</a></li>
 				</ul>
 			</li>
 			@if (cardCode == "CDMC-002") {

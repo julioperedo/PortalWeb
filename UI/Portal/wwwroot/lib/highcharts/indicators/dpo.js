@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Wojciech Chmiel
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/dpo",["highcharts","highcharts/modules/stock"],function(b){a(b);a.Highcharts=b;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function b(a,n,b,p){a.hasOwnProperty(n)||(a[n]=p.apply(null,b))}a=a?a._modules:{};b(a,"indicators/dpo.src.js",[a["parts/Utilities.js"]],function(a){function b(a,c,b,k,l){c=p(c[b][k],c[b]);
-return l?g(a-c):g(a+c)}var g=a.correctFloat,p=a.pick;a=a.seriesType;a("dpo","sma",{params:{period:21}},{nameBase:"DPO",getValues:function(a,c){var h=c.period;c=c.index;var k=h+Math.floor(h/2+1),l=a.xData||[];a=a.yData||[];var n=a.length,g=[],q=[],r=[],e=0,d,f;if(!(l.length<=k)){for(d=0;d<h-1;d++)e=b(e,a,d,c);for(f=0;f<=n-k;f++){var m=f+h-1;d=f+k-1;e=b(e,a,m,c);m=p(a[d][c],a[d]);m-=e/h;e=b(e,a,f,c,!0);g.push([l[d],m]);q.push(l[d]);r.push(m)}return{values:g,xData:q,yData:r}}}});""});b(a,"masters/indicators/dpo.src.js",
-[],function(){})});
-//# sourceMappingURL=dpo.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Wojciech Chmiel
+ *
+ * License: www.highcharts.com/license
+ */!function(t){"object"==typeof module&&module.exports?(t.default=t,module.exports=t):"function"==typeof define&&define.amd?define("highcharts/indicators/dpo",["highcharts","highcharts/modules/stock"],function(e){return t(e),t.Highcharts=e,t}):t("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(t){"use strict";var e=t?t._modules:{};function o(t,e,o,s){t.hasOwnProperty(e)||(t[e]=s.apply(null,o),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:e,module:t[e]}})))}o(e,"Stock/Indicators/DPO/DPOIndicator.js",[e["Core/Series/SeriesRegistry.js"],e["Core/Utilities.js"]],function(t,e){let{sma:o}=t.seriesTypes,{extend:s,merge:i,correctFloat:n,pick:r}=e;function a(t,e,o,s,i){let a=r(e[o][s],e[o]);return i?n(t-a):n(t+a)}class d extends o{constructor(){super(...arguments),this.options=void 0,this.data=void 0,this.points=void 0}getValues(t,e){let o=e.period,s=e.index,i=o+Math.floor(o/2+1),n=t.xData||[],d=t.yData||[],u=d.length,c=[],h=[],p=[],f,l,m,g,y,v=0;if(!(n.length<=i)){for(g=0;g<o-1;g++)v=a(v,d,g,s);for(y=0;y<=u-i;y++)l=y+o-1,m=y+i-1,v=a(v,d,l,s),f=r(d[m][s],d[m])-v/o,v=a(v,d,y,s,!0),c.push([n[m],f]),h.push(n[m]),p.push(f);return{values:c,xData:h,yData:p}}}}return d.defaultOptions=i(o.defaultOptions,{params:{index:0,period:21}}),s(d.prototype,{nameBase:"DPO"}),t.registerSeriesType("dpo",d),d}),o(e,"masters/indicators/dpo.src.js",[],function(){})});//# sourceMappingURL=dpo.js.map

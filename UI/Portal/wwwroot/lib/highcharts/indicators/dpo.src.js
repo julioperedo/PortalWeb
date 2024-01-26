@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Wojciech Chmiel
+ * (c) 2010-2021 Wojciech Chmiel
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,13 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/dpo.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/DPO/DPOIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -36,23 +43,29 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var correctFloat = U.correctFloat,
-            pick = U.pick,
-            seriesType = U.seriesType;
-        /* eslint-disable valid-jsdoc */
-        // Utils
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { extend, merge, correctFloat, pick } = U;
+        /* *
+         *
+         *  Functions
+         *
+         * */
+        // Utils:
         /**
          * @private
          */
         function accumulatePoints(sum, yVal, i, index, subtract) {
-            var price = pick(yVal[i][index],
-                yVal[i]);
+            const price = pick(yVal[i][index], yVal[i]);
             if (subtract) {
                 return correctFloat(sum - price);
             }
             return correctFloat(sum + price);
         }
-        /* eslint-enable valid-jsdoc */
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The DPO series type.
          *
@@ -62,61 +75,33 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('dpo', 'sma', 
-        /**
-         * Detrended Price Oscillator. This series requires the `linkedTo` option to
-         * be set and should be loaded after the `stock/indicators/indicators.js`.
-         *
-         * @sample {highstock} stock/indicators/dpo
-         *         Detrended Price Oscillator
-         *
-         * @extends      plotOptions.sma
-         * @since        7.0.0
-         * @product      highstock
-         * @excluding    allAreas, colorAxis, compare, compareBase, joinBy, keys,
-         *               navigatorOptions, pointInterval, pointIntervalUnit,
-         *               pointPlacement, pointRange, pointStart, showInNavigator,
-         *               stacking
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/dpo
-         * @optionparent plotOptions.dpo
-         */
-        {
-            /**
-             * Parameters used in calculation of Detrended Price Oscillator series
-             * points.
-             */
-            params: {
-                /**
-                 * Period for Detrended Price Oscillator
-                 */
-                period: 21
+        class DPOIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *   Properties
+                 *
+                 * */
+                this.options = void 0;
+                this.data = void 0;
+                this.points = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameBase: 'DPO',
-            getValues: function (series, params) {
-                var period = params.period,
-                    index = params.index,
-                    offset = Math.floor(period / 2 + 1),
-                    range = period + offset,
-                    xVal = series.xData || [],
-                    yVal = series.yData || [],
-                    yValLen = yVal.length, 
-                    // 0- date, 1- Detrended Price Oscillator
-                    DPO = [],
-                    xData = [],
-                    yData = [],
-                    sum = 0,
-                    oscillator,
-                    periodIndex,
-                    rangeIndex,
-                    price,
-                    i,
-                    j;
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, index = params.index, offset = Math.floor(period / 2 + 1), range = period + offset, xVal = series.xData || [], yVal = series.yData || [], yValLen = yVal.length, 
+                // 0- date, 1- Detrended Price Oscillator
+                DPO = [], xData = [], yData = [];
+                let oscillator, periodIndex, rangeIndex, price, i, j, sum = 0;
                 if (xVal.length <= range) {
                     return;
                 }
@@ -145,7 +130,52 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Detrended Price Oscillator. This series requires the `linkedTo` option to
+         * be set and should be loaded after the `stock/indicators/indicators.js`.
+         *
+         * @sample {highstock} stock/indicators/dpo
+         *         Detrended Price Oscillator
+         *
+         * @extends      plotOptions.sma
+         * @since        7.0.0
+         * @product      highstock
+         * @excluding    allAreas, colorAxis, compare, compareBase, joinBy, keys,
+         *               navigatorOptions, pointInterval, pointIntervalUnit,
+         *               pointPlacement, pointRange, pointStart, showInNavigator,
+         *               stacking
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/dpo
+         * @optionparent plotOptions.dpo
+         */
+        DPOIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
+            /**
+             * Parameters used in calculation of Detrended Price Oscillator series
+             * points.
+             */
+            params: {
+                index: 0,
+                /**
+                 * Period for Detrended Price Oscillator
+                 */
+                period: 21
+            }
         });
+        extend(DPOIndicator.prototype, {
+            nameBase: 'DPO'
+        });
+        SeriesRegistry.registerSeriesType('dpo', DPOIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A Detrended Price Oscillator. If the [type](#series.dpo.type) option is not
          * specified, it is inherited from [chart.type](#chart.type).
@@ -162,6 +192,7 @@
          */
         ''; // to include the above in the js output'
 
+        return DPOIndicator;
     });
     _registerModule(_modules, 'masters/indicators/dpo.src.js', [], function () {
 

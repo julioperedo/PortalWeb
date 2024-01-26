@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Slow Stochastic series type for Highstock
+ * Slow Stochastic series type for Highcharts Stock
  *
- * (c) 2010-2019 Pawel Fus
+ * (c) 2010-2021 Pawel Fus
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,75 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'mixins/indicator-required.js', [_modules['parts/Utilities.js']], function (U) {
-        /**
-         *
-         *  (c) 2010-2020 Daniel Studencki
-         *
-         *  License: www.highcharts.com/license
-         *
-         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
-         *
-         * */
-        var error = U.error;
-        /* eslint-disable no-invalid-this, valid-jsdoc */
-        var requiredIndicatorMixin = {
-                /**
-                 * Check whether given indicator is loaded,
-            else throw error.
-                 * @private
-                 * @param {Highcharts.Indicator} indicator
-                 *        Indicator constructor function.
-                 * @param {string} requiredIndicator
-                 *        Required indicator type.
-                 * @param {string} type
-                 *        Type of indicator where function was called (parent).
-                 * @param {Highcharts.IndicatorCallbackFunction} callback
-                 *        Callback which is triggered if the given indicator is loaded.
-                 *        Takes indicator as an argument.
-                 * @param {string} errMessage
-                 *        Error message that will be logged in console.
-                 * @return {boolean}
-                 *         Returns false when there is no required indicator loaded.
-                 */
-                isParentLoaded: function (indicator,
-            requiredIndicator,
-            type,
-            callback,
-            errMessage) {
-                    if (indicator) {
-                        return callback ? callback(indicator) : true;
-                }
-                error(errMessage || this.generateMessage(type, requiredIndicator));
-                return false;
-            },
-            /**
-             * @private
-             * @param {string} indicatorType
-             *        Indicator type
-             * @param {string} required
-             *        Required indicator
-             * @return {string}
-             *         Error message
-             */
-            generateMessage: function (indicatorType, required) {
-                return 'Error: "' + indicatorType +
-                    '" indicator type requires "' + required +
-                    '" indicator loaded before. Please read docs: ' +
-                    'https://api.highcharts.com/highstock/plotOptions.' +
-                    indicatorType;
-            }
-        };
-
-        return requiredIndicatorMixin;
-    });
-    _registerModule(_modules, 'indicators/slow-stochastic.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js'], _modules['mixins/indicator-required.js']], function (H, U, requiredIndicator) {
+    _registerModule(_modules, 'Stock/Indicators/SlowStochastic/SlowStochasticIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -98,8 +43,13 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var seriesType = U.seriesType;
-        var seriesTypes = H.seriesTypes;
+        const { sma: SMAIndicator, stochastic: StochasticIndicator } = SeriesRegistry.seriesTypes;
+        const { extend, merge } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The Slow Stochastic series type.
          *
@@ -109,7 +59,65 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('slowstochastic', 'stochastic', 
+        class SlowStochasticIndicator extends StochasticIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const periods = params.periods, fastValues = super.getValues.call(this, series, params), slowValues = {
+                    values: [],
+                    xData: [],
+                    yData: []
+                };
+                if (!fastValues) {
+                    return;
+                }
+                slowValues.xData = fastValues.xData.slice(periods[1] - 1);
+                const fastYData = fastValues.yData.slice(periods[1] - 1);
+                // Get SMA(%D)
+                const smoothedValues = SMAIndicator.prototype.getValues.call(this, {
+                    xData: slowValues.xData,
+                    yData: fastYData
+                }, {
+                    index: 1,
+                    period: periods[2]
+                });
+                if (!smoothedValues) {
+                    return;
+                }
+                // Format data
+                for (let i = 0, xDataLen = slowValues.xData.length; i < xDataLen; i++) {
+                    slowValues.yData[i] = [
+                        fastYData[i][1],
+                        smoothedValues.yData[i - periods[2] + 1] || null
+                    ];
+                    slowValues.values[i] = [
+                        slowValues.xData[i],
+                        fastYData[i][1],
+                        smoothedValues.yData[i - periods[2] + 1] || null
+                    ];
+                }
+                return slowValues;
+            }
+        }
         /**
          * Slow Stochastic oscillator. This series requires the `linkedTo` option
          * to be set and should be loaded after `stock/indicators/indicators.js`
@@ -126,7 +134,7 @@
          * @requires     stock/indicators/slowstochastic
          * @optionparent plotOptions.slowstochastic
          */
-        {
+        SlowStochasticIndicator.defaultOptions = merge(StochasticIndicator.defaultOptions, {
             params: {
                 /**
                  * Periods for Slow Stochastic oscillator: [%K, %D, SMA(%D)].
@@ -136,63 +144,21 @@
                  */
                 periods: [14, 3, 3]
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameBase: 'Slow Stochastic',
-            init: function () {
-                var args = arguments,
-                    ctx = this;
-                requiredIndicator.isParentLoaded(H.seriesTypes.stochastic, 'stochastic', ctx.type, function (indicator) {
-                    indicator.prototype.init.apply(ctx, args);
-                    return;
-                });
-            },
-            getValues: function (series, params) {
-                var periods = params.periods,
-                    fastValues = seriesTypes.stochastic.prototype.getValues.call(this,
-                    series,
-                    params),
-                    slowValues = {
-                        values: [],
-                        xData: [],
-                        yData: []
-                    };
-                var i = 0;
-                if (!fastValues) {
-                    return;
-                }
-                slowValues.xData = fastValues.xData.slice(periods[1] - 1);
-                var fastYData = fastValues.yData.slice(periods[1] - 1);
-                // Get SMA(%D)
-                var smoothedValues = seriesTypes.sma.prototype.getValues.call(this, {
-                        xData: slowValues.xData,
-                        yData: fastYData
-                    }, {
-                        index: 1,
-                        period: periods[2]
-                    });
-                if (!smoothedValues) {
-                    return;
-                }
-                var xDataLen = slowValues.xData.length;
-                // Format data
-                for (; i < xDataLen; i++) {
-                    slowValues.yData[i] = [
-                        fastYData[i][1],
-                        smoothedValues.yData[i - periods[2] + 1] || null
-                    ];
-                    slowValues.values[i] = [
-                        slowValues.xData[i],
-                        fastYData[i][1],
-                        smoothedValues.yData[i - periods[2] + 1] || null
-                    ];
-                }
-                return slowValues;
-            }
         });
+        extend(SlowStochasticIndicator.prototype, {
+            nameBase: 'Slow Stochastic'
+        });
+        SeriesRegistry.registerSeriesType('slowstochastic', SlowStochasticIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A Slow Stochastic indicator. If the [type](#series.slowstochastic.type)
          * option is not specified, it is inherited from [chart.type](#chart.type).
@@ -207,6 +173,7 @@
          */
         ''; // to include the above in the js output
 
+        return SlowStochasticIndicator;
     });
     _registerModule(_modules, 'masters/indicators/slow-stochastic.src.js', [], function () {
 

@@ -1,13 +1,13 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  * @module highcharts/indicators/cmf
  * @requires highcharts
  * @requires highcharts/modules/stock
  *
- * (c) 2010-2019 Highsoft AS
+ * (c) 2010-2021 Highsoft AS
  * Author: Sebastian Domas
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../indicators/cmf.src.js';
+import '../../Stock/Indicators/CMF/CMFIndicator.js';

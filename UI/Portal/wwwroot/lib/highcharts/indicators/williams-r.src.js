@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Wojciech Chmiel
+ * (c) 2010-2021 Wojciech Chmiel
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,71 +21,70 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'mixins/reduce-array.js', [], function () {
+    _registerModule(_modules, 'Stock/Indicators/ArrayUtilities.js', [], function () {
         /**
          *
-         *  (c) 2010-2020 Pawel Fus & Daniel Studencki
+         *  (c) 2010-2021 Pawel Fus & Daniel Studencki
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var reduceArrayMixin = {
-                /**
-                 * Get min value of array filled by OHLC data.
-                 * @private
-                 * @param {Array<*>} arr Array of OHLC points (arrays).
-                 * @param {string} index Index of "low" value in point array.
-                 * @return {number} Returns min value.
-                 */
-                minInArray: function (arr,
-            index) {
-                    return arr.reduce(function (min,
-            target) {
-                        return Math.min(min,
-            target[index]);
-                }, Number.MAX_VALUE);
-            },
-            /**
-             * Get max value of array filled by OHLC data.
-             * @private
-             * @param {Array<*>} arr Array of OHLC points (arrays).
-             * @param {string} index Index of "high" value in point array.
-             * @return {number} Returns max value.
-             */
-            maxInArray: function (arr, index) {
-                return arr.reduce(function (max, target) {
-                    return Math.max(max, target[index]);
-                }, -Number.MAX_VALUE);
-            },
-            /**
-             * Get extremes of array filled by OHLC data.
-             * @private
-             * @param {Array<*>} arr Array of OHLC points (arrays).
-             * @param {string} minIndex Index of "low" value in point array.
-             * @param {string} maxIndex Index of "high" value in point array.
-             * @return {Array<number,number>} Returns array with min and max value.
-             */
-            getArrayExtremes: function (arr, minIndex, maxIndex) {
-                return arr.reduce(function (prev, target) {
-                    return [
-                        Math.min(prev[0], target[minIndex]),
-                        Math.max(prev[1], target[maxIndex])
-                    ];
-                }, [Number.MAX_VALUE, -Number.MAX_VALUE]);
-            }
+        /* *
+         *
+         *  Functions
+         *
+         * */
+        /**
+         * Get extremes of array filled by OHLC data.
+         *
+         * @private
+         *
+         * @param {Array<Array<number>>} arr
+         * Array of OHLC points (arrays).
+         *
+         * @param {number} minIndex
+         * Index of "low" value in point array.
+         *
+         * @param {number} maxIndex
+         * Index of "high" value in point array.
+         *
+         * @return {Array<number,number>}
+         * Returns array with min and max value.
+         */
+        function getArrayExtremes(arr, minIndex, maxIndex) {
+            return arr.reduce((prev, target) => [
+                Math.min(prev[0], target[minIndex]),
+                Math.max(prev[1], target[maxIndex])
+            ], [Number.MAX_VALUE, -Number.MAX_VALUE]);
+        }
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        const ArrayUtilities = {
+            getArrayExtremes
         };
 
-        return reduceArrayMixin;
+        return ArrayUtilities;
     });
-    _registerModule(_modules, 'indicators/williams-r.src.js', [_modules['parts/Utilities.js'], _modules['mixins/reduce-array.js']], function (U, reduceArrayMixin) {
+    _registerModule(_modules, 'Stock/Indicators/WilliamsR/WilliamsRIndicator.js', [_modules['Stock/Indicators/ArrayUtilities.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (AU, SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -94,9 +92,13 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var isArray = U.isArray,
-            seriesType = U.seriesType;
-        var getArrayExtremes = reduceArrayMixin.getArrayExtremes;
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { extend, isArray, merge } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The Williams %R series type.
          *
@@ -106,7 +108,64 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('williamsr', 'sma', 
+        class WilliamsRIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, xVal = series.xData, yVal = series.yData, yValLen = yVal ? yVal.length : 0, WR = [], // 0- date, 1- Williams %R
+                xData = [], yData = [], close = 3, low = 2, high = 1;
+                let slicedY, extremes, R, HH, // Highest high value in period
+                LL, // Lowest low value in period
+                CC, // Current close value
+                i;
+                // Williams %R requires close value
+                if (xVal.length < period ||
+                    !isArray(yVal[0]) ||
+                    yVal[0].length !== 4) {
+                    return;
+                }
+                // For a N-period, we start from N-1 point, to calculate Nth point
+                // That is why we later need to comprehend slice() elements list
+                // with (+1)
+                for (i = period - 1; i < yValLen; i++) {
+                    slicedY = yVal.slice(i - period + 1, i + 1);
+                    extremes = AU.getArrayExtremes(slicedY, low, high);
+                    LL = extremes[0];
+                    HH = extremes[1];
+                    CC = yVal[i][close];
+                    R = ((HH - CC) / (HH - LL)) * -100;
+                    if (xVal[i]) {
+                        WR.push([xVal[i], R]);
+                        xData.push(xVal[i]);
+                        yData.push(R);
+                    }
+                }
+                return {
+                    values: WR,
+                    xData: xData,
+                    yData: yData
+                };
+            }
+        }
         /**
          * Williams %R. This series requires the `linkedTo` option to be
          * set and should be loaded after the `stock/indicators/indicators.js`.
@@ -124,70 +183,33 @@
          * @requires     stock/indicators/williams-r
          * @optionparent plotOptions.williamsr
          */
-        {
+        WilliamsRIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
             /**
              * Paramters used in calculation of Williams %R series points.
              * @excluding index
              */
             params: {
+                index: void 0,
                 /**
                  * Period for Williams %R oscillator
                  */
                 period: 14
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameBase: 'Williams %R',
-            getValues: function (series, params) {
-                var period = params.period,
-                    xVal = series.xData,
-                    yVal = series.yData,
-                    yValLen = yVal ? yVal.length : 0,
-                    WR = [], // 0- date, 1- Williams %R
-                    xData = [],
-                    yData = [],
-                    slicedY,
-                    close = 3,
-                    low = 2,
-                    high = 1,
-                    extremes,
-                    R,
-                    HH, // Highest high value in period
-                    LL, // Lowest low value in period
-                    CC, // Current close value
-                    i;
-                // Williams %R requires close value
-                if (xVal.length < period ||
-                    !isArray(yVal[0]) ||
-                    yVal[0].length !== 4) {
-                    return;
-                }
-                // For a N-period, we start from N-1 point, to calculate Nth point
-                // That is why we later need to comprehend slice() elements list
-                // with (+1)
-                for (i = period - 1; i < yValLen; i++) {
-                    slicedY = yVal.slice(i - period + 1, i + 1);
-                    extremes = getArrayExtremes(slicedY, low, high);
-                    LL = extremes[0];
-                    HH = extremes[1];
-                    CC = yVal[i][close];
-                    R = ((HH - CC) / (HH - LL)) * -100;
-                    if (xVal[i]) {
-                        WR.push([xVal[i], R]);
-                        xData.push(xVal[i]);
-                        yData.push(R);
-                    }
-                }
-                return {
-                    values: WR,
-                    xData: xData,
-                    yData: yData
-                };
-            }
         });
+        extend(WilliamsRIndicator.prototype, {
+            nameBase: 'Williams %R'
+        });
+        SeriesRegistry.registerSeriesType('williamsr', WilliamsRIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `Williams %R Oscillator` series. If the [type](#series.williamsr.type)
          * option is not specified, it is inherited from [chart.type](#chart.type).
@@ -204,6 +226,7 @@
          */
         ''; // adds doclets above to the transpiled file
 
+        return WilliamsRIndicator;
     });
     _registerModule(_modules, 'masters/indicators/williams-r.src.js', [], function () {
 

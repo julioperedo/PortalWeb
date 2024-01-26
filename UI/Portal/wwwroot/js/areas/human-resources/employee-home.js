@@ -127,7 +127,7 @@ function setupControls() {
     }).data("kendoWindow");
 
     $.get(urlEmployee, {}, function (d) {
-        if (d.message == "") {
+        if (d.message === "") {
             if (d.item) {
                 $("title").text(`Datos de RRHH de ${d.item.name} - Portal DMC`);
                 $("#employee-data").removeClass("d-none");
@@ -230,8 +230,8 @@ function setupControls() {
         },
         template: function (e) {
             var content, type = "", period = "", replacement = "", management = "", reason = "", comments = "";
-            type = e.idType == "L" ? "Licencia" : e.idType == "V" ? "Vacaci&oacute;n" : e.idType == "H" ? "Home Office" : "Viaje de Trabajo";
-            if ($.trim(e.comments) != "") {
+            type = e.idType === "L" ? "Licencia" : e.idType === "V" ? "Vacaci&oacute;n" : e.idType === "H" ? "Home Office" : "Viaje de Trabajo";
+            if ($.trim(e.comments) !== "") {
                 comments += `<div class="row"><div class="col"><label>Comentarios:</label> <span class="label-data">${e.comments}</span></div></div>`;
             }
             if (e.managers.length > 0) {
@@ -239,7 +239,7 @@ function setupControls() {
                 e.managers.forEach((x) => management += `<div class="col"><label>Jefe:</label> <span class="label-data">${x.name}</span></div>`);
                 management += '</div>';
             }
-            if (e.idType == "V") {
+            if (e.idType === "V") {
                 e.vacation.fromDate = JSON.toDate(e.vacation.fromDate);
                 e.vacation.toDate = JSON.toDate(e.vacation.toDate);
                 e.vacation.replacements.forEach(function (r) {
@@ -253,24 +253,24 @@ function setupControls() {
                     replacement += '</div>';
                 }
             }
-            if (e.idType == "H") {
+            if (e.idType === "H") {
                 e.homeOffice.fromDate = JSON.toDate(e.homeOffice.fromDate);
                 e.homeOffice.toDate = JSON.toDate(e.homeOffice.toDate);
                 period += `<span class="label-data">${kendo.toString(e.homeOffice.fromDate, "dd-MM-yyyy")} ${e.homeOffice.fromDatePeriod}</span> al <span class="label-data">${kendo.toString(e.homeOffice.toDate, "dd-MM-yyyy")} ${e.homeOffice.toDatePeriod}</span>`;
             }
-            if (e.idType == "T") {
+            if (e.idType === "T") {
                 e.travel.fromDate = JSON.toDate(e.travel.fromDate);
                 e.travel.toDate = JSON.toDate(e.travel.toDate);
                 type += `&nbsp;&nbsp;&nbsp;( ${e.travel.destiny} )`;
                 period += `<span class="label-data">${kendo.toString(e.travel.fromDate, "dd-MM-yyyy")}</span> al <span class="label-data">${kendo.toString(e.travel.toDate, "dd-MM-yyyy")}</span>`;
             }
-            if (e.idType == "L") {
+            if (e.idType === "L") {
                 e.license.date = JSON.toDate(e.license.date);
                 e.license.initialTime = JSON.toTime(e.license.initialTime);
                 e.license.finalTime = JSON.toTime(e.license.finalTime);
                 period += `<span class="label-data">${kendo.toString(e.license.date, "dd-MM-yyyy")} ( ${kendo.toString(e.license.initialTime, "HH:mm")} al ${kendo.toString(e.license.finalTime, "HH:mm")} )</span>`;
                 var reasonDesc = $.trim(e.license.idReason == -1 ? e.license.reasonDescription : e.license.reasonName);
-                reason += reasonDesc != "" ? `<div class="row"><div class="col"><label>Motivo:</label><span class="label-data">${reasonDesc}</span></div></div>` : "";
+                reason += reasonDesc !== "" ? `<div class="row"><div class="col"><label>Motivo:</label><span class="label-data">${reasonDesc}</span></div></div>` : "";
             }
             content = `<div class="request ${(e.idState == 225 ? "open" : e.idState == 221 ? "sent" : e.idState == 222 ? "cancelled" : e.idState == 223 ? "rejected" : "approved")}">
     <div class="row">
@@ -346,18 +346,18 @@ function setRequestForm(type) {
     $("#form-detail-request .row, .selected-days, .k-picker").removeClass("d-none");
     $("#form-detail-request input, #form-detail-request select").prop("required", false);
     $("#idType").prop("required", true);
-    if (type == "L") {
+    if (type === "L") {
         $("#fromDate, #destiny, #replacements").closest(".row").addClass("d-none");
         $("#date, #initialTime, #finalTime, #idReason").prop("required", true);
     }
-    if (type == "V") {
+    if (type === "V") {
         $("#initialTime, #idReason, #destiny").closest(".row").addClass("d-none");
     }
-    if (type == "H") {
+    if (type === "H") {
         $(".selected-days").addClass("d-none");
         $("#initialTime, #idReason, #destiny, #replacements").closest(".row").addClass("d-none");
     }
-    if (type == "T") {
+    if (type === "T") {
         $(".selected-days").addClass("d-none");
         $("#fromDatePeriod, #toDatePeriod").closest(".k-picker").addClass("d-none");
         $("#initialTime, #idReason").closest(".row").addClass("d-none");
@@ -370,13 +370,13 @@ function showTotalDays(e) {
     hideDetails();
     $.get(urlResumeYears, {}, function (d) {
         $("#resume-years").removeClass("d-none");
-        var grd = $("#resume-years .grid").data("kendoGrid");
-        var ds = new kendo.data.DataSource({
-            data: d.items,
-            aggregate: [{ aggregate: "sum", field: "days" }],
-            sort: [{ field: "number", dir: "asc" }],
-            schema: { model: { id: "number" } }
-        });
+        var grd = $("#resume-years .grid").data("kendoGrid"), 
+            ds = new kendo.data.DataSource({
+                data: d.items,
+                aggregate: [{ aggregate: "sum", field: "days" }],
+                sort: [{ field: "number", dir: "asc" }],            
+                schema: { model: { id: "number" } }
+            });
         grd.setDataSource(ds);
     });
 }

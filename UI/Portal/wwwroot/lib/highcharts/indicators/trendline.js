@@ -1,12 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Sebastian Bochan
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/trendline",["highcharts","highcharts/modules/stock"],function(c){a(c);a.Highcharts=c;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function c(a,c,k,b){a.hasOwnProperty(c)||(a[c]=b.apply(null,k))}a=a?a._modules:{};c(a,"indicators/trendline.src.js",[a["parts/Utilities.js"]],function(a){var c=a.isArray;a=a.seriesType;
-a("trendline","sma",{params:{index:3}},{nameBase:"Trendline",nameComponents:!1,getValues:function(a,b){var l=a.xData,d=a.yData;a=[];var n=[],p=[],f=0,m=0,q=0,r=0,g=l.length,k=b.index;for(b=0;b<g;b++){var e=l[b];var h=c(d[b])?d[b][k]:d[b];f+=e;m+=h;q+=e*h;r+=e*e}d=(g*q-f*m)/(g*r-f*f);isNaN(d)&&(d=0);f=(m-d*f)/g;for(b=0;b<g;b++)e=l[b],h=d*e+f,a[b]=[e,h],n[b]=e,p[b]=h;return{xData:n,yData:p,values:a}}});""});c(a,"masters/indicators/trendline.src.js",[],function(){})});
-//# sourceMappingURL=trendline.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Sebastian Bochan
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/indicators/trendline",["highcharts","highcharts/modules/stock"],function(t){return e(t),e.Highcharts=t,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var t=e?e._modules:{};function i(e,t,i,n){e.hasOwnProperty(t)||(e[t]=n.apply(null,i),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:t,module:e[t]}})))}i(t,"Stock/Indicators/TrendLine/TrendLineIndicator.js",[t["Core/Series/SeriesRegistry.js"],t["Core/Utilities.js"]],function(e,t){let{sma:i}=e.seriesTypes,{extend:n,merge:s,isArray:o}=t;class r extends i{constructor(){super(...arguments),this.data=void 0,this.options=void 0,this.points=void 0,this.updateAllPoints=!0}getValues(e,t){let i=e.xData,n=e.yData,s=[],r=[],a=[],d=i.length,u=t.index,c=(d-1)*d/2,l=0,h=0,p,f,m;for(f=0;f<d;f++)l+=m=o(n[f])?n[f][u]:n[f],h+=f*m;isNaN(p=(d*h-c*l)/(d*((d-1)*d*(2*d-1)/6)-c*c))&&(p=0);let y=(l-p*c)/d;for(f=0;f<d;f++)m=p*f+y,s[f]=[i[f],m],r[f]=i[f],a[f]=m;return{xData:r,yData:a,values:s}}}return r.defaultOptions=s(i.defaultOptions,{params:{period:void 0,index:3}}),n(r.prototype,{nameBase:"Trendline",nameComponents:!1}),e.registerSeriesType("trendline",r),r}),i(t,"masters/indicators/trendline.src.js",[],function(){})});//# sourceMappingURL=trendline.js.map

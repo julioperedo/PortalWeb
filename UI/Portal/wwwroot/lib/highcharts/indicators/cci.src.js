@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Sebastian Bochan
+ * (c) 2010-2021 Sebastian Bochan
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,22 +21,34 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/cci.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/CCI/CCIIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          * */
-        var isArray = U.isArray,
-            seriesType = U.seriesType;
-        /* eslint-disable valid-jsdoc */
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { isArray, merge } = U;
+        /* *
+         *
+         *  Functions
+         *
+         * */
         // Utils:
         /**
          * @private
@@ -51,15 +62,18 @@
          * @private
          */
         function meanDeviation(arr, sma) {
-            var len = arr.length,
-                sum = 0,
-                i;
+            const len = arr.length;
+            let sum = 0, i;
             for (i = 0; i < len; i++) {
                 sum += Math.abs(sma - (arr[i]));
             }
             return sum;
         }
-        /* eslint-enable valid-jsdoc */
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The CCI series type.
          *
@@ -69,48 +83,31 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('cci', 'sma', 
-        /**
-         * Commodity Channel Index (CCI). This series requires `linkedTo` option to
-         * be set.
-         *
-         * @sample stock/indicators/cci
-         *         CCI indicator
-         *
-         * @extends      plotOptions.sma
-         * @since        6.0.0
-         * @product      highstock
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/cci
-         * @optionparent plotOptions.cci
-         */
-        {
-            params: {
-                period: 14
+        class CCIIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.points = void 0;
+                this.options = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            getValues: function (series, params) {
-                var period = params.period,
-                    xVal = series.xData,
-                    yVal = series.yData,
-                    yValLen = yVal ? yVal.length : 0,
-                    TP = [],
-                    periodTP = [],
-                    range = 1,
-                    CCI = [],
-                    xData = [],
-                    yData = [],
-                    CCIPoint,
-                    p,
-                    len,
-                    smaTP,
-                    TPtemp,
-                    meanDev,
-                    i;
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, xVal = series.xData, yVal = series.yData, yValLen = yVal ? yVal.length : 0, TP = [], CCI = [], xData = [], yData = [];
+                let CCIPoint, p, periodTP = [], len, range = 1, smaTP, TPtemp, meanDev, i;
                 // CCI requires close value
                 if (xVal.length <= period ||
                     !isArray(yVal[0]) ||
@@ -141,7 +138,40 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Commodity Channel Index (CCI). This series requires `linkedTo` option to
+         * be set.
+         *
+         * @sample stock/indicators/cci
+         *         CCI indicator
+         *
+         * @extends      plotOptions.sma
+         * @since        6.0.0
+         * @product      highstock
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/cci
+         * @optionparent plotOptions.cci
+         */
+        CCIIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
+            /**
+             * @excluding index
+             */
+            params: {
+                index: void 0 // unused index, do not inherit (#15362)
+            }
         });
+        SeriesRegistry.registerSeriesType('cci', CCIIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `CCI` series. If the [type](#series.cci.type) option is not
          * specified, it is inherited from [chart.type](#chart.type).
@@ -156,6 +186,7 @@
          */
         ''; // to include the above in the js output
 
+        return CCIIndicator;
     });
     _registerModule(_modules, 'masters/indicators/cci.src.js', [], function () {
 

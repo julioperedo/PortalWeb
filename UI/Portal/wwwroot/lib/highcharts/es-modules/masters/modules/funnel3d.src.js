@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  * @module highcharts/modules/funnel3d
  * @requires highcharts
  * @requires highcharts/highcharts-3d
@@ -7,9 +7,12 @@
  *
  * Highcharts funnel module
  *
- * (c) 2010-2019 Kacper Madej
+ * (c) 2010-2021 Kacper Madej
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../modules/funnel3d.src.js';
+import RendererRegistry from '../../Core/Renderer/RendererRegistry.js';
+import Funnel3DSeries from '../../Series/Funnel3D/Funnel3DSeries.js';
+Funnel3DSeries.compose(RendererRegistry.getRendererType());
+export default Funnel3DSeries;

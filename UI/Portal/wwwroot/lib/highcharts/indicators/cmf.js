@@ -1,13 +1,8 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- (c) 2010-2019 Highsoft AS
- Author: Sebastian Domas
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/cmf",["highcharts","highcharts/modules/stock"],function(f){a(f);a.Highcharts=f;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function f(a,h,d,c){a.hasOwnProperty(h)||(a[h]=c.apply(null,d))}a=a?a._modules:{};f(a,"indicators/cmf.src.js",[a["parts/Utilities.js"]],function(a){a=a.seriesType;a("cmf","sma",{params:{period:14,
-volumeSeriesID:"volume"}},{nameBase:"Chaikin Money Flow",isValid:function(){var a=this.chart,d=this.options,c=this.linkedParent;a=this.volumeSeries||(this.volumeSeries=a.get(d.params.volumeSeriesID));var e=c&&c.yData&&4===c.yData[0].length;return!!(c&&a&&c.xData&&c.xData.length>=d.params.period&&a.xData&&a.xData.length>=d.params.period&&e)},getValues:function(a,d){if(this.isValid())return this.getMoneyFlow(a.xData,a.yData,this.volumeSeries.yData,d.period)},getMoneyFlow:function(a,d,c,e){function f(a,
-c){var d=a[1],e=a[2];a=a[3];return null!==c&&null!==d&&null!==e&&null!==a&&d!==e?(a-e-(d-a))/(d-e)*c:(q=b,null)}var h=d.length,k=[],g=0,l=0,m=[],n=[],r=[],b,q=-1;if(0<e&&e<=h){for(b=0;b<e;b++)k[b]=f(d[b],c[b]),g+=c[b],l+=k[b];m.push(a[b-1]);n.push(b-q>=e&&0!==g?l/g:null);for(r.push([m[0],n[0]]);b<h;b++){k[b]=f(d[b],c[b]);g-=c[b-e];g+=c[b];l-=k[b-e];l+=k[b];var p=[a[b],b-q>=e?l/g:null];m.push(p[0]);n.push(p[1]);r.push([p[0],p[1]])}}return{values:r,xData:m,yData:n}}});""});f(a,"masters/indicators/cmf.src.js",
-[],function(){})});
-//# sourceMappingURL=cmf.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * (c) 2010-2021 Highsoft AS
+ * Author: Sebastian Domas
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/indicators/cmf",["highcharts","highcharts/modules/stock"],function(t){return e(t),e.Highcharts=t,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var t=e?e._modules:{};function i(e,t,i,s){e.hasOwnProperty(t)||(e[t]=s.apply(null,i),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:t,module:e[t]}})))}i(t,"Stock/Indicators/CMF/CMFIndicator.js",[t["Core/Series/SeriesRegistry.js"],t["Core/Utilities.js"]],function(e,t){let{sma:i}=e.seriesTypes,{merge:s}=t;class o extends i{constructor(){super(...arguments),this.data=void 0,this.options=void 0,this.points=void 0,this.volumeSeries=void 0,this.linkedParent=void 0,this.yData=void 0,this.nameBase="Chaikin Money Flow"}isValid(){let e=this.chart,t=this.options,i=this.linkedParent,s=this.volumeSeries||(this.volumeSeries=e.get(t.params.volumeSeriesID)),o=i&&i.yData&&4===i.yData[0].length;function n(e){return e.xData&&e.xData.length>=t.params.period}return!!(i&&s&&n(i)&&n(s)&&o)}getValues(e,t){if(this.isValid())return this.getMoneyFlow(e.xData,e.yData,this.volumeSeries.yData,t.period)}getMoneyFlow(e,t,i,s){let o=t.length,n=[],a=[],r=[],u=[],l,h,d=-1,c=0,p=0;function f(e,t){let i=e[1],s=e[2],o=e[3];return null!==t&&null!==i&&null!==s&&null!==o&&i!==s?(o-s-(i-o))/(i-s)*t:(d=l,null)}if(s>0&&s<=o){for(l=0;l<s;l++)n[l]=f(t[l],i[l]),c+=i[l],p+=n[l];for(a.push(e[l-1]),r.push(l-d>=s&&0!==c?p/c:null),u.push([a[0],r[0]]);l<o;l++)n[l]=f(t[l],i[l]),c-=i[l-s],c+=i[l],p-=n[l-s],p+=n[l],h=[e[l],l-d>=s?p/c:null],a.push(h[0]),r.push(h[1]),u.push([h[0],h[1]])}return{values:u,xData:a,yData:r}}}return o.defaultOptions=s(i.defaultOptions,{params:{index:void 0,volumeSeriesID:"volume"}}),e.registerSeriesType("cmf",o),o}),i(t,"masters/indicators/cmf.src.js",[],function(){})});//# sourceMappingURL=cmf.js.map

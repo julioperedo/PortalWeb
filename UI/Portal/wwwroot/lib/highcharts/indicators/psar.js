@@ -1,14 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Parabolic SAR Indicator for Highstock
-
- (c) 2010-2019 Grzegorz Blachliski
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/psar",["highcharts","highcharts/modules/stock"],function(l){a(l);a.Highcharts=l;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function l(a,t,b,p){a.hasOwnProperty(t)||(a[t]=p.apply(null,b))}a=a?a._modules:{};l(a,"indicators/psar.src.js",[a["parts/Utilities.js"]],function(a){a=a.seriesType;a("psar","sma",{lineWidth:0,
-marker:{enabled:!0},states:{hover:{lineWidthPlus:0}},params:{initialAccelerationFactor:.02,maxAccelerationFactor:.2,increment:.02,index:2,decimals:4}},{nameComponents:!1,getValues:function(a,b){var p=a.xData;a=a.yData;var e=a[0][1],l=b.maxAccelerationFactor,t=b.increment,z=b.initialAccelerationFactor,d=a[0][2],u=b.decimals,f=b.index,v=[],w=[],x=[],g=1,c;if(!(f>=a.length)){for(c=0;c<f;c++)e=Math.max(a[c][1],e),d=Math.min(a[c][2],parseFloat(d.toFixed(u)));var q=a[c][1]>d?1:-1;b=b.initialAccelerationFactor;
-var h=b*(e-d);v.push([p[f],d]);w.push(p[f]);x.push(parseFloat(d.toFixed(u)));for(c=f+1;c<a.length;c++){f=a[c-1][2];var k=a[c-2][2];var r=a[c-1][1];var y=a[c-2][1];var m=a[c][1];var n=a[c][2];null!==k&&null!==y&&null!==f&&null!==r&&null!==m&&null!==n&&(d=q===g?1===q?d+h<Math.min(k,f)?d+h:Math.min(k,f):d+h>Math.max(y,r)?d+h:Math.max(y,r):e,f=1===q?m>e?m:e:n<e?n:e,m=1===g&&n>d||-1===g&&m>d?1:-1,g=m,h=f,n=t,k=l,r=z,b=g===q?1===g&&h>e?b===k?k:parseFloat((b+n).toFixed(2)):-1===g&&h<e?b===k?k:parseFloat((b+
-n).toFixed(2)):b:r,e=f-d,h=b*e,v.push([p[c],parseFloat(d.toFixed(u))]),w.push(p[c]),x.push(parseFloat(d.toFixed(u))),g=q,q=m,e=f)}return{values:v,xData:w,yData:x}}}});""});l(a,"masters/indicators/psar.src.js",[],function(){})});
-//# sourceMappingURL=psar.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Parabolic SAR Indicator for Highcharts Stock
+ *
+ * (c) 2010-2021 Grzegorz Blachliński
+ *
+ * License: www.highcharts.com/license
+ */!function(t){"object"==typeof module&&module.exports?(t.default=t,module.exports=t):"function"==typeof define&&define.amd?define("highcharts/indicators/psar",["highcharts","highcharts/modules/stock"],function(e){return t(e),t.Highcharts=e,t}):t("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(t){"use strict";var e=t?t._modules:{};function i(t,e,i,a){t.hasOwnProperty(e)||(t[e]=a.apply(null,i),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:e,module:t[e]}})))}i(e,"Stock/Indicators/PSAR/PSARIndicator.js",[e["Core/Series/SeriesRegistry.js"],e["Core/Utilities.js"]],function(t,e){let{sma:i}=t.seriesTypes,{merge:a}=e;function n(t,e){return parseFloat(t.toFixed(e))}class s extends i{constructor(){super(...arguments),this.data=void 0,this.nameComponents=void 0,this.points=void 0,this.options=void 0}getValues(t,e){let i=t.xData,a=t.yData,s=e.maxAccelerationFactor,o=e.increment,r=e.initialAccelerationFactor,c=e.decimals,l=e.index,u=[],d=[],h=[],p=e.initialAccelerationFactor,m,f=a[0][1],v,x,g,y=1,A,F,M,S,j=a[0][2],C,w,D,H;if(!(l>=a.length)){for(H=0;H<l;H++)f=Math.max(a[H][1],f),j=Math.min(a[H][2],n(j,c));for(m=a[H][1]>j?1:-1,v=f-j,x=(p=e.initialAccelerationFactor)*v,u.push([i[l],j]),d.push(i[l]),h.push(n(j,c)),H=l+1;H<a.length;H++)if(A=a[H-1][2],F=a[H-2][2],M=a[H-1][1],S=a[H-2][1],w=a[H][1],D=a[H][2],null!==F&&null!==S&&null!==A&&null!==M&&null!==w&&null!==D){var P,k,E,O,R,b,I,T,W,L,U,V,_;R=m,b=y,I=j,T=x,W=f,j=R===b?1===R?I+T<Math.min(F,A)?I+T:Math.min(F,A):I+T>Math.max(S,M)?I+T:Math.max(S,M):W,P=m,k=f,C=1===P?w>k?w:k:D<k?D:k,E=y,O=j,L=g=1===E&&D>O||-1===E&&w>O?1:-1,U=m,V=f,_=p,x=(p=L===U?1===L&&C>V||-1===L&&C<V?_===s?s:n(_+o,2):_:r)*(v=C-j),u.push([i[H],n(j,c)]),d.push(i[H]),h.push(n(j,c)),y=m,m=g,f=C}return{values:u,xData:d,yData:h}}}}return s.defaultOptions=a(i.defaultOptions,{lineWidth:0,marker:{enabled:!0},states:{hover:{lineWidthPlus:0}},params:{period:void 0,initialAccelerationFactor:.02,maxAccelerationFactor:.2,increment:.02,index:2,decimals:4}}),t.registerSeriesType("psar",s),s}),i(e,"masters/indicators/psar.src.js",[],function(){})});//# sourceMappingURL=psar.js.map

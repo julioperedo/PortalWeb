@@ -1,14 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Wojciech Chmiel
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/ao",["highcharts","highcharts/modules/stock"],function(e){a(e);a.Highcharts=e;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function e(a,g,h,e){a.hasOwnProperty(g)||(a[g]=e.apply(null,h))}a=a?a._modules:{};e(a,"indicators/ao.src.js",[a["parts/Globals.js"],a["parts/Utilities.js"]],function(a,g){var h=g.correctFloat,
-e=g.isArray;g=g.seriesType;g("ao","sma",{greaterBarColor:"#06B535",lowerBarColor:"#F21313",threshold:0,groupPadding:.2,pointPadding:.2,crisp:!1,states:{hover:{halo:{size:0}}}},{nameBase:"AO",nameComponents:!1,markerAttribs:a.noop,getColumnMetrics:a.seriesTypes.column.prototype.getColumnMetrics,crispCol:a.seriesTypes.column.prototype.crispCol,translate:a.seriesTypes.column.prototype.translate,drawPoints:a.seriesTypes.column.prototype.drawPoints,drawGraph:function(){var a=this.options,f=this.points,
-e=a.greaterBarColor;a=a.lowerBarColor;var c=f[0];if(!this.userOptions.color&&c)for(c.color=e,c=1;c<f.length;c++)f[c].color=f[c].y>f[c-1].y?e:f[c].y<f[c-1].y?a:f[c-1].color},getValues:function(a){var f=a.xData||[];a=a.yData||[];var g=a.length,c=[],n=[],p=[],k=0,l=0,b;if(!(34>=f.length)&&e(a[0])&&4===a[0].length){for(b=0;33>b;b++){var d=(a[b][1]+a[b][2])/2;29<=b&&(k=h(k+d));l=h(l+d)}for(b=33;b<g;b++){d=(a[b][1]+a[b][2])/2;k=h(k+d);l=h(l+d);d=k/5;var m=l/34;d=h(d-m);c.push([f[b],d]);n.push(f[b]);p.push(d);
-d=b+1-5;m=b+1-34;k=h(k-(a[d][1]+a[d][2])/2);l=h(l-(a[m][1]+a[m][2])/2)}return{values:c,xData:n,yData:p}}}});""});e(a,"masters/indicators/ao.src.js",[],function(){})});
-//# sourceMappingURL=ao.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Wojciech Chmiel
+ *
+ * License: www.highcharts.com/license
+ */!function(t){"object"==typeof module&&module.exports?(t.default=t,module.exports=t):"function"==typeof define&&define.amd?define("highcharts/indicators/ao",["highcharts","highcharts/modules/stock"],function(o){return t(o),t.Highcharts=o,t}):t("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(t){"use strict";var o=t?t._modules:{};function e(t,o,e,r){t.hasOwnProperty(o)||(t[o]=r.apply(null,e),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:o,module:t[o]}})))}e(o,"Stock/Indicators/AO/AOIndicator.js",[o["Core/Globals.js"],o["Core/Series/SeriesRegistry.js"],o["Core/Utilities.js"]],function(t,o,e){let{noop:r}=t,{column:{prototype:s},sma:i}=o.seriesTypes,{extend:a,merge:n,correctFloat:l,isArray:d}=e;class c extends i{constructor(){super(...arguments),this.data=void 0,this.options=void 0,this.points=void 0}drawGraph(){let t;let o=this.options,e=this.points,r=this.userOptions.color,s=o.greaterBarColor,i=o.lowerBarColor,a=e[0];if(!r&&a)for(t=1,a.color=s;t<e.length;t++)e[t].y>e[t-1].y?e[t].color=s:e[t].y<e[t-1].y?e[t].color=i:e[t].color=e[t-1].color}getValues(t){let o=t.xData||[],e=t.yData||[],r=e.length,s=[],i=[],a=[],n,c,h,u,p,f,g=0,m=0;if(!(o.length<=34)&&d(e[0])&&4===e[0].length){for(p=0;p<33;p++)u=(e[p][1]+e[p][2])/2,p>=29&&(m=l(m+u)),g=l(g+u);for(f=33;f<r;f++)m=l(m+(u=(e[f][1]+e[f][2])/2)),g=l(g+u),n=l(m/5-g/34),s.push([o[f],n]),i.push(o[f]),a.push(n),c=f+1-5,h=f+1-34,m=l(m-(e[c][1]+e[c][2])/2),g=l(g-(e[h][1]+e[h][2])/2);return{values:s,xData:i,yData:a}}}}return c.defaultOptions=n(i.defaultOptions,{params:{index:void 0,period:void 0},greaterBarColor:"#06b535",lowerBarColor:"#f21313",threshold:0,groupPadding:.2,pointPadding:.2,crisp:!1,states:{hover:{halo:{size:0}}}}),a(c.prototype,{nameBase:"AO",nameComponents:!1,markerAttribs:r,getColumnMetrics:s.getColumnMetrics,crispCol:s.crispCol,translate:s.translate,drawPoints:s.drawPoints}),o.registerSeriesType("ao",c),c}),e(o,"masters/indicators/ao.src.js",[],function(){})});//# sourceMappingURL=ao.js.map

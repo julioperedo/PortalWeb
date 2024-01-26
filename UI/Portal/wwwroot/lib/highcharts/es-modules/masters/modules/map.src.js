@@ -1,24 +1,39 @@
 /**
- * @license Highmaps JS v8.1.2 (2020-06-16)
+ * @license Highmaps JS v11.2.0 (2023-10-30)
  * @module highcharts/modules/map
  * @requires highcharts
  *
- * Highmaps as a plugin for Highcharts or Highstock.
+ * Highmaps as a plugin for Highcharts or Highcharts Stock.
  *
- * (c) 2011-2019 Torstein Honsi
+ * (c) 2011-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../parts-map/MapAxis.js';
-import '../../parts-map/ColorAxis.js';
-import '../../parts-map/ColorMapSeriesMixin.js';
-import '../../parts-map/MapNavigation.js';
-import '../../parts-map/MapPointer.js';
-import '../../parts-map/MapSeries.js';
-import '../../parts-map/MapLineSeries.js';
-import '../../parts-map/MapPointSeries.js';
-import '../../parts-map/MapBubbleSeries.js';
-import '../../parts-map/HeatmapSeries.js';
-import '../../parts-map/GeoJSON.js';
-import '../../parts-map/Map.js';
+import Highcharts from '../../Core/Globals.js';
+import ColorAxis from '../../Core/Axis/Color/ColorAxis.js';
+import MapNavigation from '../../Maps/MapNavigation.js';
+import '../../Series/Map/MapSeries.js';
+import '../../Series/MapLine/MapLineSeries.js';
+import '../../Series/MapPoint/MapPointSeries.js';
+import MapBubbleSeries from '../../Series/MapBubble/MapBubbleSeries.js';
+import '../../Series/Heatmap/HeatmapSeries.js';
+import GeoJSONComposition from '../../Maps/GeoJSONComposition.js';
+import MapChart from '../../Core/Chart/MapChart.js';
+import MapView from '../../Maps/MapView.js';
+import Projection from '../../Maps/Projection.js';
+const G = Highcharts;
+G.ColorAxis = ColorAxis;
+G.MapChart = MapChart;
+G.mapChart = G.Map = MapChart.mapChart;
+G.MapNavigation = MapNavigation;
+G.MapView = MapView;
+G.maps = MapChart.maps;
+G.Projection = Projection;
+G.geojson = GeoJSONComposition.geojson;
+G.topo2geo = GeoJSONComposition.topo2geo;
+ColorAxis.compose(G.Chart, G.Fx, G.Legend, G.Series);
+GeoJSONComposition.compose(G.Chart);
+MapBubbleSeries.compose(G.Axis, G.Chart, G.Legend, G.Series);
+MapNavigation.compose(MapChart, G.Pointer, G.SVGRenderer);
+MapView.compose(MapChart);

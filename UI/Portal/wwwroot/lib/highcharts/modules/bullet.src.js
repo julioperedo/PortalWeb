@@ -1,13 +1,12 @@
 /**
- * @license Highcharts JS v8.1.2 (2020-06-16)
+ * @license Highcharts JS v11.2.0 (2023-10-30)
  *
  * Bullet graph series type for Highcharts
  *
- * (c) 2010-2019 Kacper Madej
+ * (c) 2010-2021 Kacper Madej
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,38 +21,83 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'modules/bullet.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js']], function (H, U) {
+    _registerModule(_modules, 'Series/Bullet/BulletPoint.js', [_modules['Series/Column/ColumnSeries.js']], function (ColumnSeries) {
         /* *
          *
-         *  (c) 2010-2020 Kacper Madej
+         *  (c) 2010-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var isNumber = U.isNumber,
-            merge = U.merge,
-            pick = U.pick,
-            relativeLength = U.relativeLength,
-            seriesType = U.seriesType;
-        var columnProto = H.seriesTypes.column.prototype;
-        /**
-         * The bullet series type.
+        /* *
          *
-         * @private
-         * @class
-         * @name Highcharts.seriesTypes.bullet
+         *  Class
          *
-         * @augments Highcharts.Series
-         */
-        seriesType('bullet', 'column'
+         * */
+        class BulletPoint extends ColumnSeries.prototype.pointClass {
+            constructor() {
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                super(...arguments);
+                this.options = void 0;
+                this.series = void 0;
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            /**
+             * Destroys target graphic.
+             * @private
+             */
+            destroy() {
+                const series = this;
+                if (series.targetGraphic) {
+                    series.targetGraphic = series.targetGraphic.destroy();
+                }
+                super.destroy.apply(series, arguments);
+                return;
+            }
+        }
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+
+        return BulletPoint;
+    });
+    _registerModule(_modules, 'Series/Bullet/BulletSeriesDefaults.js', [], function () {
+        /* *
+         *
+         *  Imports
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A bullet graph is a variation of a bar graph. The bullet graph features
          * a single measure, compares it to a target, and displays it in the context
@@ -67,11 +111,11 @@
          * @since        6.0.0
          * @product      highcharts
          * @excluding    allAreas, boostThreshold, colorAxis, compare, compareBase,
-         *               dataSorting
+         *               dataSorting, boostBlending
          * @requires     modules/bullet
          * @optionparent plotOptions.bullet
          */
-        , {
+        const BulletSeriesDefaults = {
             /**
              * All options related with look and positiong of targets.
              *
@@ -125,152 +169,18 @@
                  *
                  * @since   6.0.0
                  */
-                borderWidth: 0
+                borderWidth: 0,
+                /**
+                 * The border radius of the rectangle representing the target.
+                 */
+                borderRadius: 0
             },
             tooltip: {
                 pointFormat: '<span style="color:{series.color}">\u25CF</span>' +
                     ' {series.name}: <b>{point.y}</b>. Target: <b>{point.target}' +
                     '</b><br/>'
             }
-        }, {
-            pointArrayMap: ['y', 'target'],
-            parallelArrays: ['x', 'y', 'target'],
-            /* eslint-disable valid-jsdoc */
-            /**
-             * Draws the targets. For inverted chart, the `series.group` is rotated,
-             * so the same coordinates apply. This method is based on column series
-             * drawPoints function.
-             *
-             * @ignore
-             * @function Highcharts.Series#drawPoints
-             */
-            drawPoints: function () {
-                var series = this,
-                    chart = series.chart,
-                    options = series.options,
-                    animationLimit = options.animationLimit || 250;
-                columnProto.drawPoints.apply(this);
-                series.points.forEach(function (point) {
-                    var pointOptions = point.options,
-                        shapeArgs,
-                        targetGraphic = point.targetGraphic,
-                        targetShapeArgs,
-                        targetVal = point.target,
-                        pointVal = point.y,
-                        width,
-                        height,
-                        targetOptions,
-                        y;
-                    if (isNumber(targetVal) && targetVal !== null) {
-                        targetOptions = merge(options.targetOptions, pointOptions.targetOptions);
-                        height = targetOptions.height;
-                        shapeArgs = point.shapeArgs;
-                        width = relativeLength(targetOptions.width, shapeArgs.width);
-                        y = series.yAxis.translate(targetVal, false, true, false, true) - targetOptions.height / 2 - 0.5;
-                        targetShapeArgs = series.crispCol.apply({
-                            // Use fake series object to set borderWidth of target
-                            chart: chart,
-                            borderWidth: targetOptions.borderWidth,
-                            options: {
-                                crisp: options.crisp
-                            }
-                        }, [
-                            (shapeArgs.x +
-                                shapeArgs.width / 2 - width / 2),
-                            y,
-                            width,
-                            height
-                        ]);
-                        if (targetGraphic) {
-                            // Update
-                            targetGraphic[chart.pointCount < animationLimit ?
-                                'animate' :
-                                'attr'](targetShapeArgs);
-                            // Add or remove tooltip reference
-                            if (isNumber(pointVal) && pointVal !== null) {
-                                targetGraphic.element.point = point;
-                            }
-                            else {
-                                targetGraphic.element.point = void 0;
-                            }
-                        }
-                        else {
-                            point.targetGraphic = targetGraphic = chart.renderer
-                                .rect()
-                                .attr(targetShapeArgs)
-                                .add(series.group);
-                        }
-                        // Presentational
-                        if (!chart.styledMode) {
-                            targetGraphic.attr({
-                                fill: pick(targetOptions.color, pointOptions.color, (series.zones.length && (point.getZone.call({
-                                    series: series,
-                                    x: point.x,
-                                    y: targetVal,
-                                    options: {}
-                                }).color || series.color)) || void 0, point.color, series.color),
-                                stroke: pick(targetOptions.borderColor, point.borderColor, series.options.borderColor),
-                                'stroke-width': targetOptions.borderWidth
-                            });
-                        }
-                        // Add tooltip reference
-                        if (isNumber(pointVal) && pointVal !== null) {
-                            targetGraphic.element.point = point;
-                        }
-                        targetGraphic.addClass(point.getClassName() +
-                            ' highcharts-bullet-target', true);
-                    }
-                    else if (targetGraphic) {
-                        // #1269:
-                        point.targetGraphic = targetGraphic.destroy();
-                    }
-                });
-            },
-            /**
-             * Includes target values to extend extremes from y values.
-             *
-             * @ignore
-             * @function Highcharts.Series#getExtremes
-             */
-            getExtremes: function (yData) {
-                var series = this,
-                    targetData = series.targetData,
-                    yMax,
-                    yMin;
-                var dataExtremes = columnProto.getExtremes.call(this,
-                    yData);
-                if (targetData && targetData.length) {
-                    var targetExtremes = columnProto.getExtremes.call(this,
-                        targetData);
-                    if (isNumber(targetExtremes.dataMin)) {
-                        dataExtremes.dataMin = Math.min(pick(dataExtremes.dataMin, Infinity), targetExtremes.dataMin);
-                    }
-                    if (isNumber(targetExtremes.dataMax)) {
-                        dataExtremes.dataMax = Math.max(pick(dataExtremes.dataMax, -Infinity), targetExtremes.dataMax);
-                    }
-                }
-                return dataExtremes;
-            }
-            /* eslint-enable valid-jsdoc */
-        }, 
-        /** @lends Highcharts.seriesTypes.ohlc.prototype.pointClass.prototype */
-        {
-            // eslint-disable-next-line valid-jsdoc
-            /**
-             * Destroys target graphic.
-             *
-             * @private
-             * @function
-             */
-            destroy: function () {
-                if (this.targetGraphic) {
-                    this.targetGraphic = this.targetGraphic.destroy();
-                }
-                columnProto.pointClass.prototype.destroy
-                    .apply(this, arguments);
-                return;
-            }
-        });
+        };
         /**
          * A `bullet` series. If the [type](#series.bullet.type) option is not
          * specified, it is inherited from [chart.type](#chart.type).
@@ -278,7 +188,8 @@
          * @extends   series,plotOptions.bullet
          * @since     6.0.0
          * @product   highcharts
-         * @excluding dataParser, dataURL, marker, dataSorting
+         * @excluding dataParser, dataURL, marker, dataSorting, boostThreshold,
+         *            boostBlending
          * @requires  modules/bullet
          * @apioption series.bullet
          */
@@ -353,8 +264,182 @@
          * @excluding halo, lineWidth, lineWidthPlus, marker
          * @apioption series.bullet.states.select
          */
-        ''; // adds doclets above to transpiled file
+        ''; // keeps doclets above separate
+        /* *
+         *
+         *  Default Export
+         *
+         * */
 
+        return BulletSeriesDefaults;
+    });
+    _registerModule(_modules, 'Series/Bullet/BulletSeries.js', [_modules['Series/Bullet/BulletPoint.js'], _modules['Series/Bullet/BulletSeriesDefaults.js'], _modules['Series/Column/ColumnSeries.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (BulletPoint, BulletSeriesDefaults, ColumnSeries, SeriesRegistry, U) {
+        /* *
+         *
+         *  (c) 2010-2021 Kacper Madej
+         *
+         *  License: www.highcharts.com/license
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         * */
+        const { extend, isNumber, merge, pick, relativeLength } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
+        /**
+         * The bullet series type.
+         *
+         * @private
+         * @class
+         * @name Highcharts.seriesTypes.bullet
+         *
+         * @augments Highcharts.Series
+         */
+        class BulletSeries extends ColumnSeries {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
+                this.targetData = void 0;
+                /* eslint-enable valid-jsdoc */
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            /**
+             * Draws the targets. For inverted chart, the `series.group` is rotated,
+             * so the same coordinates apply. This method is based on column series
+             * drawPoints function.
+             *
+             * @ignore
+             * @function Highcharts.Series#drawPoints
+             */
+            drawPoints() {
+                const series = this, chart = series.chart, options = series.options, animationLimit = options.animationLimit || 250;
+                super.drawPoints.apply(this, arguments);
+                for (const point of series.points) {
+                    const pointOptions = point.options, targetVal = point.target, pointVal = point.y;
+                    let targetShapeArgs, targetGraphic = point.targetGraphic, width, height, targetOptions, y;
+                    if (isNumber(targetVal) && targetVal !== null) {
+                        targetOptions = merge(options.targetOptions, pointOptions.targetOptions);
+                        height = targetOptions.height;
+                        let shapeArgs = point.shapeArgs;
+                        // #15547
+                        if (point.dlBox && shapeArgs && !isNumber(shapeArgs.width)) {
+                            shapeArgs = point.dlBox;
+                        }
+                        width = relativeLength(targetOptions.width, shapeArgs.width);
+                        y = series.yAxis.translate(targetVal, false, true, false, true) - targetOptions.height / 2 - 0.5;
+                        targetShapeArgs = series.crispCol.apply({
+                            // Use fake series object to set borderWidth of target
+                            chart: chart,
+                            borderWidth: targetOptions.borderWidth,
+                            options: {
+                                crisp: options.crisp
+                            }
+                        }, [
+                            (shapeArgs.x +
+                                shapeArgs.width / 2 - width / 2),
+                            y,
+                            width,
+                            height
+                        ]);
+                        if (targetGraphic) {
+                            // Update
+                            targetGraphic[chart.pointCount < animationLimit ?
+                                'animate' :
+                                'attr'](targetShapeArgs);
+                            // Add or remove tooltip reference
+                            if (isNumber(pointVal) && pointVal !== null) {
+                                targetGraphic.element.point = point;
+                            }
+                            else {
+                                targetGraphic.element.point = void 0;
+                            }
+                        }
+                        else {
+                            point.targetGraphic = targetGraphic = chart.renderer
+                                .rect()
+                                .attr(targetShapeArgs)
+                                .add(series.group);
+                        }
+                        // Presentational
+                        if (!chart.styledMode) {
+                            targetGraphic.attr({
+                                fill: pick(targetOptions.color, pointOptions.color, (series.zones.length && (point.getZone.call({
+                                    series: series,
+                                    x: point.x,
+                                    y: targetVal,
+                                    options: {}
+                                }).color || series.color)) || void 0, point.color, series.color),
+                                stroke: pick(targetOptions.borderColor, point.borderColor, series.options.borderColor),
+                                'stroke-width': targetOptions.borderWidth,
+                                r: targetOptions.borderRadius
+                            });
+                        }
+                        // Add tooltip reference
+                        if (isNumber(pointVal) && pointVal !== null) {
+                            targetGraphic.element.point = point;
+                        }
+                        targetGraphic.addClass(point.getClassName() +
+                            ' highcharts-bullet-target', true);
+                    }
+                    else if (targetGraphic) {
+                        // #1269:
+                        point.targetGraphic = targetGraphic.destroy();
+                    }
+                }
+            }
+            /**
+             * Includes target values to extend extremes from y values.
+             *
+             * @ignore
+             * @function Highcharts.Series#getExtremes
+             */
+            getExtremes(yData) {
+                const dataExtremes = super.getExtremes.call(this, yData), targetData = this.targetData;
+                if (targetData && targetData.length) {
+                    const targetExtremes = super.getExtremes.call(this, targetData);
+                    if (isNumber(targetExtremes.dataMin)) {
+                        dataExtremes.dataMin = Math.min(pick(dataExtremes.dataMin, Infinity), targetExtremes.dataMin);
+                    }
+                    if (isNumber(targetExtremes.dataMax)) {
+                        dataExtremes.dataMax = Math.max(pick(dataExtremes.dataMax, -Infinity), targetExtremes.dataMax);
+                    }
+                }
+                return dataExtremes;
+            }
+        }
+        BulletSeries.defaultOptions = merge(ColumnSeries.defaultOptions, BulletSeriesDefaults);
+        extend(BulletSeries.prototype, {
+            parallelArrays: ['x', 'y', 'target'],
+            pointArrayMap: ['y', 'target']
+        });
+        BulletSeries.prototype.pointClass = BulletPoint;
+        SeriesRegistry.registerSeriesType('bullet', BulletSeries);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+
+        return BulletSeries;
     });
     _registerModule(_modules, 'masters/modules/bullet.src.js', [], function () {
 

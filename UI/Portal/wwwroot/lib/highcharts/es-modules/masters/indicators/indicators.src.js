@@ -1,14 +1,15 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  * @module highcharts/indicators/indicators
  * @requires highcharts
  * @requires highcharts/modules/stock
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Pawel Fus, Sebastian Bochan
+ * (c) 2010-2021 Pawel Fus, Sebastian Bochan
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../indicators/indicators.src.js';
+import '../../Stock/Indicators/SMA/SMAIndicator.js';
+import '../../Stock/Indicators/EMA/EMAIndicator.js';

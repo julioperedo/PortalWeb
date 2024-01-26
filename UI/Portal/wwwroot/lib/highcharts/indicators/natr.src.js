@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Paweł Dalek
+ * (c) 2010-2021 Paweł Dalek
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,13 +21,21 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/natr.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js']], function (H, U) {
+    _registerModule(_modules, 'Stock/Indicators/NATR/NATRIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -36,8 +43,13 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var seriesType = U.seriesType;
-        var ATR = H.seriesTypes.atr;
+        const { atr: ATRIndicator } = SeriesRegistry.seriesTypes;
+        const { merge } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The NATR series type.
          *
@@ -47,7 +59,45 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('natr', 'sma', 
+        class NATRIndicator extends ATRIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /**
+                 * @lends Highcharts.Series#
+                 */
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.points = void 0;
+                this.options = void 0;
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const atrData = (super.getValues.apply(this, arguments)), atrLength = atrData.values.length, yVal = series.yData;
+                let i = 0, period = params.period - 1;
+                if (!atrData) {
+                    return;
+                }
+                for (; i < atrLength; i++) {
+                    atrData.yData[i] = (atrData.values[i][1] / yVal[period][3] * 100);
+                    atrData.values[i][1] = atrData.yData[i];
+                    period++;
+                }
+                return atrData;
+            }
+        }
         /**
          * Normalized average true range indicator (NATR). This series requires
          * `linkedTo` option to be set and should be loaded after the
@@ -63,34 +113,22 @@
          * @requires     stock/indicators/natr
          * @optionparent plotOptions.natr
          */
-        {
+        NATRIndicator.defaultOptions = merge(ATRIndicator.defaultOptions, {
             tooltip: {
                 valueSuffix: '%'
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            requiredIndicators: ['atr'],
-            getValues: function (series, params) {
-                var atrData = (ATR.prototype.getValues.apply(this,
-                    arguments)),
-                    atrLength = atrData.values.length,
-                    period = params.period - 1,
-                    yVal = series.yData,
-                    i = 0;
-                if (!atrData) {
-                    return;
-                }
-                for (; i < atrLength; i++) {
-                    atrData.yData[i] = (atrData.values[i][1] / yVal[period][3] * 100);
-                    atrData.values[i][1] = atrData.yData[i];
-                    period++;
-                }
-                return atrData;
-            }
         });
+        SeriesRegistry.registerSeriesType('natr', NATRIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `NATR` series. If the [type](#series.natr.type) option is not specified, it
          * is inherited from [chart.type](#chart.type).
@@ -100,11 +138,13 @@
          * @product   highstock
          * @excluding dataParser, dataURL
          * @requires  stock/indicators/indicators
+         * @requires  stock/indicators/atr
          * @requires  stock/indicators/natr
          * @apioption series.natr
          */
         ''; // to include the above in the js output'
 
+        return NATRIndicator;
     });
     _registerModule(_modules, 'masters/indicators/natr.src.js', [], function () {
 

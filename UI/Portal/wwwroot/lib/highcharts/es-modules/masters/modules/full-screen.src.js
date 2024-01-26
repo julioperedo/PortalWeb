@@ -1,14 +1,18 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  * @module highcharts/modules/full-screen
  * @requires highcharts
  *
- * Advanced Highstock tools
+ * Advanced Highcharts Stock tools
  *
- * (c) 2010-2019 Highsoft AS
+ * (c) 2010-2021 Highsoft AS
  * Author: Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../modules/full-screen.src.js';
+import Highcharts from '../../Core/Globals.js';
+import Fullscreen from '../../Extensions/Exporting/Fullscreen.js';
+const G = Highcharts;
+G.Fullscreen = Fullscreen;
+Fullscreen.compose(G.Chart);

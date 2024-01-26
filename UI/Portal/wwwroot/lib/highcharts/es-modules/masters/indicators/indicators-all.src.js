@@ -1,54 +1,61 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  * @module highcharts/indicators/indicators-all
  * @requires highcharts
  * @requires highcharts/modules/stock
  *
- * All technical indicators for Highstock
+ * All technical indicators for Highcharts Stock
  *
- * (c) 2010-2019 Pawel Fus
+ * (c) 2010-2021 Pawel Fus
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-
-import '../../indicators/indicators.src.js';
-import '../../indicators/accumulation-distribution.src.js';
-import '../../indicators/ao.src.js';
-import '../../indicators/aroon.src.js';
-import '../../indicators/aroon-oscillator.src.js';
-import '../../indicators/atr.src.js';
-import '../../indicators/bollinger-bands.src.js';
-import '../../indicators/cci.src.js';
-import '../../indicators/cmf.src.js';
-import '../../indicators/dpo.src.js';
-import '../../indicators/ema.src.js';
-import '../../indicators/chaikin.src.js';
-import '../../indicators/dema.src.js';
-import '../../indicators/tema.src.js';
-import '../../indicators/trix.src.js';
-import '../../indicators/apo.src.js';
-import '../../indicators/ichimoku-kinko-hyo.src.js';
-import '../../indicators/keltner-channels.src.js';
-import '../../indicators/macd.src.js';
-import '../../indicators/mfi.src.js';
-import '../../indicators/momentum.src.js';
-import '../../indicators/natr.src.js';
-import '../../indicators/pivot-points.src.js';
-import '../../indicators/ppo.src.js';
-import '../../indicators/price-channel.src.js';
-import '../../indicators/price-envelopes.src.js';
-import '../../indicators/psar.src.js';
-import '../../indicators/roc.src.js';
-import '../../indicators/rsi.src.js';
-import '../../indicators/stochastic.src.js';
-import '../../indicators/slow-stochastic.src.js';
-import '../../indicators/supertrend.src.js';
-import '../../indicators/volume-by-price.src.js';
-import '../../indicators/vwap.src.js';
-import '../../indicators/williams-r.src.js';
-import '../../indicators/wma.src.js';
-import '../../indicators/zigzag.src.js';
-import '../../indicators/regressions.src.js';
-import '../../indicators/acceleration-bands.src.js';
-import '../../indicators/trendline.src.js';
+import '../../Stock/Indicators/SMA/SMAIndicator.js';
+import '../../Stock/Indicators/EMA/EMAIndicator.js';
+import '../../Stock/Indicators/AD/ADIndicator.js';
+import '../../Stock/Indicators/AO/AOIndicator.js';
+import '../../Stock/Indicators/Aroon/AroonIndicator.js';
+import '../../Stock/Indicators/AroonOscillator/AroonOscillatorIndicator.js';
+import '../../Stock/Indicators/ATR/ATRIndicator.js';
+import '../../Stock/Indicators/BB/BBIndicator.js';
+import '../../Stock/Indicators/CCI/CCIIndicator.js';
+import '../../Stock/Indicators/CMF/CMFIndicator.js';
+import '../../Stock/Indicators/DMI/DMIIndicator.js';
+import '../../Stock/Indicators/DPO/DPOIndicator.js';
+import '../../Stock/Indicators/Chaikin/ChaikinIndicator.js';
+import '../../Stock/Indicators/CMO/CMOIndicator.js';
+import '../../Stock/Indicators/DEMA/DEMAIndicator.js';
+import '../../Stock/Indicators/TEMA/TEMAIndicator.js';
+import '../../Stock/Indicators/TRIX/TRIXIndicator.js';
+import '../../Stock/Indicators/APO/APOIndicator.js';
+import '../../Stock/Indicators/IKH/IKHIndicator.js';
+import '../../Stock/Indicators/KeltnerChannels/KeltnerChannelsIndicator.js';
+import '../../Stock/Indicators/Klinger/KlingerIndicator.js';
+import '../../Stock/Indicators/MACD/MACDIndicator.js';
+import '../../Stock/Indicators/MFI/MFIIndicator.js';
+import '../../Stock/Indicators/Momentum/MomentumIndicator.js';
+import '../../Stock/Indicators/NATR/NATRIndicator.js';
+import '../../Stock/Indicators/OBV/OBVIndicator.js';
+import '../../Stock/Indicators/PivotPoints/PivotPointsIndicator.js';
+import '../../Stock/Indicators/PPO/PPOIndicator.js';
+import '../../Stock/Indicators/PC/PCIndicator.js';
+import '../../Stock/Indicators/PriceEnvelopes/PriceEnvelopesIndicator.js';
+import '../../Stock/Indicators/PSAR/PSARIndicator.js';
+import '../../Stock/Indicators/ROC/ROCIndicator.js';
+import '../../Stock/Indicators/RSI/RSIIndicator.js';
+import '../../Stock/Indicators/Stochastic/StochasticIndicator.js';
+import '../../Stock/Indicators/SlowStochastic/SlowStochasticIndicator.js';
+import '../../Stock/Indicators/Supertrend/SupertrendIndicator.js';
+import '../../Stock/Indicators/VBP/VBPIndicator.js';
+import '../../Stock/Indicators/VWAP/VWAPIndicator.js';
+import '../../Stock/Indicators/WilliamsR/WilliamsRIndicator.js';
+import '../../Stock/Indicators/WMA/WMAIndicator.js';
+import '../../Stock/Indicators/Zigzag/ZigzagIndicator.js';
+import '../../Stock/Indicators/LinearRegression/LinearRegressionIndicator.js';
+import '../../Stock/Indicators/LinearRegressionSlopes/LinearRegressionSlopesIndicator.js';
+import '../../Stock/Indicators/LinearRegressionIntercept/LinearRegressionInterceptIndicator.js';
+import '../../Stock/Indicators/LinearRegressionAngle/LinearRegressionAngleIndicator.js';
+import '../../Stock/Indicators/ABands/ABandsIndicator.js';
+import '../../Stock/Indicators/TrendLine/TrendLineIndicator.js';
+import '../../Stock/Indicators/DisparityIndex/DisparityIndexIndicator.js';

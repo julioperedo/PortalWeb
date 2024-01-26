@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Kacper Madej
+ * (c) 2010-2021 Kacper Madej
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,32 +21,43 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/wma.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/WMA/WMAIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
-         *  (c) 2010-2020 Kacper Madej
+         *  (c) 2010-2021 Kacper Madej
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var isArray = U.isArray,
-            seriesType = U.seriesType;
-        /* eslint-disable valid-jsdoc */
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { isArray, merge } = U;
+        /* *
+         *
+         *  Functions
+         *
+         * */
         // Utils:
         /**
          * @private
          */
         function accumulateAverage(points, xVal, yVal, i, index) {
-            var xValue = xVal[i],
-                yValue = index < 0 ? yVal[i] : yVal[i][index];
+            const xValue = xVal[i], yValue = index < 0 ? yVal[i] : yVal[i][index];
             points.push([xValue, yValue]);
         }
         /**
@@ -57,7 +67,7 @@
             // The denominator is the sum of the number of days as a triangular number.
             // If there are 5 days, the triangular numbers are 5, 4, 3, 2, and 1.
             // The sum is 5 + 4 + 3 + 2 + 1 = 15.
-            var denominator = (pLen + 1) / 2 * pLen;
+            const denominator = (pLen + 1) / 2 * pLen;
             // reduce VS loop => reduce
             return array.reduce(function (prev, cur, i) {
                 return [null, prev[1] + cur[1] * (i + 1)];
@@ -67,14 +77,15 @@
          * @private
          */
         function populateAverage(points, xVal, yVal, i) {
-            var pLen = points.length,
-                wmaY = weightedSumArray(points,
-                pLen),
-                wmaX = xVal[i - 1];
+            const pLen = points.length, wmaY = weightedSumArray(points, pLen), wmaX = xVal[i - 1];
             points.shift(); // remove point until range < period
             return [wmaX, wmaY];
         }
-        /* eslint-enable valid-jsdoc */
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The SMA series type.
          *
@@ -84,7 +95,65 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('wma', 'sma', 
+        class WMAIndicator extends SMAIndicator {
+            constructor() {
+                /* *
+                 *
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, xVal = series.xData, yVal = series.yData, yValLen = yVal ? yVal.length : 0, xValue = xVal[0], wma = [], xData = [], yData = [];
+                let range = 1, index = -1, i, wmaPoint, yValue = yVal[0];
+                if (xVal.length < period) {
+                    return;
+                }
+                // Switch index for OHLC / Candlestick
+                if (isArray(yVal[0])) {
+                    index = params.index;
+                    yValue = yVal[0][index];
+                }
+                // Starting point
+                const points = [[xValue, yValue]];
+                // Accumulate first N-points
+                while (range !== period) {
+                    accumulateAverage(points, xVal, yVal, range, index);
+                    range++;
+                }
+                // Calculate value one-by-one for each period in visible data
+                for (i = range; i < yValLen; i++) {
+                    wmaPoint = populateAverage(points, xVal, yVal, i);
+                    wma.push(wmaPoint);
+                    xData.push(wmaPoint[0]);
+                    yData.push(wmaPoint[1]);
+                    accumulateAverage(points, xVal, yVal, i, index);
+                }
+                wmaPoint = populateAverage(points, xVal, yVal, i);
+                wma.push(wmaPoint);
+                xData.push(wmaPoint[0]);
+                yData.push(wmaPoint[1]);
+                return {
+                    values: wma,
+                    xData: xData,
+                    yData: yData
+                };
+            }
+        }
         /**
          * Weighted moving average indicator (WMA). This series requires `linkedTo`
          * option to be set.
@@ -99,65 +168,23 @@
          * @requires     stock/indicators/wma
          * @optionparent plotOptions.wma
          */
-        {
+        WMAIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
             params: {
                 index: 3,
                 period: 9
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            getValues: function (series, params) {
-                var period = params.period,
-                    xVal = series.xData,
-                    yVal = series.yData,
-                    yValLen = yVal ? yVal.length : 0,
-                    range = 1,
-                    xValue = xVal[0],
-                    yValue = yVal[0],
-                    WMA = [],
-                    xData = [],
-                    yData = [],
-                    index = -1,
-                    i,
-                    points,
-                    WMAPoint;
-                if (xVal.length < period) {
-                    return;
-                }
-                // Switch index for OHLC / Candlestick
-                if (isArray(yVal[0])) {
-                    index = params.index;
-                    yValue = yVal[0][index];
-                }
-                // Starting point
-                points = [[xValue, yValue]];
-                // Accumulate first N-points
-                while (range !== period) {
-                    accumulateAverage(points, xVal, yVal, range, index);
-                    range++;
-                }
-                // Calculate value one-by-one for each period in visible data
-                for (i = range; i < yValLen; i++) {
-                    WMAPoint = populateAverage(points, xVal, yVal, i);
-                    WMA.push(WMAPoint);
-                    xData.push(WMAPoint[0]);
-                    yData.push(WMAPoint[1]);
-                    accumulateAverage(points, xVal, yVal, i, index);
-                }
-                WMAPoint = populateAverage(points, xVal, yVal, i);
-                WMA.push(WMAPoint);
-                xData.push(WMAPoint[0]);
-                yData.push(WMAPoint[1]);
-                return {
-                    values: WMA,
-                    xData: xData,
-                    yData: yData
-                };
-            }
         });
+        SeriesRegistry.registerSeriesType('wma', WMAIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `WMA` series. If the [type](#series.wma.type) option is not specified, it
          * is inherited from [chart.type](#chart.type).
@@ -172,6 +199,7 @@
          */
         ''; // adds doclet above to the transpiled file
 
+        return WMAIndicator;
     });
     _registerModule(_modules, 'masters/indicators/wma.src.js', [], function () {
 

@@ -1,14 +1,14 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  * @module highcharts/indicators/dpo
  * @requires highcharts
  * @requires highcharts/modules/stock
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Wojciech Chmiel
+ * (c) 2010-2021 Wojciech Chmiel
  *
  * License: www.highcharts.com/license
  */
 'use strict';
-import '../../indicators/dpo.src.js';
+import '../../Stock/Indicators/DPO/DPOIndicator.js';

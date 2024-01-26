@@ -1,13 +1,12 @@
 /**
- * @license Highstock JS v8.1.2 (2020-06-16)
+ * @license Highstock JS v11.2.0 (2023-10-30)
  *
- * Indicator series type for Highstock
+ * Indicator series type for Highcharts Stock
  *
- * (c) 2010-2019 Wojciech Chmiel
+ * (c) 2010-2021 Wojciech Chmiel
  *
  * License: www.highcharts.com/license
  */
-'use strict';
 (function (factory) {
     if (typeof module === 'object' && module.exports) {
         factory['default'] = factory;
@@ -22,38 +21,34 @@
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
+    'use strict';
     var _modules = Highcharts ? Highcharts._modules : {};
     function _registerModule(obj, path, args, fn) {
         if (!obj.hasOwnProperty(path)) {
             obj[path] = fn.apply(null, args);
+
+            if (typeof CustomEvent === 'function') {
+                window.dispatchEvent(new CustomEvent(
+                    'HighchartsModuleLoaded',
+                    { detail: { path: path, module: obj[path] } }
+                ));
+            }
         }
     }
-    _registerModule(_modules, 'indicators/accumulation-distribution.src.js', [_modules['parts/Utilities.js']], function (U) {
+    _registerModule(_modules, 'Stock/Indicators/AD/ADIndicator.js', [_modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
          *
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          * */
-        var error = U.error,
-            seriesType = U.seriesType;
-        /* eslint-disable valid-jsdoc */
-        // Utils:
-        /**
-         * @private
-         */
-        function populateAverage(xVal, yVal, yValVolume, i) {
-            var high = yVal[i][1],
-                low = yVal[i][2],
-                close = yVal[i][3],
-                volume = yValVolume[i],
-                adY = close === high && close === low || high === low ?
-                    0 :
-                    ((2 * close - low - high) / (high - low)) * volume,
-                adX = xVal[i];
-            return [adX, adY];
-        }
-        /* eslint-enable valid-jsdoc */
+        const { sma: SMAIndicator } = SeriesRegistry.seriesTypes;
+        const { error, extend, merge } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The AD series type.
          *
@@ -63,53 +58,42 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('ad', 'sma', 
-        /**
-         * Accumulation Distribution (AD). This series requires `linkedTo` option to
-         * be set.
-         *
-         * @sample stock/indicators/accumulation-distribution
-         *         Accumulation/Distribution indicator
-         *
-         * @extends      plotOptions.sma
-         * @since        6.0.0
-         * @product      highstock
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/accumulation-distribution
-         * @optionparent plotOptions.ad
-         */
-        {
-            params: {
-                /**
-                 * The id of volume series which is mandatory.
-                 * For example using OHLC data, volumeSeriesID='volume' means
-                 * the indicator will be calculated using OHLC and volume values.
+        class ADIndicator extends SMAIndicator {
+            constructor() {
+                /* *
                  *
-                 * @since 6.0.0
-                 */
-                volumeSeriesID: 'volume'
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameComponents: false,
-            nameBase: 'Accumulation/Distribution',
-            getValues: function (series, params) {
-                var period = params.period,
-                    xVal = series.xData,
-                    yVal = series.yData,
-                    volumeSeriesID = params.volumeSeriesID,
-                    volumeSeries = series.chart.get(volumeSeriesID),
-                    yValVolume = volumeSeries && volumeSeries.yData,
-                    yValLen = yVal ? yVal.length : 0,
-                    AD = [],
-                    xData = [],
-                    yData = [],
-                    len,
-                    i,
-                    ADPoint;
+            /* *
+             *
+             *  Static Functions
+             *
+             * */
+            static populateAverage(xVal, yVal, yValVolume, i, _period) {
+                const high = yVal[i][1], low = yVal[i][2], close = yVal[i][3], volume = yValVolume[i], adY = close === high && close === low || high === low ?
+                    0 :
+                    ((2 * close - low - high) / (high - low)) * volume, adX = xVal[i];
+                return [adX, adY];
+            }
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const period = params.period, xVal = series.xData, yVal = series.yData, volumeSeriesID = params.volumeSeriesID, volumeSeries = series.chart.get(volumeSeriesID), yValVolume = volumeSeries && volumeSeries.yData, yValLen = yVal ? yVal.length : 0, AD = [], xData = [], yData = [];
+                let len, i, ADPoint;
                 if (xVal.length <= period &&
                     yValLen &&
                     yVal[0].length !== 4) {
@@ -125,7 +109,7 @@
                 // Calculate value one-by-one for each period in visible data
                 for (i = period; i < yValLen; i++) {
                     len = AD.length;
-                    ADPoint = populateAverage(xVal, yVal, yValVolume, i, period);
+                    ADPoint = ADIndicator.populateAverage(xVal, yVal, yValVolume, i, period);
                     if (len > 0) {
                         ADPoint[1] += AD[len - 1][1];
                     }
@@ -139,7 +123,52 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Accumulation Distribution (AD). This series requires `linkedTo` option to
+         * be set.
+         *
+         * @sample stock/indicators/accumulation-distribution
+         *         Accumulation/Distribution indicator
+         *
+         * @extends      plotOptions.sma
+         * @since        6.0.0
+         * @product      highstock
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/accumulation-distribution
+         * @optionparent plotOptions.ad
+         */
+        ADIndicator.defaultOptions = merge(SMAIndicator.defaultOptions, {
+            /**
+             * @excluding index
+             */
+            params: {
+                index: void 0,
+                /**
+                 * The id of volume series which is mandatory.
+                 * For example using OHLC data, volumeSeriesID='volume' means
+                 * the indicator will be calculated using OHLC and volume values.
+                 *
+                 * @since 6.0.0
+                 */
+                volumeSeriesID: 'volume'
+            }
         });
+        extend(ADIndicator.prototype, {
+            nameComponents: false,
+            nameBase: 'Accumulation/Distribution'
+        });
+        SeriesRegistry.registerSeriesType('ad', ADIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `AD` series. If the [type](#series.ad.type) option is not
          * specified, it is inherited from [chart.type](#chart.type).
@@ -154,70 +183,9 @@
          */
         ''; // add doclet above to transpiled file
 
+        return ADIndicator;
     });
-    _registerModule(_modules, 'mixins/indicator-required.js', [_modules['parts/Utilities.js']], function (U) {
-        /**
-         *
-         *  (c) 2010-2020 Daniel Studencki
-         *
-         *  License: www.highcharts.com/license
-         *
-         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
-         *
-         * */
-        var error = U.error;
-        /* eslint-disable no-invalid-this, valid-jsdoc */
-        var requiredIndicatorMixin = {
-                /**
-                 * Check whether given indicator is loaded,
-            else throw error.
-                 * @private
-                 * @param {Highcharts.Indicator} indicator
-                 *        Indicator constructor function.
-                 * @param {string} requiredIndicator
-                 *        Required indicator type.
-                 * @param {string} type
-                 *        Type of indicator where function was called (parent).
-                 * @param {Highcharts.IndicatorCallbackFunction} callback
-                 *        Callback which is triggered if the given indicator is loaded.
-                 *        Takes indicator as an argument.
-                 * @param {string} errMessage
-                 *        Error message that will be logged in console.
-                 * @return {boolean}
-                 *         Returns false when there is no required indicator loaded.
-                 */
-                isParentLoaded: function (indicator,
-            requiredIndicator,
-            type,
-            callback,
-            errMessage) {
-                    if (indicator) {
-                        return callback ? callback(indicator) : true;
-                }
-                error(errMessage || this.generateMessage(type, requiredIndicator));
-                return false;
-            },
-            /**
-             * @private
-             * @param {string} indicatorType
-             *        Indicator type
-             * @param {string} required
-             *        Required indicator
-             * @return {string}
-             *         Error message
-             */
-            generateMessage: function (indicatorType, required) {
-                return 'Error: "' + indicatorType +
-                    '" indicator type requires "' + required +
-                    '" indicator loaded before. Please read docs: ' +
-                    'https://api.highcharts.com/highstock/plotOptions.' +
-                    indicatorType;
-            }
-        };
-
-        return requiredIndicatorMixin;
-    });
-    _registerModule(_modules, 'indicators/chaikin.src.js', [_modules['parts/Globals.js'], _modules['parts/Utilities.js'], _modules['mixins/indicator-required.js']], function (H, U, requiredIndicatorMixin) {
+    _registerModule(_modules, 'Stock/Indicators/Chaikin/ChaikinIndicator.js', [_modules['Stock/Indicators/AD/ADIndicator.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (AD, SeriesRegistry, U) {
         /* *
          *
          *  License: www.highcharts.com/license
@@ -225,12 +193,13 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
-        var correctFloat = U.correctFloat,
-            error = U.error,
-            seriesType = U.seriesType;
-        var EMA = H.seriesTypes.ema,
-            AD = H.seriesTypes.ad,
-            requiredIndicator = requiredIndicatorMixin;
+        const { ema: EMAIndicator } = SeriesRegistry.seriesTypes;
+        const { correctFloat, extend, merge, error } = U;
+        /* *
+         *
+         *  Class
+         *
+         * */
         /**
          * The Chaikin series type.
          *
@@ -240,86 +209,41 @@
          *
          * @augments Highcharts.Series
          */
-        seriesType('chaikin', 'ema', 
-        /**
-         * Chaikin Oscillator. This series requires the `linkedTo` option to
-         * be set and should be loaded after the `stock/indicators/indicators.js`
-         * and `stock/indicators/ema.js`.
-         *
-         * @sample {highstock} stock/indicators/chaikin
-         *         Chaikin Oscillator
-         *
-         * @extends      plotOptions.ema
-         * @since        7.0.0
-         * @product      highstock
-         * @excluding    allAreas, colorAxis, joinBy, keys, navigatorOptions,
-         *               pointInterval, pointIntervalUnit, pointPlacement,
-         *               pointRange, pointStart, showInNavigator, stacking
-         * @requires     stock/indicators/indicators
-         * @requires     stock/indicators/ema
-         * @requires     stock/indicators/chaikin
-         * @optionparent plotOptions.chaikin
-         */
-        {
-            /**
-             * Paramters used in calculation of Chaikin Oscillator
-             * series points.
-             *
-             * @excluding index, period
-             */
-            params: {
-                /**
-                 * The id of volume series which is mandatory.
-                 * For example using OHLC data, volumeSeriesID='volume' means
-                 * the indicator will be calculated using OHLC and volume values.
-                 */
-                volumeSeriesID: 'volume',
-                /**
-                 * Periods for Chaikin Oscillator calculations.
+        class ChaikinIndicator extends EMAIndicator {
+            constructor() {
+                /* *
                  *
-                 * @type    {Array<number>}
-                 * @default [3, 10]
-                 */
-                periods: [3, 10]
+                 *  Static Properties
+                 *
+                 * */
+                super(...arguments);
+                /* *
+                 *
+                 *  Properties
+                 *
+                 * */
+                this.data = void 0;
+                this.options = void 0;
+                this.points = void 0;
             }
-        }, 
-        /**
-         * @lends Highcharts.Series#
-         */
-        {
-            nameBase: 'Chaikin Osc',
-            nameComponents: ['periods'],
-            init: function () {
-                var args = arguments,
-                    ctx = this;
-                requiredIndicator.isParentLoaded(EMA, 'ema', ctx.type, function (indicator) {
-                    indicator.prototype.init.apply(ctx, args);
-                    return;
-                });
-            },
-            getValues: function (series, params) {
-                var periods = params.periods,
-                    period = params.period, 
-                    // Accumulation Distribution Line data
-                    ADL, 
-                    // 0- date, 1- Chaikin Oscillator
-                    CHA = [],
-                    xData = [],
-                    yData = [],
-                    periodsOffset, 
-                    // Shorter Period EMA
-                    SPE, 
-                    // Longer Period EMA
-                    LPE,
-                    oscillator,
-                    i;
+            /* *
+             *
+             *  Functions
+             *
+             * */
+            getValues(series, params) {
+                const periods = params.periods, period = params.period, 
+                // 0- date, 1- Chaikin Oscillator
+                CHA = [], xData = [], yData = [];
+                let oscillator, i;
                 // Check if periods are correct
                 if (periods.length !== 2 || periods[1] <= periods[0]) {
                     error('Error: "Chaikin requires two periods. Notice, first ' +
                         'period should be lower than the second one."');
                     return;
                 }
-                ADL = AD.prototype.getValues.call(this, series, {
+                // Accumulation Distribution Line data
+                const ADL = AD.prototype.getValues.call(this, series, {
                     volumeSeriesID: params.volumeSeriesID,
                     period: period
                 });
@@ -327,17 +251,19 @@
                 if (!ADL) {
                     return;
                 }
-                SPE = EMA.prototype.getValues.call(this, ADL, {
+                // Shorter Period EMA
+                const SPE = super.getValues.call(this, ADL, {
                     period: periods[0]
                 });
-                LPE = EMA.prototype.getValues.call(this, ADL, {
+                // Longer Period EMA
+                const LPE = super.getValues.call(this, ADL, {
                     period: periods[1]
                 });
                 // Check if ema is calculated properly, if not skip
                 if (!SPE || !LPE) {
                     return;
                 }
-                periodsOffset = periods[1] - periods[0];
+                const periodsOffset = periods[1] - periods[0];
                 for (i = 0; i < LPE.yData.length; i++) {
                     oscillator = correctFloat(SPE.yData[i + periodsOffset] -
                         LPE.yData[i]);
@@ -351,7 +277,69 @@
                     yData: yData
                 };
             }
+        }
+        /**
+         * Chaikin Oscillator. This series requires the `linkedTo` option to
+         * be set and should be loaded after the `stock/indicators/indicators.js`.
+         *
+         * @sample {highstock} stock/indicators/chaikin
+         *         Chaikin Oscillator
+         *
+         * @extends      plotOptions.ema
+         * @since        7.0.0
+         * @product      highstock
+         * @excluding    allAreas, colorAxis, joinBy, keys, navigatorOptions,
+         *               pointInterval, pointIntervalUnit, pointPlacement,
+         *               pointRange, pointStart, showInNavigator, stacking
+         * @requires     stock/indicators/indicators
+         * @requires     stock/indicators/chaikin
+         * @optionparent plotOptions.chaikin
+         */
+        ChaikinIndicator.defaultOptions = merge(EMAIndicator.defaultOptions, {
+            /**
+             * Paramters used in calculation of Chaikin Oscillator
+             * series points.
+             *
+             * @excluding index
+             */
+            params: {
+                index: void 0,
+                /**
+                 * The id of volume series which is mandatory.
+                 * For example using OHLC data, volumeSeriesID='volume' means
+                 * the indicator will be calculated using OHLC and volume values.
+                 */
+                volumeSeriesID: 'volume',
+                /**
+                 * Parameter used indirectly for calculating the `AD` indicator.
+                 * Decides about the number of data points that are taken
+                 * into account for the indicator calculations.
+                 */
+                period: 9,
+                /**
+                 * Periods for Chaikin Oscillator calculations.
+                 *
+                 * @type    {Array<number>}
+                 * @default [3, 10]
+                 */
+                periods: [3, 10]
+            }
         });
+        extend(ChaikinIndicator.prototype, {
+            nameBase: 'Chaikin Osc',
+            nameComponents: ['periods']
+        });
+        SeriesRegistry.registerSeriesType('chaikin', ChaikinIndicator);
+        /* *
+         *
+         *  Default Export
+         *
+         * */
+        /* *
+         *
+         *  API Options
+         *
+         * */
         /**
          * A `Chaikin Oscillator` series. If the [type](#series.chaikin.type)
          * option is not specified, it is inherited from [chart.type](#chart.type).
@@ -363,12 +351,12 @@
          *            navigatorOptions, pointInterval, pointIntervalUnit,
          *            pointPlacement, pointRange, pointStart, stacking, showInNavigator
          * @requires  stock/indicators/indicators
-         * @requires  stock/indicators/ema
          * @requires  stock/indicators/chaikin
          * @apioption series.chaikin
          */
         ''; // to include the above in the js output
 
+        return ChaikinIndicator;
     });
     _registerModule(_modules, 'masters/indicators/chaikin.src.js', [], function () {
 

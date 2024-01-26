@@ -1,13 +1,9 @@
-/*
- Highstock JS v8.1.2 (2020-06-16)
-
- Indicator series type for Highstock
-
- (c) 2010-2019 Pawe Dalek
-
- License: www.highcharts.com/license
-*/
-(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/vwap",["highcharts","highcharts/modules/stock"],function(c){a(c);a.Highcharts=c;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function c(a,c,n,g){a.hasOwnProperty(c)||(a[c]=g.apply(null,n))}a=a?a._modules:{};c(a,"indicators/vwap.src.js",[a["parts/Utilities.js"]],function(a){var c=a.error,n=a.isArray;a=a.seriesType;
-a("vwap","sma",{params:{period:30,volumeSeriesID:"volume"}},{getValues:function(a,h){var d=a.chart,e=a.xData;a=a.yData;var g=h.period,k=!0,f;if(f=d.get(h.volumeSeriesID))return n(a[0])||(k=!1),this.calculateVWAPValues(k,e,a,f,g);c("Series "+h.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0,d)},calculateVWAPValues:function(a,c,d,e,n){var k=e.yData,f=e.xData.length,b=c.length;e=[];var g=[],h=[],q=[],p=[],l;f=b<=f?b:f;for(l=b=0;b<f;b++){var m=a?(d[b][1]+d[b][2]+d[b][3])/3:d[b];m*=k[b];m=l?e[b-
-1]+m:m;var r=l?g[b-1]+k[b]:k[b];e.push(m);g.push(r);p.push([c[b],m/r]);h.push(p[b][0]);q.push(p[b][1]);l++;l===n&&(l=0)}return{values:p,xData:h,yData:q}}});""});c(a,"masters/indicators/vwap.src.js",[],function(){})});
-//# sourceMappingURL=vwap.js.map
+/**
+ * Highstock JS v11.2.0 (2023-10-30)
+ *
+ * Indicator series type for Highcharts Stock
+ *
+ * (c) 2010-2021 Paweł Dalek
+ *
+ * License: www.highcharts.com/license
+ */!function(e){"object"==typeof module&&module.exports?(e.default=e,module.exports=e):"function"==typeof define&&define.amd?define("highcharts/indicators/vwap",["highcharts","highcharts/modules/stock"],function(t){return e(t),e.Highcharts=t,e}):e("undefined"!=typeof Highcharts?Highcharts:void 0)}(function(e){"use strict";var t=e?e._modules:{};function s(e,t,s,i){e.hasOwnProperty(t)||(e[t]=i.apply(null,s),"function"==typeof CustomEvent&&window.dispatchEvent(new CustomEvent("HighchartsModuleLoaded",{detail:{path:t,module:e[t]}})))}s(t,"Stock/Indicators/VWAP/VWAPIndicator.js",[t["Core/Series/SeriesRegistry.js"],t["Core/Utilities.js"]],function(e,t){let{sma:s}=e.seriesTypes,{error:i,isArray:o,merge:a}=t;class r extends s{constructor(){super(...arguments),this.data=void 0,this.points=void 0,this.options=void 0}getValues(e,t){let s=e.chart,a=e.xData,r=e.yData,n=t.period,u=!0,d;if(!(d=s.get(t.volumeSeriesID))){i("Series "+t.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0,s);return}return o(r[0])||(u=!1),this.calculateVWAPValues(u,a,r,d,n)}calculateVWAPValues(e,t,s,i,o){let a,r,n,u,d,l;let c=i.yData,h=i.xData.length,p=t.length,f=[],v=[],m=[],g=[],y=[];for(d=0,a=p<=h?p:h,l=0;d<a;d++)r=(e?(s[d][1]+s[d][2]+s[d][3])/3:s[d])*c[d],n=l?f[d-1]+r:r,u=l?v[d-1]+c[d]:c[d],f.push(n),v.push(u),y.push([t[d],n/u]),m.push(y[d][0]),g.push(y[d][1]),++l===o&&(l=0);return{values:y,xData:m,yData:g}}}return r.defaultOptions=a(s.defaultOptions,{params:{index:void 0,period:30,volumeSeriesID:"volume"}}),e.registerSeriesType("vwap",r),r}),s(t,"masters/indicators/vwap.src.js",[],function(){})});//# sourceMappingURL=vwap.js.map
