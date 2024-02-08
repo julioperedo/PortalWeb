@@ -82,8 +82,12 @@
 
 .width-panel {
     width: 270px;
-    margin-right: 1rem;
+    margin-right: 0.3rem;
     float: left;
+}
+
+.height-panel {
+    min-height: 138px;
 }
 
 .panel {

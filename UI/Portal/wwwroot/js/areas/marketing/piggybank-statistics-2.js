@@ -79,7 +79,7 @@ function filterData() {
     $.ajaxSetup({ cache: false });
 
     var newItem = function (x) {
-        var d = JSON.toDate(x.date), prod = _products.find((p) => p.itemCode == x.itemCode);
+        var d = JSON.toDate(x.date), prod = _products.find((p) => $.trim(p.itemCode.toLowerCase()) == $.trim(x.itemCode.toLowerCase()));
         if (!prod) console.log("Item malo", x.itemCode);
         return {
             id: x.id, idUser: x.idUser, date: d, quarter: Math.floor((d.getMonth() + 3) / 3), cardCode: x.cardCode, itemCode: x.itemCode,
@@ -154,7 +154,7 @@ function loadCharts() {
         var monthSerieNames = Enumerable.From(_products).Where((p) => _selProduct.includes(p.itemCode)).Select("$.line").Distinct().ToArray();
         var monthSeries = monthSerieNames.map(function (s) {
             var serieData = [];
-            var monthsIds = Enumerable.From(items).Select((i) => `${i.date.getFullYear()}-${i.date.getMonth()}`).Distinct().ToArray();
+            var monthsIds = Enumerable.From(items).Select((i) => `${i.date.getFullYear()}-${i.date.getMonth() + 1}`).Distinct().ToArray();
             monthsIds.forEach(function (m) {
                 serieData.push(Enumerable.From(items).Where(`$.line == '${s}' && $.month == '${m}'`).Sum("$.points"));
             });

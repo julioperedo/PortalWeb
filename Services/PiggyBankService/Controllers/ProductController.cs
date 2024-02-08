@@ -5,9 +5,12 @@ using Microsoft.Extensions.Logging;
 using PiggyBankService.Misc;
 using System.Linq.Expressions;
 using BCA = BComponents.SAP;
+using BCB = BComponents.Base;
 using BCI = BComponents.PiggyBank;
 using BCP = BComponents.Product;
 using BEA = BEntities.SAP;
+using BEB = BEntities.Base;
+using BEE = BEntities.Enums;
 using BEI = BEntities.PiggyBank;
 using BEP = BEntities.Product;
 
@@ -234,40 +237,80 @@ namespace PiggyBankService.Controllers
                     var productCards = bcSerial.List(filters, "DocDate DESC");
                     int count = records.Count();
                     state = records.Any() || !productCards.Any(x => products.Any(y => y.ItemCode.ToLower() == x.ItemCode.ToLower())) ? "I" : "V";
+                    var r = productCards?.FirstOrDefault();
                     if (state == "I")
                     {
                         rejectReason = records.Any() ? "A" : "I";
                     }
                     else
                     {
-                        //DateTime today = DateTime.Today;
-                        //int currQuarter = (today.Month - 1) / 3 + 1;
-                        //DateTime dtFirstDay = new(today.Year, 3 * currQuarter - 2, 1);
-                        //DateTime dtLastDay = new DateTime(today.Year, 3 * currQuarter, 1).AddMonths(1).AddDays(-1);
+                        BCB.Classifier bcClassifier = new();
+                        BCI.ConfigRate bcConfigRate = new();
+                        BCI.ConfigRateProduct bcConfigRateProduct = new();
 
-                        //filters = new() {
-                        //    new Field("IdUser", IdUser),
-                        //    new Field("State", "V"),
-                        //    new Field("CAST(RegisterDate AS DATE)", dtFirstDay.ToString("yyyy-MM-dd"), Operators.HigherOrEqualThan),
-                        //    new Field("CAST(RegisterDate AS DATE)", dtLastDay.ToString("yyyy-MM-dd"), Operators.LowerOrEqualThan),
-                        //    new Field(LogicalOperators.And), new Field(LogicalOperators.And), new Field(LogicalOperators.And)                    
-                        //};
-                        //records = bcRecord.List(filters, "1");
-                        //count = records.Count() + 1;
-                        //while (count > 325)
-                        //{
-                        //    count -= 325;
-                        //}
-                        points = 2;
-                        //points = count switch
-                        //{
-                        //    > 100 and <= 200 => 3,
-                        //    > 200 and <= 325 => 4,
-                        //    _ => 2,
-                        //};
+                        itemCode = r?.ItemCode ?? "";
+
+                        filters = new() { Field.New("IdType", (long)BEE.Classifiers.PiggyBank) };
+                        var classifiers = bcClassifier.List(filters, "1");
+                        string breakType = classifiers.FirstOrDefault(x => x.Name == "PointBreak")?.Value ?? "N";
+
+                        filters = new() { Field.New("Enabled", 1) };
+                        var configRates = bcConfigRate.List(filters, "MinimalQuantity");
+
+                        filters.AddRange(new[] { Field.New("ItemCode", itemCode), Field.LogicalAnd() });
+                        var configRateProducts = bcConfigRateProduct.List(filters, "MinimalQuantity");
+
+                        points = 1;
+                        if (breakType == "N")
+                        {
+                            if (configRates?.Count() > 0)
+                            {
+                                points = configRates.First().Points;
+                            }
+                            if (configRateProducts?.Count() > 0)
+                            {
+                                points = configRateProducts.First().Points;
+                            }
+                        }
+                        if (breakType == "M" || breakType == "Q" || breakType == "Y")
+                        {
+                            DateTime today = DateTime.Today, 
+                                dtFirstDay = new(today.Year, today.Month, 1), 
+                                dtLastDay = new DateTime(today.Year, today.Month + 1, 1).AddDays(-1);
+                            if (breakType == "Q")
+                            {
+                                int currQuarter = (today.Month - 1) / 3 + 1;
+                                dtFirstDay = new(today.Year, 3 * currQuarter - 2, 1);
+                                dtLastDay = new DateTime(today.Year, 3 * currQuarter, 1).AddMonths(1).AddDays(-1);
+                            }
+                            if (breakType == "Y")
+                            {
+                                dtFirstDay = new(today.Year, 1, 1);
+                                dtLastDay = new DateTime(today.Year + 1, 1, 1).AddDays(-1);
+                            }
+
+                            filters = new() {
+                                new Field("IdUser", IdUser),
+                                new Field("State", "V"),
+                                new Field("CAST(RegisterDate AS DATE)", dtFirstDay.ToString("yyyy-MM-dd"), Operators.HigherOrEqualThan),
+                                new Field("CAST(RegisterDate AS DATE)", dtLastDay.ToString("yyyy-MM-dd"), Operators.LowerOrEqualThan),
+                                new Field(LogicalOperators.And), new Field(LogicalOperators.And), new Field(LogicalOperators.And)
+                            };
+                            records = bcRecord.List(filters, "1");
+                            count = records.Count() + 1;
+
+                            if (configRates?.Count() > 0)
+                            {
+                                points = configRates.LastOrDefault(x => x.MinimalQuantity < count)?.Points ?? 1;
+                            }
+                            if (configRateProducts?.Count() > 0)
+                            {
+                                points = configRateProducts.LastOrDefault(x => x.MinimalQuantity < count)?.Points ?? 1;
+                            }
+                        }                  
                     }
                     DateTime now = DateTime.Now;
-                    var r = productCards?.FirstOrDefault();
+
                     BEI.Serial newRecord = new()
                     {
                         StatusType = BEntities.StatusType.Insert,

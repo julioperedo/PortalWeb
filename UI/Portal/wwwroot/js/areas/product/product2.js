@@ -833,15 +833,15 @@ function onLotEdit(e) {
         panel.find(".card-body").html(template(item));
 
         $("#AccEnabled").prop("checked", item.enabled);
-        $("#Quantity").kendoNumericTextBox({ format: "N0", decimals: 0 });
-        $("#InitialQuantity").kendoNumericTextBox({ format: "N0", decimals: 0 });
+        var txtQuantity = $("#Quantity").kendoNumericTextBox({ format: "N0", decimals: 0 }).data("kendoNumericTextBox");
+        var txtInitQuantity = $("#InitialQuantity").kendoNumericTextBox({ format: "N0", decimals: 0, change: (e) => txtQuantity.value(e.sender.value()) }).data("kendoNumericTextBox");
         $("#Accelerator").kendoNumericTextBox();
         $("#InitialDate").kendoDatePicker({ value: item.initialDate });
         $("#FinalDate").kendoDatePicker({ value: item.finalDate });
         if (item.id !== 0) {
-            $("#InitialQuantity").data("kendoNumericTextBox").enable(false);
-            $("#Quantity").data("kendoNumericTextBox").enable(false);
+            txtInitQuantity.enable(false);
         }
+        txtQuantity.enable(false);
         panel.removeClass("d-none");
         $("#save-product").attr("disabled", true);
     }

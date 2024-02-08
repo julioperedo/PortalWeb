@@ -26,7 +26,6 @@ using Microsoft.AspNetCore.Hosting;
 using Portal.Areas.Commercial.Models;
 using System.IO;
 using DocumentFormat.OpenXml.ExtendedProperties;
-//using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Portal.Controllers
 {

@@ -223,7 +223,7 @@ function loadDetail(clientCode) {
     var resumeDiv = $("#resumes");
     $.get(urlDetail, { CardCode: clientCode }, function (data) {
         if (data.message === "") {
-            var tempYear = `<div class="panel width-panel">
+            var tempYear = `<div class="panel width-panel height-panel">
                                 <div class="row">
                                     <div class="col text-center details-title">
                                         <div>
@@ -250,7 +250,7 @@ function loadDetail(clientCode) {
                             </div>`;
             var template = kendo.template(tempYear);
 
-            var titlesDiv = $("<div>").addClass("float-left").addClass("width-panel");
+            var titlesDiv = $("<div>").addClass("float-left").addClass("width-panel").addClass("height-panel");
             var divName = `<div class="panel available width-panel">
                                 <div class="row">
                                     <div class="col text-center">
@@ -337,11 +337,12 @@ function loadGridNotes(items) {
         var gridConfig = {
             dataSource: { data: items },
             sortable: true, selectable: true, pageable: false, noRecords: { template: "No hay registros para el criterio de búsqueda" },
-            columns: gridColumns
+            columns: gridColumns,
+            dataBound: (e) => e.sender.element.find("table").attr("style", "")
         };
 
         if (permission.SeeDetail > 0) {
-            gridConfig.detailTemplate = kendo.template($('#detailOrder').html());
+            //gridConfig.detailTemplate = kendo.template($('#detailOrder').html());
             gridConfig.detailInit = function (e) {
                 var id = e.data.id;
                 $.get(urlNoteItems, { NoteId: id }, function (data) {
@@ -353,8 +354,8 @@ function loadGridNotes(items) {
                             selectable: true,
                             columns: [
                                 { field: "itemCode", title: "Item", width: 150 },
-                                { field: "itemName", title: "Descripción" },
-                                { field: "line", title: "Línea" },
+                                { field: "itemName", title: "Descripción", width: 250 },
+                                { field: "line", title: "Línea", width: 200 },
                                 { field: "quantity", title: "Cantidad", width: 90, attributes: alignRight, headerAttributes: alignRight },
                                 { field: "total", title: "Subtotal", width: 90, format: "{0:N2}", attributes: alignRight, headerAttributes: alignRight },
                                 { field: "acceleratedQuantity", title: "Cant. Acelerador", width: 130, attributes: alignRight, headerAttributes: alignRight },
@@ -363,7 +364,8 @@ function loadGridNotes(items) {
                                 { field: "extraPoints", title: "Puntos Extra", width: 130, format: "{0:N0}", attributes: alignRight, headerAttributes: alignRight }
                             ],
                             dataSource: data.items,
-                            noRecords: { template: "No hay items con acelerador" }
+                            noRecords: { template: "No hay items con acelerador" },
+                            dataBound: (e) => e.sender.element.find("table").attr("style", "")
                         });
                     } else {
                         showError(`Se ha producido el siguiente error al traer los datos: ${data.message}.`);

@@ -9,8 +9,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion>2024.1.26.1106</AssemblyVersion>
-    <FileVersion>2024.1.26.1106</FileVersion>
+    <AssemblyVersion>2024.2.7.1028</AssemblyVersion>
+    <FileVersion>2024.2.7.1028</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace BEntities.Kbytes
 	/// <remarks>	
 	/// </remarks>
 	/// <history>
-	///   [DMC]  4/3/2022 21:28:30 Created
+	///   [DMC]  2/2/2024 14:27:48 Created
 	/// </history>
 	/// -----------------------------------------------------------------------------
 	[Serializable()]
