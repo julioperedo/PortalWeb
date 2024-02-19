@@ -4,32 +4,38 @@ using System.ComponentModel.DataAnnotations;
 using BEntities;
 using BE = BEntities;
 
-namespace BEntities.Product
+namespace BEntities.Product 
 {
-    /// -----------------------------------------------------------------------------
-    /// Project   : BEntities
-    /// NameSpace : Product
-    /// Class     : Loan
-    /// -----------------------------------------------------------------------------
-    /// <summary>
-    ///    This Business Entity has all properties to work with a database table Product
-    /// </summary>
-    /// <remarks>	
-    /// </remarks>
-    /// <history>
-    ///   [DMC]  29/1/2024 14:11:10 Created
-    /// </history>
-    /// -----------------------------------------------------------------------------
-    [Serializable()]
-    public partial class Loan : BEntity
-    {
+	/// -----------------------------------------------------------------------------
+	/// Project   : BEntities
+	/// NameSpace : Product
+	/// Class     : Loan
+	/// -----------------------------------------------------------------------------
+	/// <summary>
+	///    This Business Entity has all properties to work with a database table Product
+	/// </summary>
+	/// <remarks>	
+	/// </remarks>
+	/// <history>
+	///   [DMC]  15/2/2024 13:33:51 Created
+	/// </history>
+	/// -----------------------------------------------------------------------------
+	[Serializable()]
+	public partial class Loan : BEntity 
+	{
 
-        #region Properties 
+		#region Properties 
 
         public long Id { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
         public long IdProduct { get; set; }
+
+        [Required(ErrorMessage = "Campo requerido")]
+        public long IdUser { get; set; }
+
+        [Required(ErrorMessage = "Campo requerido")]
+        public System.DateTime RequestDate { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
         public int Quantity { get; set; }
@@ -51,30 +57,32 @@ namespace BEntities.Product
         public System.DateTime LogDate { get; set; }
 
 
-        #endregion
+		#endregion
 
-        #region Additional Properties 
+		#region Additional Properties 
 
-        public Product Product { get; set; }
+        public Product Product { get; set; } 
+
+        public Security.User User { get; set; }
 
 
-        #endregion
+		#endregion
 
-        #region Contructors 
+		#region Contructors 
 
-        public Loan() { }
+		public Loan() { }
 
-        #endregion
+		#endregion
 
-    }
+	}
 
     /// <summary>
     /// Relationship enumerator Loan
     /// </summary>
     /// <remarks></remarks>
-    public enum relLoan
-    {
-        Product
-    }
+    public enum relLoan 
+     { 
+        Product, User
+	}
 
 }

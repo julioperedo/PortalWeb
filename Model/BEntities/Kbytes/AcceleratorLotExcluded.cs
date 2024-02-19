@@ -13,10 +13,14 @@ using BEntities.Security;
 using BEntities.Staff;
 using BEntities.Visits;
 using BEntities.WebSite;
+using BEntities.CIESD;
+using BEntities.HumanResources;
+using BEntities.PiggyBank;
+using BEntities.Campaign;
 
 namespace BEntities.Kbytes 
 {
-	public partial class ClientNotAllowed 
+	public partial class AcceleratorLotExcluded 
 	{
 
 		#region Properties 

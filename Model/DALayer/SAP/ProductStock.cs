@@ -257,6 +257,16 @@ ORDER BY RAND()  ";
             return items;
         }
 
+        public IEnumerable<BEA.ProductStock> ListForLoan()
+        {
+            string query = $@"SELECT 	o2.""ItemCode"", ""ItemName"", IFNULL(U_CATEGORIA, 'Sin Categoría') AS ""Category"", IFNULL(U_SUBCATEG, 'Sin Subcategoría') AS ""Subcategory"", U_MARCA AS ""Brand"", CAST(o.""OnHand"" AS INTEGER) AS ""Stock""
+FROM 	{DBSA}.OITW o
+        INNER JOIN {DBSA}.OITM o2 ON o.""ItemCode"" = o2.""ItemCode"" 	
+WHERE 	""WhsCode"" = 'ZFLPB' AND o.""OnHand"" > 0 ";
+            IEnumerable<BEA.ProductStock> items = SQLList(query);
+            return items;
+        }
+
         #endregion
 
         #region Search Methods

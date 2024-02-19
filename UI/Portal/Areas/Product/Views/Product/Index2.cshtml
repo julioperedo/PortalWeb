@@ -250,7 +250,7 @@
 <link href="~/lib/magicsuggest/magicsuggest-min.css" rel="stylesheet" />
 @section Scripts {
     <script type="text/javascript">
-        var urlFilter = "@Url.Action("Filter")",
+        let urlFilter = "@Url.Action("Filter")",
             urlEdit = "@Url.Action("Edit2")",
             urlDelete = "@Url.Action("Delete")",
             urlHistory = "@Url.Action("PriceHistory")",
@@ -262,7 +262,8 @@
             urlSAPSubcategories = "@Url.Action("GetSAPSubcategories")",
             urlImages = "@Url.Content("~/images/products/")",
             urlNoImage = "@Url.Content("~/images/no-image.jpg")",
-            urlCategories = "@Url.Action("GetCategories2")";
+            urlCategories = "@Url.Action("GetCategories2")",
+            urlClients = "@Url.Action("GetClients")";
     </script>
     <script src="~/lib/magicsuggest/magicsuggest-min.js"></script>
     <environment include="Development">

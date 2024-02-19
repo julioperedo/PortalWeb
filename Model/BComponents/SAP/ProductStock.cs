@@ -177,6 +177,24 @@ namespace BComponents.SAP
             }
         }
 
+        public IEnumerable<BEA.ProductStock> ListForLoan()
+        {
+            try
+            {
+                IEnumerable<BEA.ProductStock> BECollection = default;
+                using (DALH.ProductStock DALObject = new())
+                {
+                    BECollection = DALObject.ListForLoan();
+                }
+                return BECollection;
+            }
+            catch (Exception ex)
+            {
+                base.ErrorHandler(ex);
+                return null;
+            }
+        }
+
         #endregion
 
         #region Constructors

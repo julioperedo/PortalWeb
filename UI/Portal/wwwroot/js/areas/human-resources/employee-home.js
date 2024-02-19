@@ -751,8 +751,6 @@ function showHidePanelReplacement(visible) {
         _dpToDateReplace = $("#toDate-replacement").kendoDatePicker({ format: "dd/MM/yyyy", change: function () { if (this.value() == null) this.value(""); } }).data("kendoDatePicker");
         _ddlFromDatePeriodReplace = $("#fromDatePeriod-replacement").kendoDropDownList().data("kendoDropDownList");
         _ddlToDatePeriodReplace = $("#toDatePeriod-replacement").kendoDropDownList().data("kendoDropDownList");
-
-
     }
     _wndDetail.center();
 }

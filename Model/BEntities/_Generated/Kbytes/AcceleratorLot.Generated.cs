@@ -4,27 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using BEntities;
 using BE = BEntities;
 
-namespace BEntities.Kbytes 
+namespace BEntities.Kbytes
 {
-	/// -----------------------------------------------------------------------------
-	/// Project   : BEntities
-	/// NameSpace : Kbytes
-	/// Class     : AcceleratorLot
-	/// -----------------------------------------------------------------------------
-	/// <summary>
-	///    This Business Entity has all properties to work with a database table Kbytes
-	/// </summary>
-	/// <remarks>	
-	/// </remarks>
-	/// <history>
-	///   [DMC]  2/2/2024 14:27:47 Created
-	/// </history>
-	/// -----------------------------------------------------------------------------
-	[Serializable()]
-	public partial class AcceleratorLot : BEntity 
-	{
+    /// -----------------------------------------------------------------------------
+    /// Project   : BEntities
+    /// NameSpace : Kbytes
+    /// Class     : AcceleratorLot
+    /// -----------------------------------------------------------------------------
+    /// <summary>
+    ///    This Business Entity has all properties to work with a database table Kbytes
+    /// </summary>
+    /// <remarks>	
+    /// </remarks>
+    /// <history>
+    ///   [DMC]  8/2/2024 16:31:04 Created
+    /// </history>
+    /// -----------------------------------------------------------------------------
+    [Serializable()]
+    public partial class AcceleratorLot : BEntity
+    {
 
-		#region Properties 
+        #region Properties 
 
         public long Id { get; set; }
 
@@ -52,30 +52,32 @@ namespace BEntities.Kbytes
         public System.DateTime LogDate { get; set; }
 
 
-		#endregion
+        #endregion
 
-		#region Additional Properties 
+        #region Additional Properties 
 
         public Product.Product Product { get; set; }
 
+        public IList<AcceleratorLotExcluded> ListAcceleratorLotExcludeds { get; set; }
 
-		#endregion
 
-		#region Contructors 
+        #endregion
 
-		public AcceleratorLot() { }
+        #region Contructors 
 
-		#endregion
+        public AcceleratorLot() { }
 
-	}
+        #endregion
+
+    }
 
     /// <summary>
     /// Relationship enumerator AcceleratorLot
     /// </summary>
     /// <remarks></remarks>
-    public enum relAcceleratorLot 
-     { 
-        Product
-	}
+    public enum relAcceleratorLot
+    {
+        Product, AcceleratorLotExcludeds
+    }
 
 }

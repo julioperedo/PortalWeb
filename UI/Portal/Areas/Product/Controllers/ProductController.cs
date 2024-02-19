@@ -28,6 +28,8 @@ using BEE = BEntities.Enums;
 using BEK = BEntities.Kbytes;
 using BEP = BEntities.Product;
 using BES = BEntities.Security;
+using NUglify.Helpers;
+using SQLitePCL;
 
 namespace Portal.Areas.Product.Controllers
 {
@@ -178,9 +180,9 @@ namespace Portal.Areas.Product.Controllers
                     lstFifo = new List<BEA.ProductStock>();
                 }
 
-                filters = new List<Field> { new Field("IdProduct", Id) };
+                filters = new List<Field> { new("IdProduct", Id) };
                 BCK.AcceleratorLot bcAcc = new();
-                var accelerators = bcAcc.List(filters, "1");
+                var accelerators = bcAcc.List(filters, "1", BEK.relAcceleratorLot.AcceleratorLotExcludeds);
 
                 BCP.PriceOffer bcOffer = new();
                 var offers = bcOffer.List(filters, "1") ?? new List<BEP.PriceOffer>();
@@ -703,6 +705,11 @@ namespace Portal.Areas.Product.Controllers
                     {
                         Item.Lots.ForEach(x =>
                         {
+                            x.ListAcceleratorLotExcludeds.ForEach(y =>
+                            {
+                                y.LogUser = UserCode;
+                                y.LogDate = logDate;
+                            });
                             x.LogUser = UserCode;
                             x.LogDate = logDate;
                         });

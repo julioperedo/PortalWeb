@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Préstamo de Equipos";
+}
+<input type="hidden" id="usercode" value="@ViewData["UserCode"]" />
+<input type="hidden" id="username" value="@ViewData["UserName"]" />
+<input type="hidden" id="cardcode" value="@ViewData["CardCode"]" />
+<input type="hidden" id="cardname" value="@ViewData["CardName"]" />
+<input type="hidden" id="permission" value="@ViewData["Permission"]" />
+<div class="row">
+    <div class="col">
+        <h3 class="title" id="page-title">@ViewBag.Title</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-secondary d-none" title="Volver a la lista" role="button" href="#" id="back-list"><i class="fas fa-arrow-left"></i></a>
+        <a class="btn btn-secondary d-none" title="Exportar a Excel" role="button" href="#" id="action-excel"><i class="far fa-file-excel"></i></a>
+        <a class="btn btn-secondary" title="Mostrar Panel de B&uacute;squeda" data-toggle="collapse" href="#filter-box" role="button" aria-expanded="false" aria-controls="filter-box" id="toggle-filter-box"><i class="fas fa-search"></i></a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="filter-box" class="bg-light px-2 py-3 collapse show">
+            <div class="row">
+                <div class="col"><input id="fil-client" /></div>
+                <div class="col"><input id="fil-since" /></div>
+                <div class="col"><input id="fil-until" /></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="fil-state">Estado</label>
+                    <select id="fil-state" multiple="multiple" class="multiple-select"></select>
+                </div>
+                <div class="col">
+                    <label for="fil-product">Producto</label>
+                    <input id="fil-product" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-right pt-2">
+                    <button id="clean-filters" class="btn btn-outline-secondary">Limpiar</button>
+                    <button id="filter" class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col pt-3">
+        <div id="list-items"></div>
+    </div>
+</div>
+<div id="item-detail">
+    <form>
+        <div class="form-horizontal">
+            <input id="Id" name="Id" type="hidden" />
+            <input id="IdUser" name="IdUser" type="hidden" />
+            <input id="RequestDate" name="RequestDate" type="hidden" />
+            <input id="State" name="State" type="hidden" />
+            <div class="row">
+                <div class="col-1"><label for="product">Producto</label></div>
+                <div class="col"><input id="product" class="w-100" required /></div>
+                <div class="col-1"><label for="quantity">Cantidad</label></div>
+                <div class="col-2"><input id="quantity" type="number" min="1" class="form-control" max="1" required /></div>
+            </div>
+            <div class="row">
+                <div class="col-1"><label for="since">Desde</label></div>
+                <div class="col"><input id="since" required /></div>
+                <div class="col-1"><label for="until">Hasta</label></div>
+                <div class="col"><input id="until" required /></div>
+            </div>
+            <div class="row">
+                <div class="col-1"><label for="comments">Comentarios</label></div>
+                <div class="col"><textarea id="comments" rows="3" class="form-control"></textarea></div>
+            </div>
+            <div class="row">
+                <div class="col text-right pt-1 pb-1">
+                    <span>Solicitud creada por </span><span id="creator" class="font-weight-bold">Julio</span><span> en la fecha </span><span id="create-date" class="font-weight-bold">Ayer</span>
+                    <span>, su estado es </span><span id="state-name" class="font-weight-bold">Solicitado</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-right pt-2">
+                    <button id="cancel-detail" class="btn btn-outline-secondary">Cerrar</button>
+                    <button id="save-detail" class="btn btn-primary">Guardar</button>
+                    <button id="cancel-request" class="btn btn-danger change-state">Cancelar</button>
+                    <button id="aprove-request" class="btn btn-primary change-state">Aprobar</button>
+                    <button id="delivered-request" class="btn btn-primary change-state">Marcar como entregado</button>
+                    <button id="finish-request" class="btn btn-primary change-state">Terminar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    #product-list ul li:nth-of-type(odd) {
+        background: #eee;
+    }
+
+    #product-list ul li.k-selected:nth-of-type(odd) {
+        background: #0d6efd;
+    }
+</style>
+@section Scripts {
+    <script type="text/javascript">
+        let urlFilter = "@Url.Action("Filter")",
+            urlProducts = "@Url.Action("DemoProducts")",
+            urlClients = "@Url.Action("GetClients")",
+            urlEdit = "@Url.Action("Edit")",
+            urlDelete = "@Url.Action("Delete")",
+            urlChangeState = "@Url.Action("ChangeState")",
+            urlImages = "@Url.Content("~/images/products/")",
+            urlNoImage = "@Url.Content("~/images/no-image.jpg")";
+    </script>
+    <script src="~/lib/magicsuggest/magicsuggest-min.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/product/loan.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/product/loan.min.js" asp-append-version="true"></script>
+    </environment>
+}

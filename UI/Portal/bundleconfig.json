@@ -30,6 +30,16 @@
     }
   },
   {
+    "outputFileName": "wwwroot/js/areas/product/loan.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/product/loan.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
     "outputFileName": "wwwroot/js/areas/product/arrival.min.js",
     "inputFiles": [
       "wwwroot/js/areas/product/arrival.js"

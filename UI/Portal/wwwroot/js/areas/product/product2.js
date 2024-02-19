@@ -58,12 +58,18 @@ const marginGrid = 30, alignCenter = { style: "text-align: center;" }, alignRigh
         </div>
     </div>
     <div class="row">
-        <div class="col text-right pr-3 pb-3">
+        <label for="Excluded" class="control-label col-2">Excluidos</label>
+        <div class="col-9">
+            <select id="Excluded" class="w-100"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-right pr-3 pb-3 pt-4">
             <button tabindex="0" class="per-update btn btn-light" id="cancel-lot" role="button" aria-disabled="false" type="button" data-role="button">Cancelar</button>&nbsp;&nbsp;
             <button tabindex="0" class="per-update btn btn-secondary" id="save-lot" role="button" aria-disabled="false" type="button" data-role="button">Guardar</button>
         </div>
     </div>`;
-var _intId = 0, _minDate, _maxDate;
+var _intId = 0, _minDate, _maxDate, _clients = [];
 //#endregion
 
 //#region Eventos
@@ -205,6 +211,8 @@ function setupControls() {
         ],
         messages: { dialogCancel: "Cancelar", dialogInsert: "Agregar", dialogUpdate: "Aceptar", imageAltTex: "Texto Alternativo", imageWebAddress: "Dirección Imagen", insertImage: "Insertar Imagen", viewHtml: "Ver HTML" }
     });
+
+    $.get(urlClients, {}, (d) => _clients = d);
 }
 
 function cleanFilters() {
@@ -684,10 +692,10 @@ function onProductSave(e) {
         });
 
         var accItems = $("#AcceleratorLots").data("kendoGrid").dataSource.data();
-        product.Lots = accItems.map((x) => { return { Id: x.id, IdProduct: x.idProduct, InitialQuantity: x.initialQuantity, Quantity: x.quantity, Accelerator: x.accelerator, InitialDate: x.initialDate, FinalDate: x.finalDate, Enabled: x.enabled, StatusType: x.statusType } });
+        product.Lots = accItems.map((x) => ({ Id: x.id, IdProduct: x.idProduct, InitialQuantity: x.initialQuantity, Quantity: x.quantity, Accelerator: x.accelerator, InitialDate: x.initialDate, FinalDate: x.finalDate, Enabled: x.enabled, ListAcceleratorLotExcludeds: x.listAcceleratorLotExcludeds.map((y) => ({ Id: y.id, CardCode: y.cardCode, StatusType: y.statusType })), StatusType: x.statusType }));
 
         var filters = getFilters();
-
+        console.log(product);
         $.post(urlEdit, { Item: product, Filters: filters.data }, function (data) {
             if (data.message === "") {
                 loadGrid(data.items);
@@ -813,7 +821,7 @@ function onVolumePriceSave(e) {
 function onLotEdit(e) {
     var grd = $(e.currentTarget).closest(".k-grid").data("kendoGrid"), item = grd.dataItem($(e.currentTarget).closest("tr"));
     if ($(e.currentTarget).hasClass("delete-lot")) {
-        showConfirm("¿Está seguro que desea eliminar este Lote con acelerador?", () => {
+        showConfirm("¿Está seguro que desea eliminar este Lote con acelerador?", function () {
             if (item) {
                 if (item.id > 0) {
                     item.statusType = 3;
@@ -838,10 +846,25 @@ function onLotEdit(e) {
         $("#Accelerator").kendoNumericTextBox();
         $("#InitialDate").kendoDatePicker({ value: item.initialDate });
         $("#FinalDate").kendoDatePicker({ value: item.finalDate });
-        if (item.id !== 0) {
+        if (item.id != 0) {
             txtInitQuantity.enable(false);
         }
         txtQuantity.enable(false);
+
+        $("#Excluded").kendoMultiSelect({
+            dataTextField: "name", dataValueField: "code", dataSource: _clients, filter: "contains", placeholder: "Clientes...", downArrow: true,
+            value: item.listAcceleratorLotExcludeds?.filter((x) => x.statusType != 3).map((x) => x.cardCode) ?? [],
+            noDataTemplate: '<div class="kd-nodata-wrapper">No hay resultados para el critrerio de búsqueda</div>',
+            virtual: {
+                itemHeight: 26, valueMapper: function (options) {
+                    var items = this.dataSource.data();
+                    var indexs = [];
+                    options.value.forEach((x) => indexs.push(items.indexOf(items.find(i => i.code === x))));
+                    options.success(indexs);
+                }
+            },
+        });
+
         panel.removeClass("d-none");
         $("#save-product").attr("disabled", true);
     }
@@ -857,7 +880,21 @@ function onLotSave(e) {
         if (+item.id === 0) item.id = getId();
         item.statusType = item.id > 0 ? 2 : 1;
         item.enabled = item.accEnabled;
+        item.listAcceleratorLotExcludeds = [];
 
+        let newItem = (id, cardCode, status) => ({ id: id, cardCode: cardCode, statusType: status }),
+            oldItem = grd.dataItem(grd.select()), sel = $("#Excluded").data("kendoMultiSelect").value();
+        oldItem.listAcceleratorLotExcludeds.forEach(function (o) {
+            if (sel.includes(o.cardCode)) {
+                item.listAcceleratorLotExcludeds.push(newItem(o.id, o.cardCode, o.statusType));
+            } else {
+                if (o.id > 0) item.listAcceleratorLotExcludeds.push(newItem(o.id, o.cardCode, 3));
+            }
+        });
+        sel.forEach(function (s) {
+            if (!oldItem.listAcceleratorLotExcludeds.find((x) => x.cardCode == s)) item.listAcceleratorLotExcludeds.push(newItem(getId(), s, 1));
+        });
+        console.log('item', item);
         grd.dataSource.pushUpdate(item);
     }
     panel.find(".card-body").empty();

@@ -15,12 +15,16 @@ using BES = BEntities.Security;
 using BEF = BEntities.Staff;
 using BEV = BEntities.Visits;
 using BEW = BEntities.WebSite;
+using BEX = BEntities.CIESD;
+using BEH = BEntities.HumanResources;
+using BEI = BEntities.PiggyBank;
+using BEN = BEntities.Campaign;
 
 using DAL = DALayer.Kbytes;
 
 namespace BComponents.Kbytes 
 {
-	public partial class ClientNotAllowed 
+	public partial class AcceleratorLotExcluded 
 	{
 		#region Save Methods 
 

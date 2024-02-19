@@ -9,7 +9,7 @@ namespace BEntities.Kbytes
 	/// -----------------------------------------------------------------------------
 	/// Project   : BEntities
 	/// NameSpace : Kbytes
-	/// Class     : ExcludedClient
+	/// Class     : AcceleratorLotExcluded
 	/// -----------------------------------------------------------------------------
 	/// <summary>
 	///    This Business Entity has all properties to work with a database table Kbytes
@@ -17,14 +17,19 @@ namespace BEntities.Kbytes
 	/// <remarks>	
 	/// </remarks>
 	/// <history>
-	///   [DMC]  2/2/2024 14:27:47 Created
+	///   [DMC]  8/2/2024 16:31:05 Created
 	/// </history>
 	/// -----------------------------------------------------------------------------
 	[Serializable()]
-	public partial class ExcludedClient : BEntity 
+	public partial class AcceleratorLotExcluded : BEntity 
 	{
 
 		#region Properties 
+
+        public long Id { get; set; }
+
+        [Required(ErrorMessage = "Campo requerido")]
+        public long IdAccelerator { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Campo requerido")]
         [StringLength(10, ErrorMessage = "No debe exceder los {1} caracteres.")]
@@ -39,16 +44,26 @@ namespace BEntities.Kbytes
 
 		#region Additional Properties 
 
+        public AcceleratorLot Accelerator { get; set; } 
+
 
 		#endregion
 
 		#region Contructors 
 
-		public ExcludedClient() { }
+		public AcceleratorLotExcluded() { }
 
 		#endregion
 
 	}
 
+    /// <summary>
+    /// Relationship enumerator AcceleratorLotExcluded
+    /// </summary>
+    /// <remarks></remarks>
+    public enum relAcceleratorLotExcluded 
+     { 
+        Accelerator
+	}
 
 }

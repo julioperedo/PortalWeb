@@ -28,7 +28,7 @@ namespace BComponents.Kbytes
     /// -----------------------------------------------------------------------------
     /// Project   : BComponents
     /// NameSpace : Kbytes
-    /// Class     : ClientNotAllowed
+    /// Class     : AcceleratorLotExcluded
     /// Service  :  Kbytes
     /// -----------------------------------------------------------------------------
     /// <summary>
@@ -39,30 +39,30 @@ namespace BComponents.Kbytes
     ///    Business component for service Kbytes
     /// </remarks>
     /// <history>
-    ///   [DMC]   2/2/2024 14:27:47 Created
+    ///   [DMC]   8/2/2024 15:57:01 Created
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
-    public partial class ClientNotAllowed : BCEntity 
+    public partial class AcceleratorLotExcluded : BCEntity 
     {
 
         #region Search Methods 
 
         /// <summary>
-        ///     Search for business objects of type ClientNotAllowed
+        ///     Search for business objects of type AcceleratorLotExcluded
         /// </summary>
-        /// <param name="Id">Object identifier ClientNotAllowed</param>
+        /// <param name="Id">Object identifier AcceleratorLotExcluded</param>
         /// <param name="Relations">relationship enumetators</param>
-        /// <returns>An object of type ClientNotAllowed</returns>
+        /// <returns>An object of type AcceleratorLotExcluded</returns>
         /// <remarks>
         ///     To get relationship objects, suply relationship enumetators
         /// </remarks>
-        public BEK.ClientNotAllowed Search(long Id, params Enum[] Relations) 
+        public BEK.AcceleratorLotExcluded Search(long Id, params Enum[] Relations) 
         {
-            BEK.ClientNotAllowed Item = null;
+            BEK.AcceleratorLotExcluded Item = null;
             try 
             {
-                using (DAL.ClientNotAllowed dal = new()) 
+                using (DAL.AcceleratorLotExcluded dal = new()) 
                 {
                     Item = dal.Search(Id, Relations);
                 }
@@ -79,20 +79,20 @@ namespace BComponents.Kbytes
         #region List Methods 
 
         /// <summary>
-        ///     Search for collection business objects of type ClientNotAllowed
+        ///     Search for collection business objects of type AcceleratorLotExcluded
         /// </summary>
         /// <param name="Order">Property column to specify collection order</param>
         /// <param name="Relations">Relationship enumerator</param>
-        /// <returns>Object collection of type ClientNotAllowed</returns>
+        /// <returns>Object collection of type AcceleratorLotExcluded</returns>
         /// <remarks>
         ///     To get relationship objects, suply relationship enumetators
         /// </remarks>
-        public IEnumerable<BEK.ClientNotAllowed> List(string Order, params Enum[] Relations) 
+        public IEnumerable<BEK.AcceleratorLotExcluded> List(string Order, params Enum[] Relations) 
         {
             try 
             {
-                IEnumerable<BEK.ClientNotAllowed> Items;
-                using (DAL.ClientNotAllowed dal = new()) 
+                IEnumerable<BEK.AcceleratorLotExcluded> Items;
+                using (DAL.AcceleratorLotExcluded dal = new()) 
                 {
                     Items = dal.List(Order, Relations);
                 }
@@ -105,12 +105,12 @@ namespace BComponents.Kbytes
             }
         }
 
-        public IEnumerable<BEK.ClientNotAllowed> List(List<Field> FilterList, string Order, params Enum[] Relations) 
+        public IEnumerable<BEK.AcceleratorLotExcluded> List(List<Field> FilterList, string Order, params Enum[] Relations) 
         {
             try 
             {
-                IEnumerable<BEK.ClientNotAllowed> Items = null;
-                using (DAL.ClientNotAllowed dal = new()) 
+                IEnumerable<BEK.AcceleratorLotExcluded> Items = null;
+                using (DAL.AcceleratorLotExcluded dal = new()) 
                 {
                     Items = dal.List(FilterList, Order, Relations);
                 }
@@ -130,10 +130,10 @@ namespace BComponents.Kbytes
         /// <summary>
         ///     Saves data object of type 
         /// </summary>
-        /// <param name="Item">Object type ClientNotAllowed</param>     
+        /// <param name="Item">Object type AcceleratorLotExcluded</param>     
         /// <remarks>
         /// </remarks>
-        public void Save(ref BEK.ClientNotAllowed Item) 
+        public void Save(ref BEK.AcceleratorLotExcluded Item) 
         {
             this.ErrorCollection.Clear();
             if (this.Validate(Item)) 
@@ -142,7 +142,7 @@ namespace BComponents.Kbytes
                 {
                     using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction()) 
                     {
-                        using(DAL.ClientNotAllowed dal = new()) 
+                        using(DAL.AcceleratorLotExcluded dal = new()) 
                         {
                             dal.Save(ref Item);
                         }
@@ -161,18 +161,18 @@ namespace BComponents.Kbytes
         }
 
         /// <summary>
-        ///     Saves data object of type ClientNotAllowed
+        ///     Saves data object of type AcceleratorLotExcluded
         /// </summary>
-        /// <param name="Items">Object type ClientNotAllowed</param>
+        /// <param name="Items">Object type AcceleratorLotExcluded</param>
         /// <remarks>
         /// </remarks>
-        public void Save(ref IList<BEK.ClientNotAllowed> Items) 
+        public void Save(ref IList<BEK.AcceleratorLotExcluded> Items) 
         {
             try 
             {
 				using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction()) 
                 {
-					using (DAL.ClientNotAllowed dal = new()) 
+					using (DAL.AcceleratorLotExcluded dal = new()) 
                     {
 						dal.Save(ref Items);
 					}
@@ -188,11 +188,11 @@ namespace BComponents.Kbytes
         /// <summary>
         ///     Validates a business object before save it 
         /// </summary>
-        /// <param name="Item">Object Type ClientNotAllowed</param>
+        /// <param name="Item">Object Type AcceleratorLotExcluded</param>
         /// <returns>True: if object were validated</returns>
         /// <remarks>
         /// </remarks>
-        internal bool Validate(BEK.ClientNotAllowed Item) 
+        internal bool Validate(BEK.AcceleratorLotExcluded Item) 
         {
             bool bolOk = true;
             if (Item.StatusType != BE.StatusType.NoAction) 
@@ -219,7 +219,7 @@ namespace BComponents.Kbytes
         /// </summary>
         /// <remarks>
         /// </remarks>
-        public ClientNotAllowed() : base() { }
+        public AcceleratorLotExcluded() : base() { }
 
         #endregion
 

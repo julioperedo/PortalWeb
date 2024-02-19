@@ -21,6 +21,7 @@ using BEI = BEntities.PiggyBank;
 using BEN = BEntities.Campaign;
 
 using DAL = DALayer.Product;
+using BEntities.Filters;
 
 namespace BComponents.Product
 {
@@ -35,6 +36,24 @@ namespace BComponents.Product
         #endregion
 
         #region List Methods 
+
+        public IEnumerable<BEP.Loan> ListExtended(List<Field> FilterList, string SortingBy, params Enum[] Relations)
+        {
+            try
+            {
+                IEnumerable<BEP.Loan> Items;
+                using (DAL.Loan dal = new())
+                {
+                    Items = dal.ListExtended(FilterList, SortingBy, Relations);
+                }
+                return Items;
+            }
+            catch (Exception ex)
+            {
+                base.ErrorHandler(ex);
+                return null;
+            }
+        }
 
         #endregion
 

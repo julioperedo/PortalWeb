@@ -17,7 +17,7 @@ namespace BEntities.Product
 	/// <remarks>	
 	/// </remarks>
 	/// <history>
-	///   [DMC]  10/8/2023 11:20:16 Created
+	///   [DMC]  15/2/2024 13:33:52 Created
 	/// </history>
 	/// -----------------------------------------------------------------------------
 	[Serializable()]
@@ -107,6 +107,8 @@ namespace BEntities.Product
 
         public IList<Document> ListDocuments { get; set; }
 
+        public IList<Loan> ListLoans { get; set; }
+
         public IList<OpenBox> ListOpenBoxs { get; set; }
 
         public IList<OpenBoxHistory> ListOpenBoxHistorys { get; set; }
@@ -152,7 +154,7 @@ namespace BEntities.Product
     /// <remarks></remarks>
     public enum relProduct 
      { 
-        AcceleratorLots, ClientNoteDetails, SaleDetails, TempSaleDetails, Documents, OpenBoxs, OpenBoxHistorys, Prices, PriceExternalSites, PriceHistorys, PriceOffers, PromoBannerItems, PromoBannerTriggers, RelatedProduct_Products, RelatedProduct_Relateds, Requests, VolumePricings, VolumePricingHistorys, QuoteDetails
+        AcceleratorLots, ClientNoteDetails, SaleDetails, TempSaleDetails, Documents, Loans, OpenBoxs, OpenBoxHistorys, Prices, PriceExternalSites, PriceHistorys, PriceOffers, PromoBannerItems, PromoBannerTriggers, RelatedProduct_Products, RelatedProduct_Relateds, Requests, VolumePricings, VolumePricingHistorys, QuoteDetails
 	}
 
 }

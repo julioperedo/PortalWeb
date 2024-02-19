@@ -4,27 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using BEntities;
 using BE = BEntities;
 
-namespace BEntities.Security
+namespace BEntities.Security 
 {
-    /// -----------------------------------------------------------------------------
-    /// Project   : BEntities
-    /// NameSpace : Security
-    /// Class     : User
-    /// -----------------------------------------------------------------------------
-    /// <summary>
-    ///    This Business Entity has all properties to work with a database table Security
-    /// </summary>
-    /// <remarks>	
-    /// </remarks>
-    /// <history>
-    ///   [DMC]  16/05/2022 09:37:14 Created
-    /// </history>
-    /// -----------------------------------------------------------------------------
-    [Serializable()]
-    public partial class User : BEntity
-    {
+	/// -----------------------------------------------------------------------------
+	/// Project   : BEntities
+	/// NameSpace : Security
+	/// Class     : User
+	/// -----------------------------------------------------------------------------
+	/// <summary>
+	///    This Business Entity has all properties to work with a database table Security
+	/// </summary>
+	/// <remarks>	
+	/// </remarks>
+	/// <history>
+	///   [DMC]  15/2/2024 13:33:52 Created
+	/// </history>
+	/// -----------------------------------------------------------------------------
+	[Serializable()]
+	public partial class User : BEntity 
+	{
 
-        #region Properties 
+		#region Properties 
 
         public long Id { get; set; }
 
@@ -84,11 +84,11 @@ namespace BEntities.Security
         public System.DateTime LogDate { get; set; }
 
 
-        #endregion
+		#endregion
 
-        #region Additional Properties 
+		#region Additional Properties 
 
-        public Profile Profile { get; set; }
+        public Profile Profile { get; set; } 
 
         public IList<BE.AppData.UserToken> ListUserTokens { get; set; }
 
@@ -97,6 +97,8 @@ namespace BEntities.Security
         public IList<BE.Online.Sale> ListSales { get; set; }
 
         public IList<BE.Online.TempSale> ListTempSales { get; set; }
+
+        public IList<BE.Product.Loan> ListLoans { get; set; }
 
         public IList<BE.Product.Request> ListRequests { get; set; }
 
@@ -119,23 +121,23 @@ namespace BEntities.Security
         public IList<UserProfile> ListUserProfiles { get; set; }
 
 
-        #endregion
+		#endregion
 
-        #region Contructors 
+		#region Contructors 
 
-        public User() { }
+		public User() { }
 
-        #endregion
+		#endregion
 
-    }
+	}
 
     /// <summary>
     /// Relationship enumerator User
     /// </summary>
     /// <remarks></remarks>
-    public enum relUser
-    {
-        Profile, UserTokens, QuoteSents, Sales, TempSales, Requests, Quotes, Sellerss, SessionHistorys, UserActivitys, UserClients, UserDatas, UserPersons, UserPivotConfigs, UserProfiles
-    }
+    public enum relUser 
+     { 
+        Profile, UserTokens, QuoteSents, Sales, TempSales, Loans, Requests, Quotes, Sellerss, SessionHistorys, UserActivitys, UserClients, UserDatas, UserPersons, UserPivotConfigs, UserProfiles
+	}
 
 }

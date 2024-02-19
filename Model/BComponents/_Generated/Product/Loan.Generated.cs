@@ -23,7 +23,7 @@ using BEN = BEntities.Campaign;
 
 using DAL = DALayer.Product;
 
-namespace BComponents.Product 
+namespace BComponents.Product
 {
     /// -----------------------------------------------------------------------------
     /// Project   : BComponents
@@ -43,7 +43,7 @@ namespace BComponents.Product
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
-    public partial class Loan : BCEntity 
+    public partial class Loan : BCEntity
     {
 
         #region Search Methods 
@@ -57,17 +57,17 @@ namespace BComponents.Product
         /// <remarks>
         ///     To get relationship objects, suply relationship enumetators
         /// </remarks>
-        public BEP.Loan Search(long Id, params Enum[] Relations) 
+        public BEP.Loan Search(long Id, params Enum[] Relations)
         {
             BEP.Loan Item = null;
-            try 
+            try
             {
-                using (DAL.Loan dal = new()) 
+                using (DAL.Loan dal = new())
                 {
                     Item = dal.Search(Id, Relations);
                 }
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 base.ErrorHandler(ex);
             }
@@ -87,36 +87,36 @@ namespace BComponents.Product
         /// <remarks>
         ///     To get relationship objects, suply relationship enumetators
         /// </remarks>
-        public IEnumerable<BEP.Loan> List(string Order, params Enum[] Relations) 
+        public IEnumerable<BEP.Loan> List(string Order, params Enum[] Relations)
         {
-            try 
+            try
             {
                 IEnumerable<BEP.Loan> Items;
-                using (DAL.Loan dal = new()) 
+                using (DAL.Loan dal = new())
                 {
                     Items = dal.List(Order, Relations);
                 }
                 return Items;
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 base.ErrorHandler(ex);
                 return null;
             }
         }
 
-        public IEnumerable<BEP.Loan> List(List<Field> FilterList, string Order, params Enum[] Relations) 
+        public IEnumerable<BEP.Loan> List(List<Field> FilterList, string Order, params Enum[] Relations)
         {
-            try 
+            try
             {
                 IEnumerable<BEP.Loan> Items = null;
-                using (DAL.Loan dal = new()) 
+                using (DAL.Loan dal = new())
                 {
                     Items = dal.List(FilterList, Order, Relations);
                 }
                 return Items;
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 base.ErrorHandler(ex);
                 return null;
@@ -133,28 +133,28 @@ namespace BComponents.Product
         /// <param name="Item">Object type Loan</param>     
         /// <remarks>
         /// </remarks>
-        public void Save(ref BEP.Loan Item) 
+        public void Save(ref BEP.Loan Item)
         {
             this.ErrorCollection.Clear();
-            if (this.Validate(Item)) 
+            if (this.Validate(Item))
             {
-                try 
+                try
                 {
-                    using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction()) 
+                    using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction())
                     {
-                        using(DAL.Loan dal = new()) 
+                        using (DAL.Loan dal = new())
                         {
                             dal.Save(ref Item);
                         }
                         BusinessTransaction.Complete();
                     }
-                } 
-                catch(Exception ex) 
+                }
+                catch (Exception ex)
                 {
                     base.ErrorHandler(ex);
                 }
-            } 
-            else 
+            }
+            else
             {
                 base.ErrorHandler(new BCException(this.ErrorCollection));
             }
@@ -166,20 +166,20 @@ namespace BComponents.Product
         /// <param name="Items">Object type Loan</param>
         /// <remarks>
         /// </remarks>
-        public void Save(ref IList<BEP.Loan> Items) 
+        public void Save(ref IList<BEP.Loan> Items)
         {
-            try 
+            try
             {
-				using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction()) 
+                using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction())
                 {
-					using (DAL.Loan dal = new()) 
+                    using (DAL.Loan dal = new())
                     {
-						dal.Save(ref Items);
-					}
-					BusinessTransaction.Complete();
+                        dal.Save(ref Items);
+                    }
+                    BusinessTransaction.Complete();
                 }
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -192,18 +192,18 @@ namespace BComponents.Product
         /// <returns>True: if object were validated</returns>
         /// <remarks>
         /// </remarks>
-        internal bool Validate(BEP.Loan Item) 
+        internal bool Validate(BEP.Loan Item)
         {
             bool bolOk = true;
-            if (Item.StatusType != BE.StatusType.NoAction) 
+            if (Item.StatusType != BE.StatusType.NoAction)
             {
-                if (Item.StatusType != BE.StatusType.Insert) 
+                if (Item.StatusType != BE.StatusType.Insert)
                 {
-					if (Item.Id == 0) 
-					{ 
-						base.ErrorCollection.Add("No se ha proporcionado el Identificador"); 
-						bolOk = false; 
-					}
+                    if (Item.Id == 0)
+                    {
+                        base.ErrorCollection.Add("No se ha proporcionado el Identificador");
+                        bolOk = false;
+                    }
 
                 }
             }

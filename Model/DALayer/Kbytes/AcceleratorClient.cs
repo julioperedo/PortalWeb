@@ -24,10 +24,10 @@ namespace DALayer.Kbytes
         public List<BEK.AcceleratorClient> List(string CardCode, DateTime CurrentDate, params Enum[] Relations)
         {
             string query = $@"SELECT  *
-							  FROM    Kbytes.AcceleratorClient ac
-							  WHERE   ac.Enabled = 1 
-									  AND ac.CardCode = '{CardCode}' 
-							  		  AND '{CurrentDate:yyyy-MM-dd}' BETWEEN ac.InitialDate AND ac.FinalDate ";
+                              FROM    Kbytes.AcceleratorClient ac
+                              WHERE   ac.Enabled = 1 
+                                      AND ac.CardCode = '{CardCode}' 
+                                      AND '{CurrentDate:yyyy-MM-dd}' BETWEEN ac.InitialDate AND ac.FinalDate ";
             List<BEK.AcceleratorClient> Items = SQLList(query, Relations).ToList();
             return Items;
         }

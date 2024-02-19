@@ -5,7 +5,7 @@ using BE = BEntities;
 
 namespace DALayer.Kbytes 
 {
-	public partial class ExcludedClient 
+	public partial class AcceleratorLotExcluded 
 	{
 
 		#region Save Methods

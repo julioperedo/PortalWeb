@@ -130,6 +130,12 @@ body {
 	font-family: Roboto,"Segoe UI";
 }
 
+.no-wrap-column {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 /*Fix para que los radiobuttons no se vean como checkboxes*/
 .k-radio {
 	border-radius: 50% !important;

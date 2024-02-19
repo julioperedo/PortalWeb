@@ -41,7 +41,7 @@ namespace DALayer.Kbytes
     ///     Data access layer for the service Kbytes
     /// </remarks>
     /// <history>
-    ///     [DMC]   2/2/2024 14:27:47 Created
+    ///     [DMC]   8/2/2024 16:31:05 Created
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
@@ -80,6 +80,17 @@ namespace DALayer.Kbytes
 					Connection.Execute(strQuery, Item);
                 Item.StatusType = BE.StatusType.NoAction;
             }
+			long itemId = Item.Id;
+			if (Item.ListAcceleratorLotExcludeds?.Count() > 0)
+			{
+				var list = Item.ListAcceleratorLotExcludeds;
+				foreach (var item in list) item.IdAccelerator = itemId;
+				using (var dal = new AcceleratorLotExcluded(Connection))
+				{
+					dal.Save(ref list);
+				}
+				Item.ListAcceleratorLotExcludeds = list;
+			}
         }
 
         /// <summary>
@@ -145,10 +156,19 @@ namespace DALayer.Kbytes
         protected override void LoadRelations(ref IEnumerable<BEK.AcceleratorLot> Items, params Enum[] Relations)
         {
 			IEnumerable<long> Keys;
+			IEnumerable<BE.Kbytes.AcceleratorLotExcluded> lstAcceleratorLotExcludeds = null; 
 			IEnumerable<BE.Product.Product> lstProducts = null;
 
             foreach (Enum RelationEnum in Relations)
             {
+				Keys = from i in Items select i.Id;
+				if (RelationEnum.Equals(BE.Kbytes.relAcceleratorLot.AcceleratorLotExcludeds))
+				{
+					using (var dal = new AcceleratorLotExcluded(Connection))
+					{
+						lstAcceleratorLotExcludeds = dal.List(Keys, "IdAccelerator", Relations);
+					}
+				}
 				if (RelationEnum.Equals(BE.Kbytes.relAcceleratorLot.Product))
 				{
 					using(var dal = new Product.Product(Connection))
@@ -163,6 +183,10 @@ namespace DALayer.Kbytes
             {
                 foreach (var Item in Items)
                 {
+					if (lstAcceleratorLotExcludeds != null)
+					{
+						Item.ListAcceleratorLotExcludeds = lstAcceleratorLotExcludeds.Where(x => x.IdAccelerator == Item.Id)?.ToList();
+					}
 					if (lstProducts != null)
 					{
 						Item.Product = (from i in lstProducts where i.Id == Item.IdProduct select i).FirstOrDefault();
@@ -181,6 +205,14 @@ namespace DALayer.Kbytes
         {
             foreach (Enum RelationEnum in Relations)
             {
+				long[] Keys = new[] { Item.Id };
+				if (RelationEnum.Equals(BE.Kbytes.relAcceleratorLot.AcceleratorLotExcludeds))
+				{
+					using (var dal = new AcceleratorLotExcluded(Connection))
+					{
+						Item.ListAcceleratorLotExcludeds = dal.List(Keys, "IdAccelerator", Relations)?.ToList();
+					}
+				}
 				if (RelationEnum.Equals(BE.Kbytes.relAcceleratorLot.Product))
 				{
 					using (var dal = new Product.Product(Connection))

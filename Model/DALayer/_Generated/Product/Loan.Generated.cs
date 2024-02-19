@@ -41,7 +41,7 @@ namespace DALayer.Product
     ///     Data access layer for the service Product
     /// </remarks>
     /// <history>
-    ///     [DMC]   29/1/2024 14:11:10 Created
+    ///     [DMC]   15/2/2024 13:33:51 Created
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
@@ -61,11 +61,11 @@ namespace DALayer.Product
             string strQuery = "";
             if (Item.StatusType == BE.StatusType.Insert)
             {
-                strQuery = "INSERT INTO [Product].[Loan]([IdProduct], [Quantity], [InitialDate], [FinalDate], [State], [Comments], [LogUser], [LogDate]) VALUES(@IdProduct, @Quantity, @InitialDate, @FinalDate, @State, @Comments, @LogUser, @LogDate) SELECT @@IDENTITY";
+                strQuery = "INSERT INTO [Product].[Loan]([IdProduct], [IdUser], [RequestDate], [Quantity], [InitialDate], [FinalDate], [State], [Comments], [LogUser], [LogDate]) VALUES(@IdProduct, @IdUser, @RequestDate, @Quantity, @InitialDate, @FinalDate, @State, @Comments, @LogUser, @LogDate) SELECT @@IDENTITY";
             }
             else if (Item.StatusType == BE.StatusType.Update)
             {
-                strQuery = "UPDATE [Product].[Loan] SET [IdProduct] = @IdProduct, [Quantity] = @Quantity, [InitialDate] = @InitialDate, [FinalDate] = @FinalDate, [State] = @State, [Comments] = @Comments, [LogUser] = @LogUser, [LogDate] = @LogDate WHERE [Id] = @Id";
+                strQuery = "UPDATE [Product].[Loan] SET [IdProduct] = @IdProduct, [IdUser] = @IdUser, [RequestDate] = @RequestDate, [Quantity] = @Quantity, [InitialDate] = @InitialDate, [FinalDate] = @FinalDate, [State] = @State, [Comments] = @Comments, [LogUser] = @LogUser, [LogDate] = @LogDate WHERE [Id] = @Id";
             }
             else if (Item.StatusType == BE.StatusType.Delete)
             {
@@ -146,6 +146,7 @@ namespace DALayer.Product
         {
             IEnumerable<long> Keys;
             IEnumerable<BE.Product.Product> lstProducts = null;
+            IEnumerable<BE.Security.User> lstUsers = null;
 
             foreach (Enum RelationEnum in Relations)
             {
@@ -157,6 +158,14 @@ namespace DALayer.Product
                         lstProducts = dal.ReturnChild(Keys, Relations)?.ToList();
                     }
                 }
+                if (RelationEnum.Equals(BE.Product.relLoan.User))
+                {
+                    using (var dal = new Security.User(Connection))
+                    {
+                        Keys = (from i in Items select i.IdUser).Distinct();
+                        lstUsers = dal.ReturnChild(Keys, Relations)?.ToList();
+                    }
+                }
             }
 
             if (Relations.GetLength(0) > 0)
@@ -166,6 +175,10 @@ namespace DALayer.Product
                     if (lstProducts != null)
                     {
                         Item.Product = (from i in lstProducts where i.Id == Item.IdProduct select i).FirstOrDefault();
+                    }
+                    if (lstUsers != null)
+                    {
+                        Item.User = (from i in lstUsers where i.Id == Item.IdUser select i).FirstOrDefault();
                     }
                 }
             }
@@ -186,6 +199,13 @@ namespace DALayer.Product
                     using (var dal = new Product(Connection))
                     {
                         Item.Product = dal.ReturnMaster(Item.IdProduct, Relations);
+                    }
+                }
+                if (RelationEnum.Equals(BE.Product.relLoan.User))
+                {
+                    using (var dal = new Security.User(Connection))
+                    {
+                        Item.User = dal.ReturnMaster(Item.IdUser, Relations);
                     }
                 }
             }

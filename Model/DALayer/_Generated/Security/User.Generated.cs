@@ -20,6 +20,10 @@ using BES = BEntities.Security;
 using BEF = BEntities.Staff;
 using BEV = BEntities.Visits;
 using BEW = BEntities.WebSite;
+using BEX = BEntities.CIESD;
+using BEH = BEntities.HumanResources;
+using BEI = BEntities.PiggyBank;
+using BEN = BEntities.Campaign;
 
 
 namespace DALayer.Security
@@ -37,7 +41,7 @@ namespace DALayer.Security
     ///     Data access layer for the service Security
     /// </remarks>
     /// <history>
-    ///     [DMC]   16/05/2022 09:37:14 Created
+    ///     [DMC]   15/2/2024 13:33:52 Created
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
@@ -116,6 +120,16 @@ namespace DALayer.Security
 					dal.Save(ref list);
 				}
 				Item.ListTempSales = list;
+			}
+			if (Item.ListLoans?.Count() > 0)
+			{
+				var list = Item.ListLoans;
+				foreach (var item in list) item.IdUser = itemId;
+				using (var dal = new DALayer.Product.Loan(Connection))
+				{
+					dal.Save(ref list);
+				}
+				Item.ListLoans = list;
 			}
 			if (Item.ListRequests?.Count() > 0)
 			{
@@ -286,6 +300,7 @@ namespace DALayer.Security
 			IEnumerable<BE.Online.QuoteSent> lstQuoteSents = null; 
 			IEnumerable<BE.Online.Sale> lstSales = null; 
 			IEnumerable<BE.Online.TempSale> lstTempSales = null; 
+			IEnumerable<BE.Product.Loan> lstLoans = null; 
 			IEnumerable<BE.Product.Request> lstRequests = null; 
 			IEnumerable<BE.Sales.Quote> lstQuotes = null; 
 			IEnumerable<BE.Security.Sellers> lstSellerss = null; 
@@ -327,6 +342,13 @@ namespace DALayer.Security
 					using (var dal = new DALayer.Online.TempSale(Connection))
 					{
 						lstTempSales = dal.List(Keys, "IdUser", Relations);
+					}
+				}
+				if (RelationEnum.Equals(BE.Security.relUser.Loans))
+				{
+					using (var dal = new DALayer.Product.Loan(Connection))
+					{
+						lstLoans = dal.List(Keys, "IdUser", Relations);
 					}
 				}
 				if (RelationEnum.Equals(BE.Security.relUser.Requests))
@@ -429,6 +451,10 @@ namespace DALayer.Security
 					{
 						Item.ListTempSales = lstTempSales.Where(x => x.IdUser == Item.Id)?.ToList();
 					}
+					if (lstLoans != null)
+					{
+						Item.ListLoans = lstLoans.Where(x => x.IdUser == Item.Id)?.ToList();
+					}
 					if (lstRequests != null)
 					{
 						Item.ListRequests = lstRequests.Where(x => x.IdUser == Item.Id)?.ToList();
@@ -514,6 +540,13 @@ namespace DALayer.Security
 					using (var dal = new DALayer.Online.TempSale(Connection))
 					{
 						Item.ListTempSales = dal.List(Keys, "IdUser", Relations)?.ToList();
+					}
+				}
+				if (RelationEnum.Equals(BE.Security.relUser.Loans))
+				{
+					using (var dal = new DALayer.Product.Loan(Connection))
+					{
+						Item.ListLoans = dal.List(Keys, "IdUser", Relations)?.ToList();
 					}
 				}
 				if (RelationEnum.Equals(BE.Security.relUser.Requests))

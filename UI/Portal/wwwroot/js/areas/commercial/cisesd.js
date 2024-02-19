@@ -371,7 +371,7 @@ function onPurchase(e) {
                     d.item.cardName = clientName;
                     d.item.productName = itemName;
                     d.item.purchaseDate = JSON.toDate(d.item.purchaseDate);
-                    console.log(d.item);
+                    //console.log(d.item);
                     items.push(d.item);
                     code = d.item.code;
                     if (i > 1) {
