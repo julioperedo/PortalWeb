@@ -155,12 +155,12 @@ namespace Portal.Controllers
                 BES.User beUser = bcUser.Search(email, Crypt.Encrypt(password), BES.relUser.UserProfiles, BES.relUserProfile.Profile);
                 string strCardCode = !string.IsNullOrWhiteSpace(cardCode) ? cardCode : beUser.CardCode;
                 bool boLocalSelected = strCardCode == "CDMC-002", boLocal = beUser.CardCode == "CDMC-002";
-                lstProfiles = (from i in beUser.ListUserProfiles where i.Profile.isExternalCapable == !boLocalSelected select i.Profile).ToList();
+                lstProfiles = (from i in beUser.ListUserProfiles where i.Profile.IsExternalCapable == !boLocalSelected select i.Profile).ToList();
                 if (boLocal == boLocalSelected)
                 {
                     if (!(from i in lstProfiles select i.Id).Contains(beUser.IdProfile))
                     {
-                        BCS.Profile bcProfile = new BCS.Profile();
+                        var bcProfile = new BCS.Profile();
                         BES.Profile beProfile = bcProfile.Search(beUser.IdProfile);
                         lstProfiles.Add(beProfile);
                     }
@@ -168,7 +168,7 @@ namespace Portal.Controllers
                 if (lstProfiles.Count == 0)
                 {
                     //Se le agrega un perfil de sólo ventas
-                    BCS.Profile bcProfile = new BCS.Profile();
+                    var bcProfile = new BCS.Profile();
                     BES.Profile beProfile;
                     if (boLocalSelected)
                     {
@@ -190,7 +190,7 @@ namespace Portal.Controllers
                     strMessage += Environment.NewLine + ex.Message;
                 }
             }
-            var items = (from i in lstProfiles orderby i.isExternalCapable, i.Name select new { i.Id, i.Name }).ToList();
+            var items = (from i in lstProfiles orderby i.IsExternalCapable, i.Name select new { i.Id, i.Name }).ToList();
             return Json(new { Message = strMessage, Items = items });
         }
 
@@ -232,7 +232,7 @@ namespace Portal.Controllers
 
                 if (user?.Id > 0)
                 {
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new();
                     sb.AppendLine(@"	<style> ");
                     sb.AppendLine(@"		body { background-color: #FFF; font-family: Verdana, Geneva, sans-serif; font-size: 12px; } ");
                     sb.AppendLine(@"		img { margin: 20px 15px; }");

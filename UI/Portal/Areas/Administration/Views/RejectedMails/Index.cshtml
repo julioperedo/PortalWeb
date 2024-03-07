@@ -24,11 +24,11 @@
                 </div>
                 <label for="FilSince" class="col-2 col-sm-1 text-nowrap">Desde</label>
                 <div class="col-10 col-sm-5 col-lg-2">
-                    <input id="FilSince" type="date" style="width: 120px;" />
+                    <input id="FilSince" type="date" />
                 </div>
                 <label for="FilUntil" class="col-2 col-sm-1 text-nowrap">Hasta</label>
                 <div class="col-10 col-sm-5 col-lg-2">
-                    <input id="FilUntil" type="date" style="width: 120px;" />
+                    <input id="FilUntil" type="date" />
                 </div>
                 <label for="FilReported" class="col-2 col-md-1">Enviado</label>
                 <div class="col-10 col-sm-4 col-md-2 col-lg-2">
@@ -108,8 +108,8 @@
 }
 @section Scripts {
     <script type="text/javascript">
-		var urlFilter = "@Url.Action("Filter")",
-			urlEdit = "@Url.Action("Edit")",
+        var urlFilter = "@Url.Action("Filter")",
+            urlEdit = "@Url.Action("Edit")",
             urlClients = "@Url.Action("GetClients")",
             urlReasons = "@Url.Action("GetReasons")",
             urlVerifyEmail = "@Url.Action("VerifyEmail")",

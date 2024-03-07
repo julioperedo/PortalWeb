@@ -9,7 +9,6 @@ using BEK = BEntities.Kbytes;
 using BEG = BEntities.Logs;
 using BEM = BEntities.Marketing;
 using BEO = BEntities.Online;
-using BET = BEntities.PostSale;
 using BEP = BEntities.Product;
 using BEL = BEntities.Sales;
 using BEA = BEntities.SAP;
@@ -17,7 +16,10 @@ using BES = BEntities.Security;
 using BEF = BEntities.Staff;
 using BEV = BEntities.Visits;
 using BEW = BEntities.WebSite;
-using BEC = BEntities.CIESD;
+using BEX = BEntities.CIESD;
+using BEH = BEntities.HumanResources;
+using BEI = BEntities.PiggyBank;
+using BEN = BEntities.Campaign;
 
 using DAL = DALayer.Security;
 
@@ -37,7 +39,7 @@ namespace BComponents.Security
     ///    Business component for service Security
     /// </remarks>
     /// <history>
-    ///   [DMC]   4/3/2022 21:28:51 Created
+    ///   [DMC]   1/3/2024 14:39:36 Created
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]

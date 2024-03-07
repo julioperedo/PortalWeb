@@ -46,8 +46,9 @@ function setupControls() {
     _since = $("#since").kendoDatePicker().data("kendoDatePicker");
     _until = $("#until").kendoDatePicker().data("kendoDatePicker");
     _product = $("#product").kendoDropDownList({
-        dataTextField: "name", dataValueField: "id", optionLabel: "Seleccione un Producto...", filter: "contains", dataSource: { data: [] }, height: 350,
-        template: (e) => `<span>${e.name}</span><br /><span>Marca: </span><span>${e.brand}</span><br /><span>Categor&iacute;a: </span><span>${e.category}</span>`
+        dataTextField: "name", dataValueField: "id", optionLabel: "Seleccione un Producto...", filter: "contains", dataSource: { data: [] }, height: 400,
+        template: (e) => `<img src="${(e.imageURL?.trim() != "" ? urlImages + e.imageURL : urlNoImage)}" /><span class="desc"><h5>${e.name}</h5><p>Marca: ${e.brand}</p><p>Categor&iacute;a: ${e.category}</p></span>`,
+        footerTemplate: '<div class="p-2">Total #: instance.dataSource.total() # items encontrados</div>'
     }).data("kendoDropDownList");
 
     $.get(urlClients, {}, d => {

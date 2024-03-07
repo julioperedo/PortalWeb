@@ -214,6 +214,8 @@ function setupControls() {
             }
         ],
         sortable: true, selectable: "Single, Row", noRecords: { template: '<div class="text-center w-100">No se encontraron registros para el criterio de búsqueda.</div>' },
+        toolbar: ["excel"],
+        excel: { fileName: "Despachos.xlsx" },
         dataSource: []
     });
 

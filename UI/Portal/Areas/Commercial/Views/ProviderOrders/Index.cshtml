@@ -32,11 +32,11 @@
                 </div>
                 <label for="initial-date" class="col-3 col-sm-2 col-lg-1 text-nowrap">Fecha Inicial</label>
                 <div class="col-9 col-sm-4 col-lg-2">
-                    <kendo-datepicker name="initial-date" class="initial-date" on-change="onSinceChange" style="width: 110px;" />
+                    <kendo-datepicker name="initial-date" class="initial-date" on-change="onSinceChange" />
                 </div>
                 <label for="final-date" class="col-3 col-sm-2 col-lg-1 text-nowrap">Fecha Final</label>
                 <div class="col-9 col-sm-4 col-lg-2">
-                    <kendo-datepicker name="final-date" class="final-date" on-change="onUntilChange" style="width: 110px;" />
+                    <kendo-datepicker name="final-date" class="final-date" on-change="onUntilChange" />
                 </div>
                 <label for="product" class="col-3 col-sm-2 col-lg-1 text-nowrap">Producto</label>
                 <div class="col-9 col-sm-10 col-lg-5">
@@ -91,19 +91,19 @@
 
 @section Scripts {
     <script type="text/javascript">
-		var urlClients = "@Url.Action("GetClients", "ProviderOrders")",
-			urlFilter = "@Url.Action("Filter", "ProviderOrders")",
-			urlExcel = "@Url.Action("ExportExcel", "ProviderOrders")",
-			urlSubsidiaries = "@Url.Action("GetSubsidiaries", "ProviderOrders")",
-			urlWarehouses = "@Url.Action("GetWarehouses", "ProviderOrders")",
-			urlLines = "@Url.Action("GetLines", "ProviderOrders")",
-			urlCategories = "@Url.Action("GetCategories", "ProviderOrders")",
-			urlSubcategories = "@Url.Action("GetSubcategories", "ProviderOrders")",
-			urlProviders = "@Url.Action("GetProviders", "ProviderOrders")",
-			urlDetail = "@Url.Action("Detail", "ProviderOrders")",
-			urlGetStock = "@Url.Action("GetStockDetail", "Orders")",
+        var urlClients = "@Url.Action("GetClients", "ProviderOrders")",
+            urlFilter = "@Url.Action("Filter", "ProviderOrders")",
+            urlExcel = "@Url.Action("ExportExcel", "ProviderOrders")",
+            urlSubsidiaries = "@Url.Action("GetSubsidiaries", "ProviderOrders")",
+            urlWarehouses = "@Url.Action("GetWarehouses", "ProviderOrders")",
+            urlLines = "@Url.Action("GetLines", "ProviderOrders")",
+            urlCategories = "@Url.Action("GetCategories", "ProviderOrders")",
+            urlSubcategories = "@Url.Action("GetSubcategories", "ProviderOrders")",
+            urlProviders = "@Url.Action("GetProviders", "ProviderOrders")",
+            urlDetail = "@Url.Action("Detail", "ProviderOrders")",
+            urlGetStock = "@Url.Action("GetStockDetail", "Orders")",
             urlDownloadFile = "@Url.Action("DownloadFile")",
-			urlService = "@Url.Content("~/api/reports/")";
+            urlService = "@Url.Content("~/api/reports/")";
     </script>
     <script src="~/lib/ReportViewer/js/telerikReportViewer-16.2.22.914.min.js"></script>
     <script src="~/lib/ReportViewer/js/resources.es-BO.js"></script>

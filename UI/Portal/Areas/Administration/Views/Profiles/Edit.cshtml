@@ -19,13 +19,13 @@
     var Charts = from c in Model.ListProfileCharts
                  group c by c.ChartGroup into g
                  select new { GroupName = g.Key, Detail = from d in g select new { Id = d.Id, IdChart = d.IdChart, Chart = d.ChartName, Selected = d.Id != 0 } };
-    string forClients = Model.isExternalCapable ? @"checked=""checked""" : "";
+    string forClients = Model.IsExternalCapable ? @"checked=""checked""" : "";
 }
 <div class="row">
     <div class="col-12 col-sm-5 pb-5">
         <form asp-action="Edit" id="form-profile">
             <input asp-for="Id" type="hidden" />
-            <input asp-for="isBase" type="hidden" />
+            <input asp-for="IsBase" type="hidden" />
             <div class="form-group">
                 <label asp-for="Name">Nombre</label>
                 <input asp-for="Name" class="form-control" type="text" />

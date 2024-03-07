@@ -156,7 +156,7 @@ namespace MobileService.Controllers
                 BES.User beUser = bcUser.Search(UserName, Encryption.Encrypt(Password), BES.relUser.UserProfiles, BES.relUserProfile.Profile);
                 string strCardCode = !string.IsNullOrWhiteSpace(CardCode) ? CardCode : beUser.CardCode;
                 bool boLocalSelected = strCardCode == "CDMC-002", boLocal = beUser.CardCode == "CDMC-002";
-                lstProfiles = (from i in beUser.ListUserProfiles where i.Profile.isExternalCapable == !boLocalSelected select i.Profile).ToList();
+                lstProfiles = (from i in beUser.ListUserProfiles where i.Profile.IsExternalCapable == !boLocalSelected select i.Profile).ToList();
                 if (boLocal == boLocalSelected)
                 {
                     if (!(from i in lstProfiles select i.Id).Contains(beUser.IdProfile))
@@ -184,7 +184,7 @@ namespace MobileService.Controllers
                     message += Environment.NewLine + ex.Message;
                 }
             }
-            var items = (from i in lstProfiles orderby i.isExternalCapable, i.Name select new { id = i.Id, name = i.Name }).ToList();
+            var items = (from i in lstProfiles orderby i.IsExternalCapable, i.Name select new { id = i.Id, name = i.Name }).ToList();
             return Ok(new { message, items });
         }
 

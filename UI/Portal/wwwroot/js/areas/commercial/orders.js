@@ -1,7 +1,7 @@
 ﻿//#region Variables Globales
-var _minDate, _maxDate, sellerCode = "", seeAllClients = false, showMargin = false;
+var _minDate, _maxDate, sellerCode = "", seeAllClients = false, showMargin = false, showAsTable = false;
 const alignCenter = { style: "text-align: center;" }, alignRight = { style: "text-align: right;" }, numberFormat = "{0:#,##0.00}", dateFormat = "{0:dd-MM-yyyy}", _gridMargin = 0,
-    seeMargin = $("#SeeMargin") === "Y", localUser = $("#LocalUser").val() === "Y", showAsTable = false;
+    seeMargin = $("#SeeMargin") === "Y", localUser = $("#LocalUser").val() === "Y";
 //#endregion
 
 //#region Eventos
@@ -118,15 +118,7 @@ function setupControls() {
     $("#seller").kendoDropDownList({ dataTextField: "name", dataValueField: "shortName", dataSource: { transport: { read: { url: urlSellers } } }, optionLabel: "Seleccione un Vendedor...", filter: "contains", enable: (seeAllClients | !localUser), value: sellerCode });
     $("#category").kendoDropDownList({ dataTextField: "name", dataValueField: "id", dataSource: { transport: { read: { url: urlCategories } } }, optionLabel: "Seleccione una Categoría...", filter: "contains" });
     $("#subcategory").kendoDropDownList({
-        dataSource: {
-            serverFiltering: true, transport: {
-                read: {
-                    url: urlSubcategories, data: (e) => {
-                        return { CategoryId: e.filter.filters[0].value }
-                    }
-                }
-            }
-        },
+        dataSource: { serverFiltering: true, transport: { read: { url: urlSubcategories, data: (e) => ({ CategoryId: e.filter.filters[0].value }) } } },
         cascadeFrom: "category", enable: false, optionLabel: "Seleccione una Subcategoría...", filter: "contains", dataTextField: "name", dataValueField: "id"
     });
     $("#line").kendoDropDownList({ dataTextField: "name", dataValueField: "name", dataSource: { transport: { read: { url: urlLines } } }, optionLabel: "Seleccione una Línea...", filter: "contains" });

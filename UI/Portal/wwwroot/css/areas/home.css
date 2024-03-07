@@ -46,9 +46,9 @@
 }
 
 .form-date {
-    width: 130px;
-    margin-left: 5px;
-    margin-right: 10px;
+    width: fit-content;
+    margin-left: 3px;
+    margin-right: 8px;
 }
 
 @media (min-width: 768px) {

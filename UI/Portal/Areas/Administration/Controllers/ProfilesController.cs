@@ -179,7 +179,7 @@ namespace Portal.Areas.Administration.Controllers
                 lstFilter.AddRange(new[] { new Field("Name", filterData, Operators.Likes), new Field("Description", filterData, Operators.Likes), new Field(LogicalOperators.Or) });
             }
             IEnumerable<BES.Profile> lstItems = bcProfile.List(lstFilter, "1");
-            List<BEM.Profile> profiles = lstItems.Select(x => new BEM.Profile { Id = x.Id, Description = x.Description, Name = x.Name, Type = x.isExternalCapable ? "Para Clientes" : "Para Personal" }).ToList();
+            List<BEM.Profile> profiles = lstItems.Select(x => new BEM.Profile { Id = x.Id, Description = x.Description, Name = x.Name, Type = x.IsExternalCapable ? "Para Clientes" : "Para Personal" }).ToList();
             return profiles;
         }
 

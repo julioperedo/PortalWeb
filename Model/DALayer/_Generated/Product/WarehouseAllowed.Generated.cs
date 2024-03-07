@@ -72,10 +72,10 @@ namespace DALayer.Product
 
             if (Item.StatusType != BE.StatusType.NoAction)
             {
-				if (Item.StatusType == BE.StatusType.Insert)
-					Item.Id = Convert.ToInt64(Connection.ExecuteScalar(strQuery, Item));
-				else
-					Connection.Execute(strQuery, Item);
+                if (Item.StatusType == BE.StatusType.Insert)
+                    Item.Id = Convert.ToInt64(Connection.ExecuteScalar(strQuery, Item));
+                else
+                    Connection.Execute(strQuery, Item);
                 Item.StatusType = BE.StatusType.NoAction;
             }
         }

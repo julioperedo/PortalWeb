@@ -1,57 +1,57 @@
 //#region Variables Globales
 const alignCenter = { style: "text-align: center;" }, alignRight = { style: "text-align: right;" }, numberFormat = "{0:#,##0.00}", _gridMargin = 15, localUser = $("#LocalUser").val() === "Y";
 var _minDate, _maxDate, receiptTemplate = `<div class="row">
-		<div class="col-5">Recibo : <strong>#= data.docNumber #</strong></div>
-		<div class="col-5">Fecha : #= kendo.toString(data.docDate, "dd/MM/yyyy") #</div>
-	</div>
-	<div class="row">
-		<div class="col-5">Estado Recibo : #= data.state #</div>
-	</div>
-	<div class="row">
-		<div class="col-5">Total Recibo : <strong>#= kendo.toString(data.totalReceipt, "N2") #</strong></div>
-	</div>
-	<div class="row">
-		<div class="col-5">Pago a Cuenta : #= kendo.toString(data.onAccount, "N2") #</div>
-		<div class="col-5">Total Sin Aplicar : #= kendo.toString(data.notAppliedTotal, "N2") #</div>
-	</div>
-	<br />
-	<table class="table table-hover">
-		<thead>
-			<tr><td><strong>Nota de Venta</strong></td><td class="text-center"><strong>Fecha</strong></td><td class="text-center"><strong>T&eacute;rmino</strong></td><td class="text-right"><strong>Monto Pagado</strong></td><td class="text-right"><strong>Total Nota</strong></td><td class="text-right"><strong>D&iacute;as Mora</strong></td></tr>
-		</thead>
-		# var decTotal = 0, decPayed = 0; #
-		# for (var i = 0; i < data.notes.length; i++) { #
-		# decTotal += data.notes[i].total; #
-		# decPayed += data.notes[i].amountPaid; #
-		<tr><td># if (data.notes[i].noteNumber > 0) { # #= data.notes[i].noteNumber # # } #</td><td class="text-center"># if (data.notes[i].noteNumber > 0) { # #= kendo.toString(data.notes[i].docDate, "dd/MM/yyyy") # # } #</td><td class="text-center"># if (data.notes[i].noteNumber > 0) { # #= data.notes[i].terms # # } #</td><td class="text-right">#= kendo.toString(data.notes[i].amountPaid, "N2") #</td><td class="text-right">#= kendo.toString(data.notes[i].total, "N2") #</td><td class="text-right">#= kendo.toString(data.notes[i].days, "N0") #</td></tr>
-		# } #
-		<tfoot>
-			<tr><td><strong>TOTAL</strong></td><td></td><td></td><td class="text-right"><strong>#= kendo.toString(decPayed, "N2") #</strong></td><td class="text-right"><strong>#= kendo.toString(decTotal, "N2") #</strong></td><td></td></tr>
-		</tfoot>
-	</table>`, adjustTemplate = `<div class="row">
-		<div class="col-5">No. Nota de Cr&eacute;dito : <strong>#= data.docNumber #</strong></div>
-		<div class="col-5">Fecha : #= kendo.toString(data.docDate, "dd/MM/yyyy") #</div>
-	</div>	
+        <div class="col-5">Recibo : <strong>#= data.docNumber #</strong></div>
+        <div class="col-5">Fecha : #= kendo.toString(data.docDate, "dd/MM/yyyy") #</div>
+    </div>
     <div class="row">
-		<div class="col-5">Referencia : #= data.comments #</div>
-	</div>
-	<div class="row">
-		<div class="col-5">Total : <strong>#= kendo.toString(data.totalReceipt, "N2") #</strong></div>
-	</div>
-	<br />
-	<table class="table table-hover">
-		<thead>
-			<tr><td><strong>Descripci&oacute;n</strong></td><td><strong>C&oacute;d. Cuenta</strong></td><td><strong>Cuenta de Mayor</strong></td><td class="text-right"><strong>Total</strong></td></tr>
-		</thead>
-		# var decTotal = 0; #
-		# for (var i = 0; i < data.items.length; i++) { #
-		# decTotal += data.items[i].total; #
-		<tr><td>#= data.items[i].description #</td><td>#= data.items[i].accountCode #</td><td>#= data.items[i].accountName #</td><td class="text-right">#= kendo.toString(data.items[i].total, "N2") #</td></tr>
-		# } #
-		<tfoot>
-			<tr><td><strong>TOTAL</strong></td><td></td><td></td><td class="text-right"><strong>#= kendo.toString(decTotal, "N2") #</strong></td></tr>
-		</tfoot>
-	</table>`;
+        <div class="col-5">Estado Recibo : #= data.state #</div>
+    </div>
+    <div class="row">
+        <div class="col-5">Total Recibo : <strong>#= kendo.toString(data.totalReceipt, "N2") #</strong></div>
+    </div>
+    <div class="row">
+        <div class="col-5">Pago a Cuenta : #= kendo.toString(data.onAccount, "N2") #</div>
+        <div class="col-5">Total Sin Aplicar : #= kendo.toString(data.notAppliedTotal, "N2") #</div>
+    </div>
+    <br />
+    <table class="table table-hover">
+        <thead>
+            <tr><td><strong>Nota de Venta</strong></td><td class="text-center"><strong>Fecha</strong></td><td class="text-center"><strong>T&eacute;rmino</strong></td><td class="text-right"><strong>Monto Pagado</strong></td><td class="text-right"><strong>Total Nota</strong></td><td class="text-right"><strong>D&iacute;as Mora</strong></td></tr>
+        </thead>
+        # var decTotal = 0, decPayed = 0; #
+        # for (var i = 0; i < data.notes.length; i++) { #
+        # decTotal += data.notes[i].total; #
+        # decPayed += data.notes[i].amountPaid; #
+        <tr><td># if (data.notes[i].noteNumber > 0) { # #= data.notes[i].noteNumber # # } #</td><td class="text-center"># if (data.notes[i].noteNumber > 0) { # #= kendo.toString(data.notes[i].docDate, "dd/MM/yyyy") # # } #</td><td class="text-center"># if (data.notes[i].noteNumber > 0) { # #= data.notes[i].terms # # } #</td><td class="text-right">#= kendo.toString(data.notes[i].amountPaid, "N2") #</td><td class="text-right">#= kendo.toString(data.notes[i].total, "N2") #</td><td class="text-right">#= kendo.toString(data.notes[i].days, "N0") #</td></tr>
+        # } #
+        <tfoot>
+            <tr><td><strong>TOTAL</strong></td><td></td><td></td><td class="text-right"><strong>#= kendo.toString(decPayed, "N2") #</strong></td><td class="text-right"><strong>#= kendo.toString(decTotal, "N2") #</strong></td><td></td></tr>
+        </tfoot>
+    </table>`, adjustTemplate = `<div class="row">
+        <div class="col-5">No. Nota de Cr&eacute;dito : <strong>#= data.docNumber #</strong></div>
+        <div class="col-5">Fecha : #= kendo.toString(data.docDate, "dd/MM/yyyy") #</div>
+    </div>	
+    <div class="row">
+        <div class="col-5">Referencia : #= data.comments #</div>
+    </div>
+    <div class="row">
+        <div class="col-5">Total : <strong>#= kendo.toString(data.totalReceipt, "N2") #</strong></div>
+    </div>
+    <br />
+    <table class="table table-hover">
+        <thead>
+            <tr><td><strong>Descripci&oacute;n</strong></td><td><strong>C&oacute;d. Cuenta</strong></td><td><strong>Cuenta de Mayor</strong></td><td class="text-right"><strong>Total</strong></td></tr>
+        </thead>
+        # var decTotal = 0; #
+        # for (var i = 0; i < data.items.length; i++) { #
+        # decTotal += data.items[i].total; #
+        <tr><td>#= data.items[i].description #</td><td>#= data.items[i].accountCode #</td><td>#= data.items[i].accountName #</td><td class="text-right">#= kendo.toString(data.items[i].total, "N2") #</td></tr>
+        # } #
+        <tfoot>
+            <tr><td><strong>TOTAL</strong></td><td></td><td></td><td class="text-right"><strong>#= kendo.toString(decTotal, "N2") #</strong></td></tr>
+        </tfoot>
+    </table>`;
 //#endregion
 
 //#region Eventos
@@ -98,8 +98,8 @@ function setupControls() {
     }
     $("#Listado").kendoGrid({
         columns: [
-            { title: "Cliente", hidden: true, field: "clientName", groupHeaderTemplate: "Cliente: #=value#    ( Total: #= count#,  Total Recibos: #= kendo.toString(aggregates.totalReceipt.sum, 'N2') #, Días Mora (Promedio): #= kendo.toString(aggregates.totalDueDays.sum / ( aggregates.totalBilled.sum > 0 ? aggregates.totalBilled.sum : 1 ), 'N0') # )" },
-            { title: "Sucursal", hidden: true, field: "subsidiary", groupHeaderTemplate: "Sucursal: #= value #    ( Total: #= count#,  Total Recibos: #= kendo.toString(aggregates.totalReceipt.sum, 'N2') #, Días Mora (Promedio): #= kendo.toString(aggregates.totalDueDays.sum / ( aggregates.totalBilled.sum > 0 ? aggregates.totalBilled.sum : 1 ), 'N0') # )" },
+            { title: "Cliente", hidden: true, field: "clientName", groupHeaderTemplate: "Cliente: #=value#    ( Total: #= count#,  Total Recibos: #= kendo.toString(aggregates.totalReceipt.sum, 'N2') #, Días Mora ( Promedio: #= kendo.toString(aggregates.totalDueDays.sum / ( aggregates.totalBilled.sum > 0 ? aggregates.totalBilled.sum : 1 ), 'N0') # , M&aacute;ximo: #= aggregates.maxDueDays.max # )" },
+            { title: "Sucursal", hidden: true, field: "subsidiary", groupHeaderTemplate: "Sucursal: #= value #    ( Total: #= count#,  Total Recibos: #= kendo.toString(aggregates.totalReceipt.sum, 'N2') #, Días Mora ( Promedio: #= kendo.toString(aggregates.totalDueDays.sum / ( aggregates.totalBilled.sum > 0 ? aggregates.totalBilled.sum : 1 ), 'N0') # , M&aacute;ximo: #= aggregates.maxDueDays.max # )" },
             { title: "Fecha", attributes: alignCenter, headerAttributes: alignCenter, width: 120, field: "docDate", format: "{0:dd/MM/yyyy}" },
             {
                 title: "Recibo", attributes: alignCenter, headerAttributes: alignCenter, width: 120, field: "docNumber",
@@ -113,7 +113,7 @@ function setupControls() {
             { title: "Referencia", width: 200, field: "comments" },
             { title: "Ajuste", attributes: alignCenter, headerAttributes: alignCenter, width: 80, template: '# if(adjust) {# <i class="fas fa-check"></i> #} #', field: "adjust" }
         ],
-        sortable: true, selectable: "Single, Row", scrollable: { height: 200 }, noRecords: { template: "No se encontraron registros para el criterio de búsqueda." },
+        sortable: true, selectable: "Single, Row", scrollable: { height: 200 }, noRecords: { template: '<div class="w-100 p-2 text-center">No se encontraron registros para el criterio de b&uacute;squeda.</div>' },
         dataSource: getDataSource([])
     });
 }
@@ -196,7 +196,9 @@ function getDataSource(items) {
     items.forEach(x => {
         x.docDate = JSON.toDate(x.docDate);
         x.notes.forEach(y => y.docDate = JSON.toDate(y.docDate));
+        //x.maxDueDays = x.notes.length > 0 ? Enumerable.From(x.notes).Max("$.days") : 0;
     });
+    console.log('items', items.filter((x) => x.clientCode == 'CALP-004'));
     var ds = new kendo.data.DataSource({
         data: items,
         aggregate: [
@@ -204,8 +206,8 @@ function getDataSource(items) {
             { aggregate: "count", field: "totalDueDays" }
         ],
         group: [
-            { field: "clientName", dir: "asc", aggregates: [{ field: "clientName", aggregate: "count" }, { field: "totalReceipt", aggregate: "sum" }, { field: "totalDueDays", aggregate: "sum" }, { field: "totalBilled", aggregate: "sum" }] },
-            { field: "subsidiary", dir: "asc", aggregates: [{ field: "subsidiary", aggregate: "count" }, { field: "totalReceipt", aggregate: "sum" }, { field: "totalDueDays", aggregate: "sum" }, { field: "totalBilled", aggregate: "sum" }] }
+            { field: "clientName", dir: "asc", aggregates: [{ field: "clientName", aggregate: "count" }, { field: "totalReceipt", aggregate: "sum" }, { field: "totalDueDays", aggregate: "sum" }, { field: "maxDueDays", aggregate: "max" }, { field: "totalBilled", aggregate: "sum" }] },
+            { field: "subsidiary", dir: "asc", aggregates: [{ field: "subsidiary", aggregate: "count" }, { field: "totalReceipt", aggregate: "sum" }, { field: "totalDueDays", aggregate: "sum" }, { field: "maxDueDays", aggregate: "max" }, { field: "totalBilled", aggregate: "sum" }] }
         ],
         sort: [{ field: "docDate", dir: "desc" }, { field: "docNumber", dir: "desc" }]
     });

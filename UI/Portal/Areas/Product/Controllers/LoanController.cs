@@ -113,7 +113,7 @@ namespace Portal.Areas.Product.Controllers
 
                 var items = from p in products
                             join s in stockItems on p.ItemCode.ToLower() equals s.ItemCode.ToLower()
-                            select new { p.Id, p.ItemCode, p.Name, s.Category, s.Subcategory, s.Brand, s.Stock };
+                            select new { p.Id, p.ItemCode, p.Name, s.Category, s.Subcategory, s.Brand, s.Stock, p.ImageURL };
 
                 return Json(new { message, items });
             }
@@ -245,6 +245,9 @@ namespace Portal.Areas.Product.Controllers
             BCS.User bcUser = new();
             var user = bcUser.Search(Item.IdUser);
 
+            BCA.Client bcClient = new();
+            var client = bcClient.Search(user.CardCode);
+
             BCP.Product bcProduct = new();
             var product = bcProduct.Search(Item.IdProduct);
 
@@ -282,7 +285,7 @@ namespace Portal.Areas.Product.Controllers
             sb.AppendLine(@"			<tr>");
             sb.AppendLine(@"                <td style=""width: 20px;"">&nbsp;</td>");
             sb.AppendLine(@"				<td>");
-            sb.AppendLine($@"				    <p>Estimado Cliente: <strong>{user.Name}</strong><p/>");
+            sb.AppendLine($@"				    <p>Estimado Cliente: <strong>{user.Name} ( {client.CardName} )</strong><p/>");
             sb.AppendLine($@"                    <p>Su solictud del producto <b>{product.ItemCode}</b> {product.Name} {body}.</p>");
             sb.AppendLine(@"					<p>Atentamente<br />El equipo de DMC</p><br />");
             sb.AppendLine(@"				</td>");
@@ -299,6 +302,26 @@ namespace Portal.Areas.Product.Controllers
             else
             {
                 lstTo.Add(new MailAddress(user.EMail, user.Name));
+                lstTo.Add(new MailAddress(EMail, UserName));
+
+                if (!string.IsNullOrEmpty(client.SellerCode))
+                {
+                    BCS.UserData bcUserData = new();
+                    List<Field> filters = new() { new("LOWER(SellerCode)", client.SellerCode.ToLower()) };
+                    var dataResults = bcUserData.List(filters, "1", BEntities.Security.relUserData.User);
+                    if (dataResults?.Count() > 0)
+                    {
+                        lstTo.Add(new MailAddress(dataResults.First().User.EMail, dataResults.First().User.Name));
+                    }
+                }
+
+                BCP.Line bcLine = new();
+                var line = bcLine.SearchByProduct(product.Id, BEP.relLine.Manager);
+                if (line != null && line.Manager != null)
+                {
+                    lstTo.Add(new MailAddress(line.Manager.Mail, line.Manager.Name));
+                }
+
                 FillCustomCopies("Product", "Loan", "SendMail", ref lstCopies, ref lstBlindCopies);
             }
             _ = SendMailAsync(strSubject, sb.ToString(), lstTo, lstCopies, lstBlindCopies);

@@ -23,6 +23,7 @@ namespace Portal.Areas.Commercial.Models
         public bool InDue { get; set; }
         public int TotalDueDays { get; set; }
         public int TotalBilled { get; set; }
+        public int MaxDueDays { get; set; }
         public bool Adjust { get; set; }
         public string JournalComments { get; set; }
 

@@ -9,6 +9,7 @@ var _loaded = false, _minPrize = 0, _options = {
         xfields: [
             { field: "Serial", state: "opened", op: "count" },
             { field: "Usuario", state: "opened" },
+            { field: "UsuarioId", state: "opened" },
             { field: "Tienda", state: "opened" },
             { field: "Ciudad", state: "opened" },
             { field: "Fecha", state: "opened" },
@@ -77,13 +78,13 @@ function loadPivot(data, minPrize) {
     data.sort((a, b) => a.date < b.date)
     var items = data.map(function (x) {
         return {
-            Serial: x.serialNumber, Usuario: x.userName, Ciudad: x.city, Puntos: x.points, Producto: x.itemName, CodProducto: x.itemCode, CodCliente: x.cardCode, Cliente: x.cardName,
+            Serial: x.serialNumber, UsuarioId: x.idUser, Usuario: x.userName, Usuario2: `${x.idUser} - ${x.userName}`, Ciudad: x.city, Puntos: x.points, Producto: x.itemName, CodProducto: x.itemCode, CodCliente: x.cardCode, Cliente: x.cardName,
             Fecha: x.date, Tienda: x.storeName, Direccion: x.address, Correo: x.eMail, Telefono: x.phone, Fecha: kendo.toString(x.date, "yyyy-MM-dd"), Ano: x.date.getFullYear(),
             Mes: x.date.getMonth() + '-' + x.date.toLocaleString('default', { month: 'long' }), Dia: x.date.getDate(), Trimestre: "Q" + x.quarter, Usado: x.usedPoints, TotalPuntos: x.totalPoints
         };
     });
 
-    var arrRows = ["Ciudad", "Usuario"], arrColumns = ["Trimestre"], arrValues = [{ field: "Puntos" }, { field: "Usado" }, { field: "TotalPuntos" }]; //, { field: "Serial", op: "count" }];
+    var arrRows = ["Ciudad", "Usuario2"], arrColumns = ["Trimestre"], arrValues = [{ field: "Puntos" }, { field: "Usado" }, { field: "TotalPuntos" }]; //, { field: "Serial", op: "count" }];
 
     if (_loaded) {
         _options = $("#pivot").pivotgrid("options");

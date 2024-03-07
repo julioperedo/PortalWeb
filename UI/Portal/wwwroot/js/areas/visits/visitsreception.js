@@ -161,6 +161,8 @@ function setupControls() {
 
 	$("#Listado").kendoGrid({
 		sortable: true, noRecords: { template: "No hay resultados para el criterio de búsqueda." },
+		toolbar: ["excel"],
+		excel: { fileName: "Visitas.xlsx" },
 		columns: [
 			{ title: "Tarjeta", attributes: alignCenter, headerAttributes: alignCenter, width: 80, field: "securityCardId" },
 			{ title: "Cliente", width: 180, field: "clientName" },

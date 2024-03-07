@@ -40,6 +40,15 @@
     }
   },
   {
+    "outputFileName": "wwwroot/css/areas/product/loan.min.css",
+    "inputFiles": [
+      "wwwroot/css/areas/product/loan.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
     "outputFileName": "wwwroot/js/areas/product/arrival.min.js",
     "inputFiles": [
       "wwwroot/js/areas/product/arrival.js"

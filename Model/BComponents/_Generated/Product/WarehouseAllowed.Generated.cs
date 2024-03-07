@@ -21,7 +21,7 @@ using BEC = BEntities.CIESD;
 
 using DAL = DALayer.Product;
 
-namespace BComponents.Product 
+namespace BComponents.Product
 {
     /// -----------------------------------------------------------------------------
     /// Project   : BComponents
@@ -41,7 +41,7 @@ namespace BComponents.Product
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
-    public partial class WarehouseAllowed : BCEntity 
+    public partial class WarehouseAllowed : BCEntity
     {
 
         #region Search Methods 
@@ -55,17 +55,17 @@ namespace BComponents.Product
         /// <remarks>
         ///     To get relationship objects, suply relationship enumetators
         /// </remarks>
-        public BEP.WarehouseAllowed Search(long Id, params Enum[] Relations) 
+        public BEP.WarehouseAllowed Search(long Id, params Enum[] Relations)
         {
             BEP.WarehouseAllowed Item = null;
-            try 
+            try
             {
-                using (DAL.WarehouseAllowed dal = new()) 
+                using (DAL.WarehouseAllowed dal = new())
                 {
                     Item = dal.Search(Id, Relations);
                 }
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 base.ErrorHandler(ex);
             }
@@ -85,36 +85,36 @@ namespace BComponents.Product
         /// <remarks>
         ///     To get relationship objects, suply relationship enumetators
         /// </remarks>
-        public IEnumerable<BEP.WarehouseAllowed> List(string Order, params Enum[] Relations) 
+        public IEnumerable<BEP.WarehouseAllowed> List(string Order, params Enum[] Relations)
         {
-            try 
+            try
             {
                 IEnumerable<BEP.WarehouseAllowed> Items;
-                using (DAL.WarehouseAllowed dal = new()) 
+                using (DAL.WarehouseAllowed dal = new())
                 {
                     Items = dal.List(Order, Relations);
                 }
                 return Items;
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 base.ErrorHandler(ex);
                 return null;
             }
         }
 
-        public IEnumerable<BEP.WarehouseAllowed> List(List<Field> FilterList, string Order, params Enum[] Relations) 
+        public IEnumerable<BEP.WarehouseAllowed> List(List<Field> FilterList, string Order, params Enum[] Relations)
         {
-            try 
+            try
             {
                 IEnumerable<BEP.WarehouseAllowed> Items = null;
-                using (DAL.WarehouseAllowed dal = new()) 
+                using (DAL.WarehouseAllowed dal = new())
                 {
                     Items = dal.List(FilterList, Order, Relations);
                 }
                 return Items;
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 base.ErrorHandler(ex);
                 return null;
@@ -131,28 +131,28 @@ namespace BComponents.Product
         /// <param name="Item">Object type WarehouseAllowed</param>     
         /// <remarks>
         /// </remarks>
-        public void Save(ref BEP.WarehouseAllowed Item) 
+        public void Save(ref BEP.WarehouseAllowed Item)
         {
             this.ErrorCollection.Clear();
-            if (this.Validate(Item)) 
+            if (this.Validate(Item))
             {
-                try 
+                try
                 {
-                    using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction()) 
+                    using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction())
                     {
-                        using(DAL.WarehouseAllowed dal = new()) 
+                        using (DAL.WarehouseAllowed dal = new())
                         {
                             dal.Save(ref Item);
                         }
                         BusinessTransaction.Complete();
                     }
-                } 
-                catch(Exception ex) 
+                }
+                catch (Exception ex)
                 {
                     base.ErrorHandler(ex);
                 }
-            } 
-            else 
+            }
+            else
             {
                 base.ErrorHandler(new BCException(this.ErrorCollection));
             }
@@ -164,20 +164,20 @@ namespace BComponents.Product
         /// <param name="Items">Object type WarehouseAllowed</param>
         /// <remarks>
         /// </remarks>
-        public void Save(ref IList<BEP.WarehouseAllowed> Items) 
+        public void Save(ref IList<BEP.WarehouseAllowed> Items)
         {
-            try 
+            try
             {
-				using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction()) 
+                using (TransactionScope BusinessTransaction = base.GenerateBusinessTransaction())
                 {
-					using (DAL.WarehouseAllowed dal = new()) 
+                    using (DAL.WarehouseAllowed dal = new())
                     {
-						dal.Save(ref Items);
-					}
-					BusinessTransaction.Complete();
+                        dal.Save(ref Items);
+                    }
+                    BusinessTransaction.Complete();
                 }
-            } 
-            catch(Exception ex) 
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -190,18 +190,18 @@ namespace BComponents.Product
         /// <returns>True: if object were validated</returns>
         /// <remarks>
         /// </remarks>
-        internal bool Validate(BEP.WarehouseAllowed Item) 
+        internal bool Validate(BEP.WarehouseAllowed Item)
         {
             bool bolOk = true;
-            if (Item.StatusType != BE.StatusType.NoAction) 
+            if (Item.StatusType != BE.StatusType.NoAction)
             {
-                if (Item.StatusType != BE.StatusType.Insert) 
+                if (Item.StatusType != BE.StatusType.Insert)
                 {
-					if (Item.Id == 0) 
-					{ 
-						base.ErrorCollection.Add("No se ha proporcionado el Identificador"); 
-						bolOk = false; 
-					}
+                    if (Item.Id == 0)
+                    {
+                        base.ErrorCollection.Add("No se ha proporcionado el Identificador");
+                        bolOk = false;
+                    }
 
                 }
             }

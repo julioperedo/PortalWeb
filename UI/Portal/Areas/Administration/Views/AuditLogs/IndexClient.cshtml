@@ -22,11 +22,11 @@
                 </div>
                 <label for="filSince" class="col-2 col-md-1 text-nowrap">Desde</label>
                 <div class="col-10 col-sm-4 col-md-3 col-lg-2">
-                    <input id="filSince" style="width: 110px;" />
+                    <input id="filSince" />
                 </div>
                 <label for="filUntil" class="col-2 col-md-1 text-nowrap">Hasta</label>
                 <div class="col-10 col-sm-4 col-md-3 col-lg-2">
-                    <input id="filUntil" style="width: 110px;" />
+                    <input id="filUntil" />
                 </div>
                 <div class="col text-right text-nowrap pt-2">
                     <button type="button" class="btn btn-outline-secondary mr-1" id="action-clean">Limpiar</button>
@@ -43,10 +43,10 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
-		var urlFilter = "@Url.Action("Filter", "AuditLogs")",
+        var urlFilter = "@Url.Action("Filter", "AuditLogs")",
             urlExcel = "@Url.Action("ExportExcel", "AuditLogs")",
-			urlClients = "@Url.Action("GetClients", "AuditLogs")",
-			urlUsers = "@Url.Action("GetUsers", "AuditLogs")";
+            urlClients = "@Url.Action("GetClients", "AuditLogs")",
+            urlUsers = "@Url.Action("GetUsers", "AuditLogs")";
     </script>
     <environment include="Development">
         <script src="~/js/areas/administration/auditlogs.js"></script>

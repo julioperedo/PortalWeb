@@ -4,27 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using BEntities;
 using BE = BEntities;
 
-namespace BEntities.Base 
+namespace BEntities.Base
 {
-	/// -----------------------------------------------------------------------------
-	/// Project   : BEntities
-	/// NameSpace : Base
-	/// Class     : ClassifierType
-	/// -----------------------------------------------------------------------------
-	/// <summary>
-	///    This Business Entity has all properties to work with a database table Base
-	/// </summary>
-	/// <remarks>	
-	/// </remarks>
-	/// <history>
-	///   [DMC]  4/3/2022 21:28:15 Created
-	/// </history>
-	/// -----------------------------------------------------------------------------
-	[Serializable()]
-	public partial class ClassifierType : BEntity 
-	{
+    /// -----------------------------------------------------------------------------
+    /// Project   : BEntities
+    /// NameSpace : Base
+    /// Class     : ClassifierType
+    /// -----------------------------------------------------------------------------
+    /// <summary>
+    ///    This Business Entity has all properties to work with a database table Base
+    /// </summary>
+    /// <remarks>	
+    /// </remarks>
+    /// <history>
+    ///   [DMC]  4/3/2022 21:28:15 Created
+    /// </history>
+    /// -----------------------------------------------------------------------------
+    [Serializable()]
+    public partial class ClassifierType : BEntity
+    {
 
-		#region Properties 
+        #region Properties 
 
         public long Id { get; set; }
 
@@ -43,30 +43,30 @@ namespace BEntities.Base
         public System.DateTime LogDate { get; set; }
 
 
-		#endregion
+        #endregion
 
-		#region Additional Properties 
+        #region Additional Properties 
 
         public IList<Classifier> ListClassifiers { get; set; }
 
 
-		#endregion
+        #endregion
 
-		#region Contructors 
+        #region Contructors 
 
-		public ClassifierType() { }
+        public ClassifierType() { }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
     /// <summary>
     /// Relationship enumerator ClassifierType
     /// </summary>
     /// <remarks></remarks>
-    public enum relClassifierType 
-     { 
+    public enum relClassifierType
+    {
         Classifiers
-	}
+    }
 
 }

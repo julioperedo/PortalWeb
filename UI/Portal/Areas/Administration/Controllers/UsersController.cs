@@ -474,7 +474,7 @@ namespace Portal.Areas.Administration.Controllers
             sb.AppendLine(@"			<tr>");
             sb.AppendLine(@"                <td style=""width: 20px;"">&nbsp;</td>");
             sb.AppendLine(@"				<td style=""height:130px"">");
-            sb.AppendLine($@"					<br /><img src=""http://www.dmc.bo/img/logo3.png"" class=""logo"" height=""70"" />");
+            sb.AppendLine($@"					<br /><img src=""https://www.dmc.bo/img/logo3.png"" class=""logo"" height=""70"" />");
             sb.AppendLine(@"				</td>");
             sb.AppendLine(@"                <td style=""width: 20px;"">&nbsp;</td>");
             sb.AppendLine(@"			</tr>");

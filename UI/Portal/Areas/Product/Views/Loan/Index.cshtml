@@ -90,15 +90,14 @@
         </div>
     </form>
 </div>
-<style>
-    #product-list ul li:nth-of-type(odd) {
-        background: #eee;
-    }
-
-    #product-list ul li.k-selected:nth-of-type(odd) {
-        background: #0d6efd;
-    }
-</style>
+@section Styles {
+    <environment include="Development">
+        <link href="~/css/areas/product/loan.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/css/areas/product/loan.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
 @section Scripts {
     <script type="text/javascript">
         let urlFilter = "@Url.Action("Filter")",

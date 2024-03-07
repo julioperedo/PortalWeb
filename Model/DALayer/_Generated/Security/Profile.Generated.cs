@@ -13,7 +13,6 @@ using BEK = BEntities.Kbytes;
 using BEG = BEntities.Logs;
 using BEM = BEntities.Marketing;
 using BEO = BEntities.Online;
-using BET = BEntities.PostSale;
 using BEP = BEntities.Product;
 using BEL = BEntities.Sales;
 using BEA = BEntities.SAP;
@@ -21,7 +20,10 @@ using BES = BEntities.Security;
 using BEF = BEntities.Staff;
 using BEV = BEntities.Visits;
 using BEW = BEntities.WebSite;
-using BEC = BEntities.CIESD;
+using BEX = BEntities.CIESD;
+using BEH = BEntities.HumanResources;
+using BEI = BEntities.PiggyBank;
+using BEN = BEntities.Campaign;
 
 
 namespace DALayer.Security
@@ -39,7 +41,7 @@ namespace DALayer.Security
     ///     Data access layer for the service Security
     /// </remarks>
     /// <history>
-    ///     [DMC]   7/3/2022 18:16:48 Created
+    ///     [DMC]   1/3/2024 14:39:36 Created
     /// </history>
     /// -----------------------------------------------------------------------------
     [Serializable()]
@@ -59,11 +61,11 @@ namespace DALayer.Security
             string strQuery = "";
             if (Item.StatusType == BE.StatusType.Insert)
             {
-                strQuery = "INSERT INTO [Security].[Profile]([Name], [Description], [isBase], [isExternalCapable], [LogUser], [LogDate]) VALUES(@Name, @Description, @isBase, @isExternalCapable, @LogUser, @LogDate) SELECT @@IDENTITY";
+                strQuery = "INSERT INTO [Security].[Profile]([Name], [Description], [IsBase], [IsExternalCapable], [LogUser], [LogDate]) VALUES(@Name, @Description, @IsBase, @IsExternalCapable, @LogUser, @LogDate) SELECT @@IDENTITY";
             }
             else if (Item.StatusType == BE.StatusType.Update)
             {
-                strQuery = "UPDATE [Security].[Profile] SET [Name] = @Name, [Description] = @Description, [isBase] = @isBase, [isExternalCapable] = @isExternalCapable, [LogUser] = @LogUser, [LogDate] = @LogDate WHERE [Id] = @Id";
+                strQuery = "UPDATE [Security].[Profile] SET [Name] = @Name, [Description] = @Description, [IsBase] = @IsBase, [IsExternalCapable] = @IsExternalCapable, [LogUser] = @LogUser, [LogDate] = @LogDate WHERE [Id] = @Id";
             }
             else if (Item.StatusType == BE.StatusType.Delete)
             {

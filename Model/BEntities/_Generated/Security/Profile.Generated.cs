@@ -4,27 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using BEntities;
 using BE = BEntities;
 
-namespace BEntities.Security 
+namespace BEntities.Security
 {
-	/// -----------------------------------------------------------------------------
-	/// Project   : BEntities
-	/// NameSpace : Security
-	/// Class     : Profile
-	/// -----------------------------------------------------------------------------
-	/// <summary>
-	///    This Business Entity has all properties to work with a database table Security
-	/// </summary>
-	/// <remarks>	
-	/// </remarks>
-	/// <history>
-	///   [DMC]  4/3/2022 21:28:51 Created
-	/// </history>
-	/// -----------------------------------------------------------------------------
-	[Serializable()]
-	public partial class Profile : BEntity 
-	{
+    /// -----------------------------------------------------------------------------
+    /// Project   : BEntities
+    /// NameSpace : Security
+    /// Class     : Profile
+    /// -----------------------------------------------------------------------------
+    /// <summary>
+    ///    This Business Entity has all properties to work with a database table Security
+    /// </summary>
+    /// <remarks>	
+    /// </remarks>
+    /// <history>
+    ///   [DMC]  1/3/2024 14:39:36 Created
+    /// </history>
+    /// -----------------------------------------------------------------------------
+    [Serializable()]
+    public partial class Profile : BEntity
+    {
 
-		#region Properties 
+        #region Properties 
 
         public long Id { get; set; }
 
@@ -36,19 +36,19 @@ namespace BEntities.Security
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
-        public bool isBase { get; set; }
+        public bool IsBase { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
-        public bool isExternalCapable { get; set; }
+        public bool IsExternalCapable { get; set; }
 
         public long LogUser { get; set; }
 
         public System.DateTime LogDate { get; set; }
 
 
-		#endregion
+        #endregion
 
-		#region Additional Properties 
+        #region Additional Properties 
 
         public IList<ProfileActivity> ListProfileActivitys { get; set; }
 
@@ -61,23 +61,23 @@ namespace BEntities.Security
         public IList<UserProfile> ListUserProfiles { get; set; }
 
 
-		#endregion
+        #endregion
 
-		#region Contructors 
+        #region Contructors 
 
-		public Profile() { }
+        public Profile() { }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
     /// <summary>
     /// Relationship enumerator Profile
     /// </summary>
     /// <remarks></remarks>
-    public enum relProfile 
-     { 
+    public enum relProfile
+    {
         ProfileActivitys, ProfileCharts, ProfilePages, Users, UserProfiles
-	}
+    }
 
 }

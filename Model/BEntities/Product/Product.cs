@@ -56,7 +56,19 @@ namespace BEntities.Product
         {
             get
             {
-                return ListPriceOffers?.Where(x => x.Enabled & (!x.Since.HasValue || x.Since.Value <= DateTime.Today) & (!x.Until.HasValue || x.Until.Value >= DateTime.Today))?.OrderByDescending(x => x.Price) ?? Enumerable.Empty<PriceOffer>();
+                var result = new List<PriceOffer>();
+                if (ListPriceOffers == null || ListPriceOffers.Count == 0) return result;
+                var idSubs = ListPriceOffers.Select(x => x.IdSubsidiary).Distinct();
+                foreach (var id in idSubs)
+                {
+                    var temp = from t in ListPriceOffers 
+                               where t.IdSubsidiary == id & t.Enabled & t.Price > 0 & (!t.Since.HasValue || t.Since.Value <= DateTime.Today) & (!t.Until.HasValue || t.Until.Value >= DateTime.Today) 
+                               orderby t.Price 
+                               select t;
+                    if (temp.Any()) result.Add(temp.First());
+                }
+                return result;
+                //return ListPriceOffers?.Where(x => x.Enabled & x.Price > 0 & (!x.Since.HasValue || x.Since.Value <= DateTime.Today) & (!x.Until.HasValue || x.Until.Value >= DateTime.Today))?.OrderByDescending(x => x.Price) ?? Enumerable.Empty<PriceOffer>();
             }
         }
 

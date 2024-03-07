@@ -123,12 +123,13 @@ namespace Portal.Areas.Commercial.Controllers
             wsMain.Cells[6, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
             wsMain.Cells[6, 11].Value = "Referencia";
             wsMain.Cells[6, 12].Value = "Días Mora";
-            wsMain.Cells[6, 12].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            wsMain.Cells[6, 12, 6, 13].Merge = true;
+            wsMain.Cells[6, 12].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-            wsMain.Cells[6, 1, 6, 12].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            wsMain.Cells[6, 1, 6, 12].Style.Fill.BackgroundColor.SetColor(Color.DimGray);
-            wsMain.Cells[6, 1, 6, 12].Style.Font.Color.SetColor(Color.White);
-            wsMain.Cells[6, 1, 6, 12].Style.Font.Bold = true;
+            wsMain.Cells[6, 1, 6, 13].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            wsMain.Cells[6, 1, 6, 13].Style.Fill.BackgroundColor.SetColor(Color.DimGray);
+            wsMain.Cells[6, 1, 6, 13].Style.Font.Color.SetColor(Color.White);
+            wsMain.Cells[6, 1, 6, 13].Style.Font.Bold = true;
 
             if (lstItems != null && lstItems.Count > 0)
             {
@@ -137,33 +138,33 @@ namespace Portal.Areas.Commercial.Controllers
                 int intFila = 7;
                 foreach (var cliente in lstClientes)
                 {
-                    List<string> lstSucursales = (from i in lstItems where i.ClientName == cliente orderby i.Subsidiary select i.Subsidiary).Distinct().ToList();
+                    var lstTemp = lstItems.Where(x => x.ClientName == cliente);
+                    List<string> lstSucursales = (from i in lstTemp orderby i.Subsidiary select i.Subsidiary).Distinct().ToList();
 
-                    int totalDueDays = (from i in lstItems where i.ClientName == cliente select i.TotalDueDays).Sum(), totalBilled = (from i in lstItems where i.ClientName == cliente select i.TotalBilled).Sum();
+                    int totalDueDays = (from i in lstTemp select i.TotalDueDays).Sum(), totalBilled = (from i in lstTemp select i.TotalBilled).Sum();
 
                     wsMain.Cells[intFila, 1].Value = "Cliente: " + cliente;
-                    wsMain.Cells[intFila, 1, intFila, 12].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
-                    wsMain.Cells[intFila, 1, intFila, 12].Style.Font.Bold = true;
+                    wsMain.Cells[intFila, 1, intFila, 13].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                    wsMain.Cells[intFila, 1, intFila, 13].Style.Font.Bold = true;
                     wsMain.Cells[intFila, 1, intFila, 8].Merge = true;
-                    wsMain.Cells[intFila, 9].Value = (from i in lstItems where i.ClientName == cliente select i.TotalReceipt).Sum();
+                    wsMain.Cells[intFila, 9].Value = (from i in lstTemp select i.TotalReceipt).Sum();
                     wsMain.Cells[intFila, 9].Style.Numberformat.Format = "#,##0.00";
-                    wsMain.Cells[intFila, 12].Value = totalBilled > 0 ? (decimal)totalDueDays / totalBilled : "";
-                    wsMain.Cells[intFila, 12].Style.Numberformat.Format = "#,##0.00";
+                    wsMain.Cells[intFila, 12].Value = totalBilled > 0 ? $"Promedio: {(int)((decimal)totalDueDays / totalBilled)}" : "Promedio: 0";
+                    wsMain.Cells[intFila, 13].Value = $"Máximo: {lstTemp.Max(x => x.MaxDueDays)}";
                     intFila += 1;
                     foreach (var sucursal in lstSucursales)
                     {
-                        var lstSubItems = (from i in lstItems where i.Subsidiary == sucursal & i.ClientName == cliente select i).ToList();
+                        var lstSubItems = (from i in lstTemp where i.Subsidiary == sucursal select i).ToList();
 
                         wsMain.Cells[intFila, 2].Value = "Sucursal: " + sucursal;
-                        wsMain.Cells[intFila, 1, intFila, 12].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
-                        wsMain.Cells[intFila, 1, intFila, 12].Style.Font.Bold = true;
+                        wsMain.Cells[intFila, 1, intFila, 13].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                        wsMain.Cells[intFila, 1, intFila, 13].Style.Font.Bold = true;
                         wsMain.Cells[intFila, 2, intFila, 8].Merge = true;
-                        wsMain.Cells[intFila, 9].Value = (from i in lstItems where i.Subsidiary == sucursal & i.ClientName == cliente select i.TotalReceipt).Sum();
+                        wsMain.Cells[intFila, 9].Value = lstSubItems.Sum(x => x.TotalReceipt);
                         wsMain.Cells[intFila, 9].Style.Numberformat.Format = "#,##0.00";
-                        var x = (from i in lstItems where i.Subsidiary == sucursal & i.ClientName == cliente select i.TotalDueDays).Sum();
-                        var y = (from i in lstItems where i.Subsidiary == sucursal & i.ClientName == cliente select i.TotalBilled).Sum();
-                        wsMain.Cells[intFila, 12].Value = y == 0 ? (decimal)0.0 : (decimal)x / y;
-                        wsMain.Cells[intFila, 12].Style.Numberformat.Format = "#,##0.00";
+                        int x = lstSubItems.Sum(x => x.TotalDueDays), y = lstSubItems.Sum(x => x.TotalBilled);
+                        wsMain.Cells[intFila, 12].Value = y == 0 ? "Promedio: 0" : $"Promedio: {(int)((decimal)x / y)}";
+                        wsMain.Cells[intFila, 13].Value = $"Máximo: {lstSubItems.Max(x => x.MaxDueDays)}";
                         intFila += 1;
 
                         foreach (var item in lstSubItems)
@@ -180,16 +181,18 @@ namespace Portal.Areas.Commercial.Controllers
                             wsMain.Cells[intFila, 10].Value = item.NotAppliedTotal;
                             wsMain.Cells[intFila, 10].Style.Numberformat.Format = "#,##0.00";
                             wsMain.Cells[intFila, 11].Value = item.Comments;
-                            wsMain.Cells[intFila, 12].Value = item.TotalDueDays;
+                            wsMain.Cells[intFila, 12].Value = string.Join(", ", (from i in item.Notes where i.NoteNumber > 0 select i.Days));
+                            wsMain.Cells[intFila, 12, intFila, 13].Merge = true;
+                            wsMain.Cells[intFila, 12].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                             intFila += 1;
                         }
                     }
                 }
                 wsMain.Cells[intFila, 9].Value = (from i in lstItems select i.TotalReceipt).Sum();
                 wsMain.Cells[intFila, 9].Style.Numberformat.Format = "#,##0.00";
-                wsMain.Cells[intFila, 1, intFila, 12].Style.Fill.BackgroundColor.SetColor(Color.DimGray);
-                wsMain.Cells[intFila, 1, intFila, 12].Style.Font.Color.SetColor(Color.White);
-                wsMain.Cells[intFila, 1, intFila, 12].Style.Font.Bold = true;
+                wsMain.Cells[intFila, 1, intFila, 13].Style.Fill.BackgroundColor.SetColor(Color.DimGray);
+                wsMain.Cells[intFila, 1, intFila, 13].Style.Font.Color.SetColor(Color.White);
+                wsMain.Cells[intFila, 1, intFila, 13].Style.Font.Bold = true;
             }
 
             wsMain.Cells.AutoFitColumns();
@@ -258,7 +261,8 @@ namespace Portal.Areas.Commercial.Controllers
                             NotAppliedTotal = g.First().NotAppliedTotal,
                             Comments = g.First().Comments,
                             TotalDueDays = (from d in g select d.DueDays).Sum(),
-                            TotalBilled = g.Count(),
+                            TotalBilled = g.Count(x => x.NoteNumber.HasValue && x.NoteNumber.Value > 0),
+                            MaxDueDays = g.Max(x => x.DueDays),
                             InDue = (from d in g where d.DueDays >= 10 select d).Any(),
                             Notes = (from d in g
                                      where d.NoteNumber.HasValue && d.NoteNumber.Value > 0

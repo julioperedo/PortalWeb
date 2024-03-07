@@ -211,16 +211,19 @@ namespace MobileService.Controllers
 
                 BCP.Product bcProduct = new();
                 BEP.Product beProduct;
-                if (UserId > 0)
-                {
-                    beProduct = bcProduct.Search(Id, BEP.relProduct.Prices, BEP.relProduct.PriceOffers, BEP.relPrice.Sudsidiary, BEP.relProduct.VolumePricings, BEP.relVolumePricing.Subsidiary);
-                }
-                else
-                {
-                    beProduct = bcProduct.Search(Id);
-                }
+                Enum[] rels = UserId == 0 ? Array.Empty<Enum>() : new Enum[] { BEP.relProduct.Prices, BEP.relProduct.PriceOffers, BEP.relPrice.Sudsidiary, BEP.relProduct.VolumePricings, BEP.relVolumePricing.Subsidiary };
+                beProduct = bcProduct.Search(Id, rels);
+                //if (UserId > 0)
+                //{
+                //    beProduct = bcProduct.Search(Id, BEP.relProduct.Prices, BEP.relProduct.PriceOffers, BEP.relPrice.Sudsidiary, BEP.relProduct.VolumePricings, BEP.relVolumePricing.Subsidiary);
+                //}
+                //else
+                //{
+                //    beProduct = bcProduct.Search(Id);
+                //}
                 beProduct.ListPrices ??= new List<BEP.Price>();
                 beProduct.ListVolumePricings ??= new List<BEP.VolumePricing>();
+                beProduct.ListPriceOffers ??= new List<BEP.PriceOffer>();
                 bool boLocal = false, boSeeStock = false, allowLinesBlocked = false;
                 BCS.User bcUser = new();
                 if (UserId > 0)
@@ -259,27 +262,21 @@ namespace MobileService.Controllers
                 BCP.WarehouseAllowed bcAllowed = new();
                 IEnumerable<BEP.WarehouseAllowed> lstAllowed = bcAllowed.List("1");
 
-                if (lstInventory == null)
-                {
-                    lstInventory = new List<BEA.ProductStock>();
-                }
-                else
-                {
-                    if (!boLocal & !boSeeStock)
-                    {
-                        lstInventory = (from i in lstInventory
-                                        where (from a in lstAllowed where a.Subsidiary.ToLower() == i.Subsidiary.ToLower() & a.Name.ToLower() == i.Warehouse.ToLower() & (a.ClientVisible | boLocal) select a).Any()
-                                                & (from w in lstAllowed select w.Name.ToLower()).Contains(i.Warehouse.ToLower())
-                                        select i).ToList();
-                    }
-                    else
-                    {
-                        lstInventory = (from i in lstInventory
-                                        join w in lstAllowed on new { s = i.Subsidiary.ToLower(), w = i.Warehouse.ToLower() } equals new { s = w.Subsidiary.ToLower(), w = w.Name.ToLower() }
-                                        where w.ClientVisible | boLocal
-                                        select i).ToList();
-                    }
-                }
+                //if (!boLocal & !boSeeStock)
+                //{
+                //    lstInventory = (from i in lstInventory
+                //                    where lstAllowed.Any(a => a.Subsidiary.ToLower() == i.Subsidiary.ToLower() & a.Name.ToLower() == i.Warehouse.ToLower() & (a.ClientVisible | boLocal))
+                //                            & (from w in lstAllowed select w.Name.ToLower()).Contains(i.Warehouse.ToLower())
+                //                    select i).ToList();
+                //}
+                //else
+                //{
+                lstInventory = (from i in lstInventory
+                                join w in lstAllowed on new { s = i.Subsidiary.ToLower(), w = i.Warehouse.ToLower() } equals new { s = w.Subsidiary.ToLower(), w = w.Name.ToLower() } into ljAllowed
+                                from l in ljAllowed.DefaultIfEmpty()
+                                where (l?.ClientVisible ?? false) | boLocal
+                                select i).ToList();
+                //}
 
                 BCP.Line bcLine = new();
                 var lines = bcLine.ListForPriceList("1", BEP.relLine.LineDetails);
@@ -303,16 +300,20 @@ namespace MobileService.Controllers
                     link = beProduct.Link ?? "",
                     isNew = (beProduct.EnabledDate.HasValue && (beProduct.EnabledDate.Value.AddDays(30) >= DateTime.Now)),
                     isDigital = beProduct.IsDigital,
-                    prices = from p in (beProduct.ListPrices ?? new List<BEP.Price>())
-                             where (p.Regular > 0 /*| (p.Offer.HasValue && p.Offer.Value > 0)*/) & (boLocal | allowLinesBlocked | (line.FilterType == "NoneBut" & lstClientExceptions.Any(x => x.IdLine == line.Id)) | (line.FilterType == "AllBut" & !lstClientExceptions.Any(x => x.IdLine == line.Id)))
+                    prices = from p in beProduct.ListPrices
+                             where p.Regular > 0 & (boLocal | allowLinesBlocked | (line.FilterType == "NoneBut" & lstClientExceptions.Any(x => x.IdLine == line.Id)) | (line.FilterType == "AllBut" & !lstClientExceptions.Any(x => x.IdLine == line.Id)))
+                             join o in beProduct.CurrentOffers on p.IdSudsidiary equals o.IdSubsidiary into ljOffer
+                             from l in ljOffer.DefaultIfEmpty()
                              select new
                              {
                                  subsidiary = p.Sudsidiary.Name.ToLower(),
                                  price = (priceGroupLine != null || priceGroup != null) & beProduct.Cost > 0 & percentage >= 0 ? beProduct.Cost.Value * (100 + percentage) / 100 / 0.84m : p.Regular,
                                  observations = p.Observations ?? "",
                                  commentaries = boLocal ? (p.Commentaries ?? "") : "",
-                                 offer = (from i in lstInventory where i.Subsidiary.ToLower() == p.Sudsidiary.Name.ToLower() select i.Available2).Sum() > 0 ? beProduct.ListPriceOffers?.Where(o => o.IdSubsidiary == p.IdSudsidiary)?.OrderBy(o => o.Price)?.FirstOrDefault()?.Price ?? 0.0M : 0.0M,
-                                 OfferCommentaries = lstInventory.Any(x => x.Subsidiary.ToLower() == p.Sudsidiary.Name.ToLower() & x.Available2 > 0) ? beProduct.ListPriceOffers?.Where(o => o.IdSubsidiary == p.IdSudsidiary)?.OrderBy(o => o.Price)?.FirstOrDefault()?.Description ?? "" : "",
+                                 offer = lstInventory.Where(i => i.Subsidiary.Trim().ToLower() == p.Sudsidiary.Name.Trim().ToLower()).Sum(i => i.Available2) > 0 | !(l?.OnlyWithStock ?? false) ? l?.Price ?? 0.0M : 0.0M,
+                                 offerCommentaries = lstInventory.Where(i => i.Subsidiary.Trim().ToLower() == p.Sudsidiary.Name.Trim().ToLower()).Sum(i => i.Available2) > 0 | !(l?.OnlyWithStock ?? false) ? l?.Description ?? "" : "",
+                                 offerSince = lstInventory.Where(i => i.Subsidiary.Trim().ToLower() == p.Sudsidiary.Name.Trim().ToLower()).Sum(i => i.Available2) > 0 | !(l?.OnlyWithStock ?? false) ? l?.Since?.ToString("yyyy-MM-dd") : "",
+                                 offerUntil = lstInventory.Where(i => i.Subsidiary.Trim().ToLower() == p.Sudsidiary.Name.Trim().ToLower()).Sum(i => i.Available2) > 0 | !(l?.OnlyWithStock ?? false) ? l?.Until?.ToString("yyyy-MM-dd") : "",
                                  volumen = boLocal ? from v in beProduct.ListVolumePricings
                                                      where p.IdSudsidiary == v.IdSubsidiary
                                                      select new { quantity = v.Quantity, price = v.Price, observations = v.Observations } : null,

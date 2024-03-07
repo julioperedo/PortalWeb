@@ -23,6 +23,8 @@ namespace Portal.Services
             var settings = settingsSection.Get<MailSettings>();
             var account = settings.Accounts.Find(x => x.Id == "soporte-santacruz");
 
+            SmtpClient smtpClient = new(settings.Server, settings.Port) { Credentials = new NetworkCredential(account.User, account.Password), DeliveryMethod = SmtpDeliveryMethod.Network, UseDefaultCredentials = false };
+
             MailMessage message = new();
             MailAddress fromAddress = new(account.EMail, account.Name);
             if (From != null && !string.IsNullOrWhiteSpace(From.Item1) && !string.IsNullOrWhiteSpace(From.Item2))
@@ -56,8 +58,8 @@ namespace Portal.Services
             message.IsBodyHtml = true;
             message.Body = MessageBody;
 
-            SmtpClient smtpClient = new(settings.Server, settings.Port) { Credentials = new NetworkCredential(account.User, account.Password), DeliveryMethod = SmtpDeliveryMethod.Network };
             smtpClient.Send(message);
+
             message.Dispose();
             smtpClient.Dispose();
 
